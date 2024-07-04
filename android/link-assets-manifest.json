@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/FiraMono-Bold.ttf",
+      "sha1": "9bcd1dd66bc57133184b1f0d78d5ea00ea120cff"
+    },
+    {
+      "path": "assets/fonts/FiraMono-Regular.ttf",
+      "sha1": "7d98ea84a19a53744b95bd572c310c2f0dec1ac5"
+    },
+    {
+      "path": "assets/fonts/PTSansNarrow-Regular.ttf",
+      "sha1": "a82b8549a78cbd2b01047a818bbd42d713f86431"
+    },
+    {
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "assets/fonts/Roboto-Light.ttf",
+      "sha1": "18788c5d630fa695f9283f6393bfa541b2031508"
+    },
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "56c5c0d38bde4c1f1549dda43db37b09c608aad3"
+    }
+  ]
+}
