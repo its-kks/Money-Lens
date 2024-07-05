@@ -14,14 +14,56 @@ import CategoryList from './screens/CategoryList';
 import RecurringList from './screens/RecurringList';
 import SavingsList from './screens/SavingsList';
 import TransactionList from './screens/TransactionList';
+import  'react-native-gesture-handler';
+import WelcomeScreen from './screens/WelcomeScreen';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const TopTab = createMaterialTopTabNavigator();
-
 const BottomTab = createBottomTabNavigator();
+const StackNavigator = createStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
-      <BottomTab.Navigator
+      <StackNavigator.Navigator
+        screenOptions={
+          {
+            headerShown: false,
+          }
+        }
+      >
+        <StackNavigator.Screen name="Welcome" component={WelcomeScreen}/>
+        <StackNavigator.Screen name="BottomTabsHome" component={BottomTabsHome}/>
+      </StackNavigator.Navigator>
+      
+    </NavigationContainer>
+  );
+}
+
+const TopTabsLists = ()=>{
+  return (
+    <TopTab.Navigator
+      screenOptions={{
+        tabBarLabelStyle: {fontFamily: 'FiraMono-Bold', fontSize: 12, marginTop: 30, height:30},
+        tabBarIndicatorStyle: {backgroundColor: appColors.blue},
+        tabBarStyle: {backgroundColor: appColors.white},
+        tabBarActiveTintColor: appColors.blue,
+        tabBarInactiveTintColor: appColors.grey,
+        tabBarScrollEnabled: true,
+      }}
+    >
+      <TopTab.Screen name="Transactions" component={TransactionList}/>
+      <TopTab.Screen name="Recipients" component={RecipientList}/>
+      <TopTab.Screen name="Categories" component={CategoryList}/>
+      <TopTab.Screen name="Recurring Payments" component={RecurringList}/>
+      <TopTab.Screen name="Savings" component={SavingsList}/>
+    </TopTab.Navigator>
+  )
+}
+
+const BottomTabsHome = ()=>{
+  return (
+    <BottomTab.Navigator
         screenOptions={{
           tabBarStyle:{height:60},
         }}
@@ -84,27 +126,5 @@ export default function App() {
         />
 
       </BottomTab.Navigator>
-    </NavigationContainer>
-  );
-}
-
-const TopTabsLists = ()=>{
-  return (
-    <TopTab.Navigator
-      screenOptions={{
-        tabBarLabelStyle: {fontFamily: 'FiraMono-Bold', fontSize: 12, marginTop: 30, height:30},
-        tabBarIndicatorStyle: {backgroundColor: appColors.blue},
-        tabBarStyle: {backgroundColor: appColors.white},
-        tabBarActiveTintColor: appColors.blue,
-        tabBarInactiveTintColor: appColors.grey,
-        tabBarScrollEnabled: true,
-      }}
-    >
-      <TopTab.Screen name="Transactions" component={TransactionList}/>
-      <TopTab.Screen name="Recipients" component={RecipientList}/>
-      <TopTab.Screen name="Categories" component={CategoryList}/>
-      <TopTab.Screen name="Recurring Payments" component={RecurringList}/>
-      <TopTab.Screen name="Savings" component={SavingsList}/>
-    </TopTab.Navigator>
   )
 }
