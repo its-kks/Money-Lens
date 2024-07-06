@@ -16,10 +16,10 @@ export const createTableCategories = async (db) => {
   const query = `
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    type TEXT NOT NULL CHECK (type IN ('Expense', 'Earning')),
+    name TEXT NOT NULL,
+    type TEXT NOT NULL CHECK (type IN ('Expense', 'Income')),
     icon TEXT NOT NULL DEFAULT '❓',
-    background_color TEXT DEFAULT 'blue'
+    background_color TEXT DEFAULT 'blue' NOT NULL
   );`;
   await db.executeSql(query);
   console.log('Category Table Created');
@@ -31,8 +31,8 @@ export const createTableRecipients = async (db) => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     upiUrl TEXT,
-    icon TEXT NOT NULL DEFAULT '👷',
-    background_color TEXT DEFAULT 'red'
+    icon TEXT NOT NULL DEFAULT '🤷‍♂',
+    background_color TEXT DEFAULT 'red' NOT NULL
   );`;
   await db.executeSql(query);
   console.log('Recipient Table Created');

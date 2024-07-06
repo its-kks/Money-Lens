@@ -15,7 +15,7 @@ export default function RecipientAndCategory({ name, icon, backgroundColorIcon})
       <View style={styles.dataContainer}>
         <TouchableOpacity>
           <View style={{justifyContent:'space-evenly', alignItems:'center'}}>
-            <Text style={{ fontSize: 18, fontFamily: 'FiraMono-Regular', color:appColors.black }}>{name}</Text>
+            <Text style={{ fontSize: 14, fontFamily: 'FiraMono-Regular', color:appColors.black }}>{ name.length >13 ? name.substring(0,10)+'...': name}</Text>
             <Text>
               <MaterialCommunityIcons name="dots-horizontal" size={30} color={appColors.lightGrey} />
             </Text>
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'space-between',
-
     height: 120,
     width: 120
   },

@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import PiggyBank from './PiggyBank';
 import numToWords from '../../utilities/numerical';
 
-export default function TopText() {
+export default function TopText({userName, src}) {
   const [showWords, setShowWords] = useState(false);
   const handleShowWords = async () => {
     setShowWords(!showWords);
@@ -18,11 +18,11 @@ export default function TopText() {
       <View style={styles.textContainer}>
         <View style={styles.upperTextConainer}>
           <View>
-            <Image source={require('../../assets/images/man.png')} style={styles.avatarImage}/>
+            <Image source={src} style={styles.avatarImage}/>
           </View>
           <View style={{marginLeft:10}}>
             <Text style={{fontSize:25, fontFamily:'Roboto-Bold', color:appColors.white}}>Welcome</Text>
-            <Text style={{fontSize:13, fontFamily:'Roboto-Light'}}>Rajesh Khanna</Text>
+            <Text style={{fontSize:14, fontFamily:'Roboto-Regular'}}>{userName}</Text>
           </View>
         </View>
         <View style={{flex:60, alignItems:'flex-start', justifyContent:'flex-start'}}>

@@ -15,7 +15,7 @@ export default function AddCategoryRecipient() {
 
         <View style={styles.dataContainer}>
           <View style={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
-            <Text style={{ fontSize: 18, fontFamily: 'FiraMono-Regular', color: appColors.lightBlack }}>Add</Text>
+            <Text style={{ fontSize: 14, fontFamily: 'FiraMono-Regular', color: appColors.lightBlack }}>Add</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'space-between',
-
+    marginLeft:10,
+    marginRight:10,
     height: 120,
     width: 120
   },

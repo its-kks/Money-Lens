@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   currentItem:{
-    fontSize: 15,
+    fontSize: 14,
     color: appColors.blue,
     fontFamily: 'FiraMono-Regular',
   }

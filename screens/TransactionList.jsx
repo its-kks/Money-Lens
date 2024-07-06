@@ -10,7 +10,7 @@ import AscDescButton from '../components/listScreenComponents/AscDescButton'
 
 export default function TransactionList() {
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}> 
       <SafeAreaView style={styles.container}>
         {/* title */}
         <View style={styles.titleContainer}>
@@ -56,9 +56,7 @@ const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
     backgroundColor: appColors.white,
-
-    // 120 = 60 + 60  (60 top bar and 60 bottom bar)
-    height: Dimensions.get('window').height - 120 - StatusBar.currentHeight,
+    height:Dimensions.get('window').height -142
   },
   filterContainer: {
     flex: 6,
