@@ -8,14 +8,13 @@ import AddCategoryRecipient from '../components/listScreenComponents/AddCategory
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCategoriesRequest } from '../Redux/actions/categories'
 
-
 export default function CategoryList() {
   const dispatch = useDispatch();
   const fetchedCategories = useSelector(state => state.categories.categories);
   const loading = useSelector(state => state.categories.loading);
   const error = useSelector(state => state.categories.error);
 
-  const [columns, setColumns] = useState(3);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCategoriesRequest());
@@ -23,6 +22,7 @@ export default function CategoryList() {
 
   return (
     <View>
+      
       <SafeAreaView style={styles.container}>
         <View style={styles.titleContainer}>
           <TopTitle title="Categories:" />
@@ -37,7 +37,9 @@ export default function CategoryList() {
             <Text style={styles.subHeadingExp}>Expenditure</Text>
           </View>
           <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-            <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} />
+            <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} 
+            showModal={showModal} setShowModal={setShowModal}
+            />
             {fetchedCategories.map((item) => (
               item.type === 'Expense' ? (
                 <RecipientAndCategory key={item.id.toString()} name={item.name} icon={item.icon} backgroundColorIcon={appColors[item.background_color] + '50'} />
@@ -51,7 +53,11 @@ export default function CategoryList() {
             <Text style={styles.subHeadingEarn}>Income</Text>
           </View>
           <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-            <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} />
+            <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} 
+              showModal={showModal} setShowModal={setShowModal}
+            >
+              
+            </AddCategoryRecipient>
             {fetchedCategories.map((item) => (
               item.type === 'Income' ? (
                 <RecipientAndCategory key={item.id.toString()} name={item.name} icon={item.icon} backgroundColorIcon={appColors[item.background_color] + '50'} />

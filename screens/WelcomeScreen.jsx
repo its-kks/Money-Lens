@@ -14,28 +14,25 @@ export default function WelcomeScreen({ navigation }) {
   const [enableNext, setEnableNext] = useState(false);
 
   useEffect(() => {
-    async function manageTables() {
-      let name = null;
-      try {
-        name = await AsyncStorage.getItem('name');
+    async function manageTables(){
+      const name = await AsyncStorage.getItem('name');
+      if(name){
+        return;
       }
-      catch (error) {
-        console.warn(error);
-      }
-      if (name === null) {
-        try {
-          await createTables();
-          await addDefaultCategories();
-          await addDefaultRecipients();
+      try{
+        await createTables();
+        await addDefaultCategories();
+        await addDefaultRecipients();
 
-        }
-        catch (error) {
-          console.warn(error);
-        }
+      }
+      catch(error){
+        console.warn(error);
       }
 
     }
+    console.log("WHat the hell")
     manageTables();
+    createTables();
 
   }, []);
 

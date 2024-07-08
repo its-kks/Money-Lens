@@ -1,28 +1,36 @@
-import { enablePromise, openDatabase } from 'react-native-sqlite-storage';
+import SQLite from 'react-native-sqlite-storage';
 
 // Enable promises
-enablePromise(true);
+SQLite.DEBUG(true);
+SQLite.enablePromise(true);
+
 
 // Open database
 export const getDBConnection = async () => {
-  return openDatabase({
-    name: 'money-lens-expense.db',
-    location: 'default',
-  });
+  try {
+    const db = await SQLite.openDatabase({
+      name: 'money-lens-expense.db',
+      location: 'default',
+    });
+    console.log('Database opened');
+    return db;
+  } catch (error) {
+    console.error("Failed to connect to the database", error);
+  }
 };
 
 // Create tables functions
 export const createTableCategories = async (db) => {
-  const query = `
-  CREATE TABLE IF NOT EXISTS categories (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    type TEXT NOT NULL CHECK (type IN ('Expense', 'Income')),
-    icon TEXT NOT NULL DEFAULT '❓',
-    background_color TEXT DEFAULT 'blue' NOT NULL
-  );`;
-  await db.executeSql(query);
-  console.log('Category Table Created');
+    const query = `
+    CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL CHECK (type IN ('Expense', 'Income')),
+      icon TEXT NOT NULL DEFAULT '❓',
+      background_color TEXT DEFAULT 'blue' NOT NULL
+    );`;
+    await db.executeSql(query);
+    console.log('Category Table Created');
 };
 
 export const createTableRecipients = async (db) => {
@@ -57,6 +65,7 @@ export const createTableTransactions = async (db) => {
   const query = `
   CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     amount REAL NOT NULL,
     category_id INTEGER,
     recipient_id INTEGER,
@@ -91,17 +100,8 @@ export const createTables = async () => {
     await createTableTransactions(db);
     await createTableSavings(db);
     console.log('All tables created successfully');
+    console.log('Creating misc data');
   } catch (error) {
     console.error('Error creating tables:', error);
   }
-};
-
-export const createMiscData = async () => {
-    try{
-        const db = await getDBConnection();
-        await db.executeSql('INSERT INTO categories (name, type, icon, background_color) VALUES ("Miscellaneous", "Expense", "❔", "red")');
-    }
-    catch(error){
-        console.error('Error creating misc data:', error);
-    }
 };

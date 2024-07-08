@@ -5,6 +5,8 @@ export const  addDefaultCategories = async ()=>{
   const query = `
   INSERT INTO categories (name,type, icon, background_color)
   VALUES
+  ('Miscellaneous', 'Expense', '❓', 'purple'),
+  ('Miscellaneous', 'Income', '❓', 'blue'),
   ('Groceries', 'Expense', '🍞', 'red'),
   ('Transport', 'Expense', '🚗', 'orange'),
   ('Entertainment', 'Expense', '🎥', 'green'),
@@ -18,9 +20,7 @@ export const  addDefaultCategories = async ()=>{
   ('Insurance', 'Expense', '🛡️', 'green'),
   ('Vaccation', 'Expense', '🏖️', 'orange'),
   ('Gifts', 'Expense', '🎁', 'purple'),
-  ('EMI', 'Expense', '💳', 'red'),
-  ('Miscellaneous', 'Expense', '❔', 'purple'),
-  ('Micellaneous', 'Income', '❓', 'blue');
+  ('EMI', 'Expense', '💳', 'red');
 
   `;
   try{
@@ -29,7 +29,7 @@ export const  addDefaultCategories = async ()=>{
     console.log('Default Categories Added');
   }
   catch(error){
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -43,7 +43,7 @@ export const fetchCategories = async ()=>{
     return categories;
   }
   catch(error){
-    console.log(error);
+    console.error(error);
   }
 
 }

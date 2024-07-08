@@ -20,6 +20,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoadScreen from './screens/LoadScreen';
 import { Provider } from 'react-redux';
 import store from './Redux/store';
+import TransactionForm from './components/listScreenComponents/Forms/TransactionForm';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -58,7 +59,7 @@ const TopTabsLists = () => {
         tabBarScrollEnabled: true,
       }}
     >
-      <TopTab.Screen name="Transactions" component={TransactionList} />
+      <TopTab.Screen name="Transactions" component={TransactionAndForm} />
       <TopTab.Screen name="Recipients" component={RecipientList} />
       <TopTab.Screen name="Categories" component={CategoryList} />
       <TopTab.Screen name="Recurring Payments" component={RecurringList} />
@@ -67,11 +68,29 @@ const TopTabsLists = () => {
   )
 }
 
+{/* Top Tabs Navigator with Edit forms stack */}
+
+const TransactionAndForm = () => {
+  return (
+    <StackNavigator.Navigator
+      screenOptions={
+        {
+          headerShown: false,
+        }
+      }
+    >
+      <StackNavigator.Screen name="TransactionList" component={TransactionList} />
+      <StackNavigator.Screen name="TransactionForm" component={TransactionForm} />
+    </StackNavigator.Navigator>
+  )
+}
+
+
 const BottomTabsHome = () => {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        tabBarStyle: { height: 60 },
+        tabBarHideOnKeyboard: true,
       }}
     >
 
@@ -81,7 +100,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', marginBottom: 10, color: appColors.grey }}>Home</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Home</Text>
           ),
           tabBarIcon: () => (
             <MaterialCommunityIcons name="home" size={30} color={appColors.blue} />
@@ -95,7 +114,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', marginBottom: 10, color: appColors.grey }}>Lists</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Lists</Text>
           ),
           tabBarIcon: () => (
             <MaterialIcons name="view-list" size={30} color={appColors.blue} />
@@ -109,7 +128,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', marginBottom: 10, color: appColors.grey }}>Insights</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Insights</Text>
           ),
           tabBarIcon: () => (
             <MaterialCommunityIcons name="database-cog" size={30} color={appColors.blue} />
@@ -123,7 +142,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', marginBottom: 10, color: appColors.grey }}>Settings</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Settings</Text>
           ),
           tabBarIcon: () => (
             <MaterialIcons name="settings" size={30} color={appColors.blue} />

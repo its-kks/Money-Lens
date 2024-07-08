@@ -18,14 +18,14 @@ export default function HomeScreen() {
     updateData();
   },[])
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, }}>
+    
       <SafeAreaView style={styles.homeScreenContainer}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
         <TopText userName={userName} src={avatar}/>
         <PayButtons />
         <Transactions />
       </SafeAreaView>
-    </ScrollView>
+    
   );
 }
 
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: Dimensions.get('window').height - 85
+    flex:1
   },
 });

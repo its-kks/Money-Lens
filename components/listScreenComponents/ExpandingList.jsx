@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import appColors from '../../constants/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function ExpandingList({listItem}) {
+export default function ExpandingList({listItem,showList,setShowList}) {
   const [currentItem, setCurrentItem] = useState(listItem[0]);
-  const [showList, setShowList] = useState(false);
   return (
 
     <View>
@@ -17,7 +16,7 @@ export default function ExpandingList({listItem}) {
             {currentItem}
           </Text>
           <Text style={styles.currentItem}>
-            <MaterialCommunityIcons name="chevron-down" size={20} color={appColors.blue} />
+            <MaterialCommunityIcons name="chevron-down" size={18} color={appColors.blue} />
           </Text>
         </View>
       </TouchableOpacity>
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   currentItem:{
-    fontSize: 14,
+    fontSize: 13,
     color: appColors.blue,
     fontFamily: 'FiraMono-Regular',
   }

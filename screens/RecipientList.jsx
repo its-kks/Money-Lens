@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Dimensions, StatusBar, ScrollView, SafeAreaView } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, BackHandler, View, Dimensions, StatusBar, ScrollView, SafeAreaView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import appColors from '../constants/colors'
 import TopTitle from '../components/listScreenComponents/TopTitle'
 import SearchBar from '../components/listScreenComponents/SearchBar'
@@ -12,6 +12,7 @@ import { fetchRecipientsRequest } from '../Redux/actions/recipients'
 export default function RecipientList() {
 
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
 
   const fetchedRecipients = useSelector(state => state.recipients.recipients);
 
@@ -35,7 +36,7 @@ export default function RecipientList() {
         <View style={styles.recipentsContainer}>
           <ScrollView >
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-              <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} />
+              <AddCategoryRecipient name='Add Recipient' backgroundColorIcon={appColors.green + '50'} showModal={showModal} setShowModal={setShowModal}/>
               {fetchedRecipients.map((item) => {
                 return(
                 <RecipientAndCategory key={item.id.toString()} name={item.name} icon={item.icon} backgroundColorIcon={appColors[item.background_color] + '50'} />)

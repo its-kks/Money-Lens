@@ -12,7 +12,7 @@ export const addDefaultRecipients = async ()=>{
     console.log('Default Recipients Added');
   }
   catch(error){
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -25,7 +25,23 @@ export const fetchRecipients = async ()=>{
     return recipients;
   }
   catch(error){
-    console.log(error);
+    console.error(error);
   }
 
+}
+
+export const addRecipient = async (name, icon, backgroundColor)=>{
+  const query = `
+  INSERT INTO recipients (name, background_color)
+  VALUES
+  (?,?)
+  `
+  try{
+    const db = await getDBConnection();
+    await db.executeSql(query,[name, backgroundColor]);
+    console.log('Recipient Added');
+  }
+  catch(error){
+    console.error(error);
+  }
 }
