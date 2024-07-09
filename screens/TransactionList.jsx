@@ -1,5 +1,5 @@
 import { ScrollView,View, Pressable } from 'react-native'
-import React ,{useState} from 'react'
+import React ,{useState, useEffect} from 'react'
 import appColors from '../constants/colors'
 import TopTitle from '../components/listScreenComponents/TopTitle'
 import SearchBar from '../components/listScreenComponents/SearchBar'
@@ -7,11 +7,24 @@ import SingleTransaction from '../components/listScreenComponents/SingleTransact
 import ExpandingList from '../components/listScreenComponents/ExpandingList'
 import AscDescButton from '../components/listScreenComponents/AscDescButton'
 import AddBar from '../components/listScreenComponents/AddBar'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchTransactionRequest } from '../Redux/actions/transactions'
+import { FlatList } from 'react-native-gesture-handler'
+
 
 export default function TransactionList({navigation}) {
+  const dispatch = useDispatch();
+  const fetchedTransactions = useSelector(state => state.transactions.transactions);
+  const loading = useSelector(state => state.transactions.loading);
+  const error = useSelector(state => state.transactions.error);
+
   const [showType,setShowType] = useState(false);
   const [showMonth,setShowMonth] = useState(false);
   const [showYear,setShowYear] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchTransactionRequest());
+  },[]);
 
   const handleAddNavigation = () => {
     const date = new Date();
@@ -50,7 +63,7 @@ export default function TransactionList({navigation}) {
       }}
     >
       <View style={{ height: 30 }}>
-        <TopTitle title="Transaction History" />
+        <TopTitle title="Transaction History:" />
       </View>
       <View style={{
         height: 60,
@@ -81,21 +94,26 @@ export default function TransactionList({navigation}) {
 
       <View style={{ height: 500}}>
 
-        <ScrollView>
-          <AddBar onPressFunction={handleAddNavigation} />
-          <SingleTransaction itemName='Groceries' itemIcon='🍎' date='12/12/2021' time='12:00' price={-100} itemBackgroundColor={appColors.red + '50'} itemCategory={'Food'} />
-          <SingleTransaction itemName='Salary' itemIcon='💼' date='01/01/2022' time='09:00' price={2000} itemBackgroundColor={appColors.green + '50'} />
-          <SingleTransaction itemName='Utilities' itemIcon='💡' date='15/12/2021' time='10:00' price={-150} itemBackgroundColor={appColors.blue + '50'} />
-          <SingleTransaction itemName='Dining Out' itemIcon='🍽️' date='18/12/2021' time='19:30' price={-50} itemBackgroundColor={appColors.grey + '50'} />
-          <SingleTransaction itemName='Gym Membership' itemIcon='🏋️' date='20/12/2021' time='11:00' price={-30} itemBackgroundColor={appColors.purple + '50'} />
-          <SingleTransaction itemName='Freelance Project' itemIcon='💻' date='25/12/2021' time='15:00' price={9999999} itemBackgroundColor={appColors.green + '50'} />
-          <SingleTransaction itemName='Groceries' itemIcon='🍎' date='12/12/2021' time='12:00' price={-100} itemBackgroundColor={appColors.red + '50'} />
-          <SingleTransaction itemName='Salary' itemIcon='💼' date='01/01/2022' time='09:00' price={2000} itemBackgroundColor={appColors.green + '50'} />
-          <SingleTransaction itemName='Utilities' itemIcon='💡' date='15/12/2021' time='10:00' price={-150} itemBackgroundColor={appColors.blue + '50'} />
-          <SingleTransaction itemName='Dining Out' itemIcon='🍽️' date='18/12/2021' time='19:30' price={-50} itemBackgroundColor={appColors.grey + '50'} />
-          <SingleTransaction itemName='Gym Membership' itemIcon='🏋️' date='20/12/2021' time='11:00' price={-30} itemBackgroundColor={appColors.purple + '50'} />
-          <SingleTransaction itemName='Freelance Project' itemIcon='💻' date='25/12/2021' time='15:00' price={500} itemBackgroundColor={appColors.green + '50'} />
-        </ScrollView>
+        <FlatList
+          data={fetchedTransactions}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <SingleTransaction 
+              itemId={item.id}
+              itemName={item.name} 
+              itemIcon={item.icon} 
+              date={item.tran_date_time.split(' ')[0]} 
+              time={item.tran_date_time.split(' ')[1]} 
+              price={item.amount} 
+              itemBackgroundColor={appColors[item.backgroundColor]+'50'} 
+              itemRecipient={item.recipient}
+              categoryID={item.category_id}
+              recipientId={item.recipient_id}
+              navigation={navigation}
+            />
+          )}
+          ListHeaderComponent={<AddBar onPressFunction={handleAddNavigation} />}
+        />
       </View>
 
     </Pressable>

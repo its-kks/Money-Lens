@@ -3,20 +3,20 @@ import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function SingleTransaction({itemName,itemIcon,date,time,price, itemBackgroundColor, itemCategory}) {
+export default function SingleTransaction({ navigation, itemId, itemName, itemIcon, date, time, price, itemBackgroundColor, itemRecipient, categoryID, recipientId }) {
   return (
     <View style={styles.container}>
 
       <View style={styles.iconContainer}>
-        <View style={[styles.icon,{backgroundColor:itemBackgroundColor}]}>
+        <View style={[styles.icon, { backgroundColor: itemBackgroundColor }]}>
           <Text style={styles.iconText}>{itemIcon}</Text>
         </View>
-        <View style={price < 0 ?  styles.triangleUp : styles.triangleDown}/>
+        <View style={price < 0 ? styles.triangleUp : styles.triangleDown} />
       </View>
 
       <View style={styles.detailsContainer}>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>{itemCategory}</Text>
+          <Text style={styles.dateText}>{itemRecipient}</Text>
         </View>
         <View>
           <Text style={styles.itemName}>{itemName}</Text>
@@ -26,10 +26,21 @@ export default function SingleTransaction({itemName,itemIcon,date,time,price, it
           <Text style={styles.timeText}>{time}</Text>
         </View>
       </View>
-
       <View style={styles.priceContainer}>
-        <Text style={[styles.price, {color: (price < 0 ? appColors.red : appColors.green)  }]}>{'$'+Math.abs(price)}</Text>
-        <TouchableOpacity style={styles.editIcon}>
+        <Text style={[styles.price, { color: (price < 0 ? appColors.red : appColors.green) }]}>{'$' + Math.abs(price)}</Text>
+        <TouchableOpacity style={styles.editIcon} onPress={() => {
+          navigation.navigate('TransactionForm', {
+            id: itemId,
+            name: itemName,
+            amount: price,
+            category: categoryID,
+            date: date,
+            time: time,
+            recipient: recipientId,
+            type: price < 0 ? 'Expense' : 'Income',
+            addition: false
+          });
+        }}>
           <MaterialCommunityIcons name="dots-vertical" size={30} color={appColors.lightGrey} />
         </TouchableOpacity>
       </View>
@@ -43,7 +54,7 @@ const styles = StyleSheet.create({
     height: 70,
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: appColors.red+'30'
+    borderBottomColor: appColors.red + '30'
   },
   iconContainer: {
     flex: 20,
@@ -97,8 +108,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Roboto-Bold',
     padding: 5,
-    marginLeft:10,
-    flex:70,
+    marginLeft: 10,
+    flex: 70,
   },
   triangleDown: {
     width: 0,
@@ -113,24 +124,24 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent', // Right border is transparent
     borderTopColor: appColors.green, // Color of the triangle
     position: 'absolute',
-    left:60,
-    bottom:10
+    left: 60,
+    bottom: 10
   },
   triangleUp: {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: 5, 
+    borderLeftWidth: 5,
     borderRightWidth: 5,
-    borderTopWidth: 0, 
-    borderBottomWidth: 10, 
-    borderLeftColor: 'transparent', 
-    borderRightColor: 'transparent', 
-    borderBottomColor: appColors.red, 
+    borderTopWidth: 0,
+    borderBottomWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: appColors.red,
     position: 'absolute',
-    left:60,
-    bottom:10
+    left: 60,
+    bottom: 10
   },
   editIcon: {
     flex: 30,

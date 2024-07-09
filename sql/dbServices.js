@@ -38,6 +38,7 @@ export const createTableRecipients = async (db) => {
   CREATE TABLE IF NOT EXISTS recipients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    type TEXT NOT NULL CHECK (type in ('Recipient', 'Payer')),
     upiUrl TEXT,
     icon TEXT NOT NULL DEFAULT '🤷‍♂',
     background_color TEXT DEFAULT 'red' NOT NULL

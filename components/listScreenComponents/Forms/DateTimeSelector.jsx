@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import appColors from '../../../constants/colors';
 import TextField from './TextField';
 
-export default function DateTimeSelector({ initialDate, initialTime, setDate, setTime }) {
+export default function DateTimeSelector({ initialDate, initialTime, setDate, setTime, disabled = false }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -36,7 +36,9 @@ export default function DateTimeSelector({ initialDate, initialTime, setDate, se
           submitPressed={false}
           disabled={false}
         />
-        <Pressable onPress={() => setShowDatePicker(true)}>
+        <Pressable onPress={() => setShowDatePicker(true)}
+          disabled={disabled}
+        >
           <MaterialCommunityIcons name="calendar-outline" size={30} color={appColors.lightBlack} />
         </Pressable>
         {showDatePicker && (
@@ -59,7 +61,9 @@ export default function DateTimeSelector({ initialDate, initialTime, setDate, se
           submitPressed={false}
           disabled={false}
         />
-        <Pressable onPress={() => setShowTimePicker(true)}>
+        <Pressable onPress={() => setShowTimePicker(true)}
+          disabled={disabled}
+        >
           <MaterialCommunityIcons name="clock-outline" size={30} color={appColors.lightBlack} />
         </Pressable>
         {showTimePicker && (

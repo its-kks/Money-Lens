@@ -47,3 +47,66 @@ export const fetchCategories = async ()=>{
   }
 
 }
+
+export const addCategories = async ({categoryName, categoryType, categoryIcon, categoryBackgroundColor})=>{
+  const query = `
+  INSERT INTO categories (name,type, icon, background_color)
+  VALUES
+  (?,?,?,?);
+  `;
+  const data = [
+    categoryName.trim(),
+    categoryType.trim(),
+    categoryIcon,
+    categoryBackgroundColor
+  ];
+  console.log(data);
+  try{
+    const db = await getDBConnection();
+    await db.executeSql(query,data);
+    console.log('Category Added');
+  }
+  catch(error){
+    console.error(error);
+  }
+}
+
+export const deleteCategory = async (id)=>{
+  const query = ` DELETE FROM categories WHERE id = ?`;
+  const data = [id];
+  try{
+    const db = await getDBConnection();
+    await db.executeSql(query,data);
+    console.log('Category Deleted');
+  }
+  catch(error){
+    console.error(error);
+  }
+
+}
+
+export const updateCategory = async ({categoryId, categoryName, categoryType, categoryIcon, categoryBackgroundColor})=>{
+  const query = `
+  UPDATE categories
+  SET name = ?,
+  type = ?,
+  icon = ?,
+  background_color = ?
+  WHERE id = ?;
+  `;
+  const data = [
+    categoryName.trim(),
+    categoryType.trim(),
+    categoryIcon,
+    categoryBackgroundColor,
+    categoryId
+  ];
+  try{
+    const db = await getDBConnection();
+    await db.executeSql(query,data);
+    console.log('Category Updated');
+  }
+  catch(error){
+    console.error(error);
+  }
+}

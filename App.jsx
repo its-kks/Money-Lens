@@ -21,6 +21,7 @@ import LoadScreen from './screens/LoadScreen';
 import { Provider } from 'react-redux';
 import store from './Redux/store';
 import TransactionForm from './components/listScreenComponents/Forms/TransactionForm';
+import CategoryForm from './components/listScreenComponents/Forms/CategoryForm';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -61,7 +62,7 @@ const TopTabsLists = () => {
     >
       <TopTab.Screen name="Transactions" component={TransactionAndForm} />
       <TopTab.Screen name="Recipients" component={RecipientList} />
-      <TopTab.Screen name="Categories" component={CategoryList} />
+      <TopTab.Screen name="Categories" component={CategoryAndForm} />
       <TopTab.Screen name="Recurring Payments" component={RecurringList} />
       <TopTab.Screen name="Savings" component={SavingsList} />
     </TopTab.Navigator>
@@ -81,6 +82,16 @@ const TransactionAndForm = () => {
     >
       <StackNavigator.Screen name="TransactionList" component={TransactionList} />
       <StackNavigator.Screen name="TransactionForm" component={TransactionForm} />
+    </StackNavigator.Navigator>
+  )
+}
+
+
+const CategoryAndForm = () => {
+  return (
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <StackNavigator.Screen name="CategoryList" component={CategoryList} />
+      <StackNavigator.Screen name="CategoryForm" component={CategoryForm} />
     </StackNavigator.Navigator>
   )
 }

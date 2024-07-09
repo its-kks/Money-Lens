@@ -5,7 +5,7 @@ import appColors from '../../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
 
-export default function RecipientSelector({ initialRecipient, setRecipient }) {
+export default function RecipientSelector({ initialRecipient, setRecipient , disabled=false}) {
   const fetchedRecipients = useSelector(state => state.recipients.recipients);
   const convertedObject = fetchedRecipients.reduce((acc, item) => {
     acc[item.id] = { ...item };
@@ -60,6 +60,7 @@ export default function RecipientSelector({ initialRecipient, setRecipient }) {
                 setRecipient(item.id)
               }
               }
+              disabled={disabled}
             >
               <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
                 {item.icon}

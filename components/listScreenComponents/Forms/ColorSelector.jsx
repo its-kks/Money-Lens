@@ -4,21 +4,19 @@ import { useSelector } from 'react-redux';
 import appColors from '../../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function CategorySelector({ initialCategory, setCategory, type, disabled = false}) {
-  const fetchedCategories = useSelector(state => state.categories.categories);
-  const convertedObject = fetchedCategories.reduce((acc, item) => {
-    acc[item.id] = { ...item };
-    return acc;
-  }, {});
+
+export default function ColorSelector({ initialColor, setColor, disabled = false }) {
+  const fetechedColors = ["red", "blue", "green", "orange", "purple", "pink", "grey"];
 
   return (
     <>
       <TextField
-        placeholder={'Category'}
-        text={convertedObject[initialCategory].name}
-        setText={setCategory}
-        errorMessage={'Category is required'}
+        placeholder={'Background Color'}
+        text={initialColor}
+        setText={setColor}
+        errorMessage={'Background Color is required'}
         isRequired={true}
         showErrorNow={false}
         submitPressed={false}
@@ -26,14 +24,14 @@ export default function CategorySelector({ initialCategory, setCategory, type, d
       />
 
       <View style={{
-        height: 75,
+        height: 95,
         marginTop: 5,
         marginBottom: 5,
         marginLeft: 10,
         marginRight: 10,
         borderRadius: 5,
         overflow: 'hidden',
-        backgroundColor: appColors.blue + '20',
+        backgroundColor: appColors.grey + '50',
       }}>
         <ScrollView
           contentContainerStyle={{
@@ -43,35 +41,44 @@ export default function CategorySelector({ initialCategory, setCategory, type, d
           showsVerticalScrollIndicator={true}
           persistentScrollbar={true}
         >
-          {fetchedCategories.map((item, index) => (
-            item.type === type ?
-              <Pressable
-                key={index}
+          {fetechedColors.map((item, index) => (
+            <Pressable
+              key={index}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: appColors.white,
+                borderRadius: 20,
+                margin: 5
+              }}
+              onPress={() => {
+                setColor(item)
+              }
+              }
+              disabled={disabled}
+
+            >
+              <View
+
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  padding: 2,
-                  backgroundColor: appColors.lightGrey,
+                  backgroundColor: appColors[item] + '50',
                   borderRadius: 20,
                   paddingLeft: 5,
                   paddingRight: 10,
-                  margin: 5
+                  margin:1
+
                 }}
-                onPress={() => {
-                  setCategory(item.id)
-                }
-                }
-                disabled={disabled}
-                
               >
                 <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
-                  {item.icon}
+                  <MaterialCommunityIcons name="circle" size={15} color={appColors[item]} />
                 </Text>
                 <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 15, color: appColors.black }}>
-                  {item.name}
+                  {item}
                 </Text>
-              </Pressable>
-              : null
+              </View>
+            </Pressable>
           ))}
         </ScrollView>
       </View>

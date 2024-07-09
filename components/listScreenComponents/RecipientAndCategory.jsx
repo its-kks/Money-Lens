@@ -3,7 +3,7 @@ import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function RecipientAndCategory({ name, icon, backgroundColorIcon}) {
+export default function RecipientAndCategory({ name, icon, backgroundColorIcon, onPressFunc}) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -13,7 +13,7 @@ export default function RecipientAndCategory({ name, icon, backgroundColorIcon})
       </View>
 
       <View style={styles.dataContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{onPressFunc()}}>
           <View style={{justifyContent:'space-evenly', alignItems:'center'}}>
             <Text style={{ fontSize: 14, fontFamily: 'FiraMono-Regular', color:appColors.black }}>{ name.length >13 ? name.substring(0,10)+'...': name}</Text>
             <Text>

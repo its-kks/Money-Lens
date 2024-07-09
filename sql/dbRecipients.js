@@ -2,9 +2,10 @@ import { getDBConnection } from "./dbServices";
 
 export const addDefaultRecipients = async ()=>{
   const query = `
-  INSERT INTO recipients (name, background_color)
+  INSERT INTO recipients (name, background_color,type)
   VALUES
-  ('Unknown','green')
+  ('Unknown','red','recipient')
+  ('Unknown','green','payer'),
   `
   try{
     const db = await getDBConnection();

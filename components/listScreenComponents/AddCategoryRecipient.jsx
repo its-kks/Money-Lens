@@ -1,29 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View, Modal, BackHandler, Pressable, Dimensions } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import appColors from '../../constants/colors'
 import { useFocusEffect } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function AddCategoryRecipient({ showModal, setShowModal, children }) {
+export default function AddCategoryRecipient({ navigateAdd }) {
   return (
     <View style={styles.container}>
-      <Modal transparent={true} visible={showModal} animationType='slide'>
-
-        <Pressable style={{ flex: 1, backgroundColor: appColors.black + '50', justifyContent: 'flex-end', alignItems: 'center' }} onPress={() => { setShowModal(false); }}>
-          <Pressable style={{ backgroundColor: appColors.white, borderRadius: 10, justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, }} onPress={() => { }}>
-            <View style={{ width: Dimensions.get('window').width, borderRadius: 10, alignItems: 'flex-end' }}>
-              <Pressable onPress={() => { setShowModal(false) }}>
-                <MaterialCommunityIcons name='close' size={30} color={appColors.grey} style={{ margin: 10 }} />
-              </Pressable>
-            </View>
-            {children}
-          </Pressable>
-        </Pressable>
-
-      </Modal>
-
       <TouchableOpacity onPress={() => {
-        setShowModal(true);
+        navigateAdd();
 
       }}>
         <View style={styles.iconContainer}>

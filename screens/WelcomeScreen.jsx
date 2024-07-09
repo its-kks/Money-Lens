@@ -30,7 +30,6 @@ export default function WelcomeScreen({ navigation }) {
       }
 
     }
-    console.log("WHat the hell")
     manageTables();
     createTables();
 

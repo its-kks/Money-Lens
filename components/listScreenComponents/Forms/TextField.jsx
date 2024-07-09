@@ -20,7 +20,6 @@ export default function TextField({ text, setText, placeholder, errorMessage, sh
       }).start();
     }
   }, [text]);
-
   return (
     <View style={styles.container}>
       <Animated.Text style={[styles.placeholder, { transform: [{ translateY: jumpAnim }] }]}>
@@ -37,9 +36,10 @@ export default function TextField({ text, setText, placeholder, errorMessage, sh
         }}
         editable={!disabled}
         keyboardType={keyboardType}
+        placeholderTextColor={appColors.grey}
       />
       {isRequired && submitPressed && text.length === 0 ? <Text style={styles.errorText}>Required</Text> : null}
-      {showErrorNow ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      {showErrorNow && submitPressed ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );
 }
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginTop: 8,
     padding: 10,
-    minWidth: 170,
+    minWidth: 130,
   },
   placeholder: {
     position: 'absolute',
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 5,
-    fontStyle:'italic'
+    fontStyle:'italic',
+    width:'100%',
   },
 });
