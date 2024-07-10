@@ -63,6 +63,9 @@ export default function TransactionForm({ route, navigation }) {
     ) {
       return;
     }
+    console.log(typeof transactionDate)
+    console.warn(transactionDate);
+
     dispatch(addTransactionRequest({
       transactionName,
       transactionAmount,
@@ -103,6 +106,7 @@ export default function TransactionForm({ route, navigation }) {
 
     dispatch(deleteTransactionRequest(id));
     dispatch(fetchCurrentMonthMoneyRequest());
+    setShowModal(false);
     navigation.navigate('TransactionList');
   }
 

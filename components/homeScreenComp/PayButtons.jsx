@@ -10,7 +10,7 @@ export default function PayButtons({ navigation }) {
     const date = new Date();
     const formattedDate = [
       date.getDate().toString().padStart(2, '0'),
-      (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
+      (date.getMonth() + 1).toString().padStart(2, '0'),
       date.getFullYear(),
     ].join('-');
 

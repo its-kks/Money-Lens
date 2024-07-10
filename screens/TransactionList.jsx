@@ -17,7 +17,6 @@ export default function TransactionList({navigation}) {
   const fetchedTransactions = useSelector(state => state.transactions.transactions);
   const loading = useSelector(state => state.transactions.loading);
   const error = useSelector(state => state.transactions.error);
-  console.log(fetchedTransactions);
 
   const [showType,setShowType] = useState(false);
   const [showMonth,setShowMonth] = useState(false);
@@ -29,7 +28,7 @@ export default function TransactionList({navigation}) {
       date.getDate().toString().padStart(2, '0'),
       (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
       date.getFullYear(),
-    ].join('-');
+    ].join('/');
   
     const formattedTime = [
       date.getHours().toString().padStart(2, '0'),
@@ -99,7 +98,7 @@ export default function TransactionList({navigation}) {
               itemId={item.id}
               itemName={item.name} 
               itemIcon={item.icon} 
-              date={item.tran_date_time.split(' ')[0]} 
+              date={item.tran_date_time.split(' ')[0].split('-').reverse().join('/')} 
               time={item.tran_date_time.split(' ')[1]} 
               price={item.amount} 
               itemBackgroundColor={appColors[item.backgroundColor]+'50'} 

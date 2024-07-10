@@ -26,10 +26,9 @@ export const addTransaction = async ({
   transactionType
 }) => {
   const db = await getDBConnection();
-  console.log(transactionTime, transactionDate);
 
-  const [day, month, year] = transactionDate.split('-');
-  const formattedDateTime = `${year}-${month}-${day} ${transactionTime}`;
+  const [day, month, year] = transactionDate.split('/');
+  const formattedDateTime = `${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`;
 
   const query = `INSERT INTO transactions (name, amount, category_id, recipient_id, tran_date_time) VALUES (?,?,?,?,?)`;
   const data = [
@@ -51,7 +50,6 @@ export const addTransaction = async ({
 export const deleteTransaction = async (id) => {
   const db = await getDBConnection();
   const query = `DELETE FROM transactions WHERE id = ?`;
-  console.log('DELETE: ' + id);
   try {
     await db.executeSql(query, [id]);
     console.log('Transaction deleted');
@@ -69,8 +67,8 @@ export const updateTransaction = async ({
   transactionTime,
   transactionRecipient,
   transactionType }) => {
-  const [day, month, year] = transactionDate.split('-');
-  const formattedDateTime = `${year}-${month}-${day} ${transactionTime}`;
+  const [day, month, year] = transactionDate.split('/');
+  const formattedDateTime = `${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`;
   const db = await getDBConnection();
   const query = `UPDATE transactions SET name = ?, amount = ?, category_id = ?, recipient_id = ?, tran_date_time = ? WHERE id = ?`;
   const data = [transactionName,

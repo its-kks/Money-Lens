@@ -14,7 +14,7 @@ export default function LoadScreen({ navigation }) {
           navigation.replace('Welcome');
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
     checkUser();

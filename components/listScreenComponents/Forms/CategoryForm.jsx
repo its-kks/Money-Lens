@@ -113,7 +113,6 @@ export default function CategoryForm({ route, navigation }) {
               submitPressed={submitPressed}
               disabled={!addition && !udpdateState}
             />
-            {console.log(isNotSingleEmoji(categoryIcon))}
             <TextField
               placeholder={'Icon'}
               text={categoryIcon}

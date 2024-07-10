@@ -26,7 +26,7 @@ export default function WelcomeScreen({ navigation }) {
 
       }
       catch(error){
-        console.warn(error);
+        console.error(error);
       }
 
     }

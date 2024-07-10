@@ -9,7 +9,6 @@ export default function PiggyBank({ moneyPos, moneyNeg }) {
   }
   const upperPercentange = Math.floor(Math.abs(moneyNeg) / (moneyPos) * 100);
   const lowerPercentange = 100 - upperPercentange;
-  console.log(upperPercentange, lowerPercentange);
   return (
     <View style={styles.imageContainer}>
       {/* <View style={styles.coinStyle}><Text>$</Text></View> */}

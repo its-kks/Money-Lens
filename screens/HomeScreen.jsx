@@ -35,7 +35,12 @@ export default function HomeScreen({navigation}) {
   if(currentMonthMoney){
     positive = currentMonthMoney.positive;
     negative = currentMonthMoney.negative;
-    console.log(positive,negative);
+    if(!positive){
+      positive = 0;
+    }
+    if(!negative){
+      negative = 0;
+    }
   }
 
 

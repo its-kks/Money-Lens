@@ -47,7 +47,6 @@ export const addRecipient = async ({ recipientName, recipientType, recipientUrl,
       recipientIcon,
       recipientBackgroundColor,
     ]
-    console.log(data);
     await db.executeSql(query, data);
     console.log('Recipient Added');
   }

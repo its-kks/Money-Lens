@@ -6,7 +6,6 @@ import {
 from '../constants';
 
 export const fetchCurrentMonthMoneyRequest = () => {
-  console.log("fetchCurrentMonthMoneyRequest          WORKING");
   return {
     type: FETCH_CURRENT_MONTH_MONEY_REQUEST
   }

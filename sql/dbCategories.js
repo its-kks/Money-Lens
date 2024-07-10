@@ -60,7 +60,6 @@ export const addCategories = async ({ categoryName, categoryType, categoryIcon, 
     categoryIcon,
     categoryBackgroundColor
   ];
-  console.log(data);
   try {
     const db = await getDBConnection();
     await db.executeSql(query, data);

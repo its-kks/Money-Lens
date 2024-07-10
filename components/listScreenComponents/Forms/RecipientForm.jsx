@@ -13,7 +13,6 @@ import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
 
 export default function RecipientForm({ route, navigation }) {
   const { id, name, icon, backgroundColor, type, url, addition } = route.params;
-  console.log(`This is ${backgroundColor}`);
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -45,13 +44,6 @@ export default function RecipientForm({ route, navigation }) {
     if (recipientName.length === 0 || recipientName.length > 30 || isNotSingleEmoji(recipientIcon)) {
       return;
     }
-    console.log({
-      recipientName,
-      recipientType,
-      recipientUrl,
-      recipientIcon,
-      recipientBackgroundColor
-    })
     dispatch(addRecipientRequest({
       recipientName,
       recipientType,
@@ -123,7 +115,6 @@ export default function RecipientForm({ route, navigation }) {
               submitPressed={submitPressed}
               disabled={!addition && !udpdateState}
             />
-            {console.log(isNotSingleEmoji(recipientIcon))}
             <TextField
               placeholder={'Icon'}
               text={recipientIcon}
