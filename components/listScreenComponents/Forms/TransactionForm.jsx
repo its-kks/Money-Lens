@@ -17,6 +17,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import ConfirmationModal from './ConfirmationModal';
 import { useFocusEffect } from '@react-navigation/native';
+import { fetchCurrentMonthMoneyRequest } from '../../../Redux/actions/users';
 
 export default function TransactionForm({ route, navigation }) {
 
@@ -35,7 +36,6 @@ export default function TransactionForm({ route, navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      // Actions to perform when the screen is focused
       setTransactionName(name);
       setTransactionAmount(Math.abs(amount) + '');
       setTransactionCategory(category);
@@ -45,8 +45,6 @@ export default function TransactionForm({ route, navigation }) {
       setTransactionType(type === 'Expense' ? '1' : '2');
 
       return () => {
-        // Cleanup actions to simulate unmounting when the screen is no longer focused
-        // For example, resetting state or performing other cleanup tasks
       };
     }, [name, amount, category, date, time, recipient, type])
   );
@@ -74,6 +72,7 @@ export default function TransactionForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
+    dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
 
@@ -96,12 +95,14 @@ export default function TransactionForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
+    dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
 
   const handleTransactionDelete = () => {
 
     dispatch(deleteTransactionRequest(id));
+    dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
 

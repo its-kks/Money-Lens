@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import PiggyBank from './PiggyBank';
 import numToWords from '../../utilities/numerical';
 
-export default function TopText({userName, src}) {
+export default function TopText({userName, src, moneyPos, moneyNeg}) {
   const [showWords, setShowWords] = useState(false);
   const handleShowWords = async () => {
     setShowWords(!showWords);
@@ -29,17 +29,17 @@ export default function TopText({userName, src}) {
           <Text style={{fontSize:18, fontFamily:'Roboto-Bold', marginLeft:10}}>Your Balance:</Text>
           {showWords ?
           (
-            <Text style={styles.moneyWordsText}>{numToWords(9975775)}</Text>
+            <Text style={styles.moneyWordsText}>{numToWords(moneyPos+moneyNeg)}</Text>
           ) : 
           (
             <Pressable onPress={handleShowWords}>
-              <Text style={styles.moneyText}>$99,75,775</Text>
+              <Text style={styles.moneyText}>{moneyPos+moneyNeg}</Text>
             </Pressable>
           )}
         </View>
       </View>
       <View style={{ flex: 2.5, justifyContent: 'center', alignItems: 'center' , marginBottom:1}}>
-        <PiggyBank />
+        <PiggyBank moneyNeg={moneyNeg} moneyPos={moneyPos} />
       </View>
     </View>
   )

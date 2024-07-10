@@ -28,12 +28,22 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchCurrentMonthMoneyRequest());
     updateData();
   },[])
-  
+
+  const currentMonthMoney = useSelector(state => state.users.currentMonthMoney[0]);
+  let positive = 0;
+  let negative = 0;
+  if(currentMonthMoney){
+    positive = currentMonthMoney.positive;
+    negative = currentMonthMoney.negative;
+    console.log(positive,negative);
+  }
+
+
   return (
     
       <SafeAreaView style={styles.homeScreenContainer}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
-        <TopText userName={userName} src={avatar}/>
+        <TopText userName={userName} src={avatar} moneyPos={positive} moneyNeg={negative}/>
         <PayButtons navigation={navigation}/>
         <Transactions />
       </SafeAreaView>
