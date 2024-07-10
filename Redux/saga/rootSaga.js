@@ -18,6 +18,8 @@ import {
   watcUpdateTransactions
 } from './transactions';
 
+import { watchFetchCurrentMonthMoney } from './users';
+
 export default function* rootSaga() {
   yield all(
     [
@@ -30,11 +32,13 @@ export default function* rootSaga() {
       watchAddRecipient(),
       watchUpdateRecipient(),
       watchDeleteRecipient(),
-      
+
       watchAddTransaction(),
       watchFetchTransactions(),
       watcUpdateTransactions(),
       watcDeleteTransactions(),
+
+      watchFetchCurrentMonthMoney(),
 
     ]
   );

@@ -23,28 +23,35 @@ export const addTransaction = async ({
   transactionDate,
   transactionTime,
   transactionRecipient,
-  transactionType }) => {
-
+  transactionType
+}) => {
   const db = await getDBConnection();
+  console.log(transactionTime, transactionDate);
+
+  const [day, month, year] = transactionDate.split('-');
+  const formattedDateTime = `${year}-${month}-${day} ${transactionTime}`;
+
   const query = `INSERT INTO transactions (name, amount, category_id, recipient_id, tran_date_time) VALUES (?,?,?,?,?)`;
-  const data = [transactionName,
+  const data = [
+    transactionName,
     Math.abs(transactionAmount) * (transactionType === '1' ? -1 : 1),
     parseInt(transactionCategory),
     parseInt(transactionRecipient),
-    `${transactionDate} ${transactionTime}`];
+    formattedDateTime
+  ];
+
   try {
     await db.executeSql(query, data);
     console.log('Transaction added');
   } catch (error) {
     console.error(error);
   }
-
 }
 
 export const deleteTransaction = async (id) => {
   const db = await getDBConnection();
   const query = `DELETE FROM transactions WHERE id = ?`;
-  console.log('DELETE: '+id);
+  console.log('DELETE: ' + id);
   try {
     await db.executeSql(query, [id]);
     console.log('Transaction deleted');
@@ -62,13 +69,15 @@ export const updateTransaction = async ({
   transactionTime,
   transactionRecipient,
   transactionType }) => {
+  const [day, month, year] = transactionDate.split('-');
+  const formattedDateTime = `${year}-${month}-${day} ${transactionTime}`;
   const db = await getDBConnection();
   const query = `UPDATE transactions SET name = ?, amount = ?, category_id = ?, recipient_id = ?, tran_date_time = ? WHERE id = ?`;
   const data = [transactionName,
     Math.abs(transactionAmount) * (transactionType === '1' ? -1 : 1),
     parseInt(transactionCategory),
     parseInt(transactionRecipient),
-    `${transactionDate} ${transactionTime}`,
+    formattedDateTime,
     transactionId];
   try {
     await db.executeSql(query, data);
@@ -78,5 +87,5 @@ export const updateTransaction = async ({
     console.error(error);
   }
 }
-  
+
 

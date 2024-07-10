@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet, Text, View, Modal } from 'react-native'
-import React, { useState } from 'react'
+import { Dimensions, StyleSheet, Text, View, } from 'react-native'
+import React, { useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, PaperProvider, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,7 +23,7 @@ export default function TransactionForm({ route, navigation }) {
   const { id, name, amount, category, date, time, recipient, type, addition } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  
+
   const [transactionName, setTransactionName] = React.useState(name);
   const [transactionAmount, setTransactionAmount] = React.useState(Math.abs(amount) + '');
   const [transactionCategory, setTransactionCategory] = React.useState(category);
@@ -32,16 +32,25 @@ export default function TransactionForm({ route, navigation }) {
   const [transactionRecipient, setTransactionRecipient] = React.useState(recipient);
   const [transactionType, setTransactionType] = React.useState(type === 'Expense' ? '1' : '2');
 
-  useFocusEffect(() => {
-    setTransactionName(name);
-    setTransactionAmount(Math.abs(amount) + '');
-    setTransactionCategory(category);
-    setTransactionDate(date);
-    setTransactionTime(time);
-    setTransactionRecipient(recipient);
-    setTransactionType(type === 'Expense' ? '1' : '2');
-  });
-  
+
+  useFocusEffect(
+    useCallback(() => {
+      // Actions to perform when the screen is focused
+      setTransactionName(name);
+      setTransactionAmount(Math.abs(amount) + '');
+      setTransactionCategory(category);
+      setTransactionDate(date);
+      setTransactionTime(time);
+      setTransactionRecipient(recipient);
+      setTransactionType(type === 'Expense' ? '1' : '2');
+
+      return () => {
+        // Cleanup actions to simulate unmounting when the screen is no longer focused
+        // For example, resetting state or performing other cleanup tasks
+      };
+    }, [name, amount, category, date, time, recipient, type])
+  );
+
 
   const [udpdateState, setupdateState] = useState(false);
 

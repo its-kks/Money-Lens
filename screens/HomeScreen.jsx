@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategoriesRequest } from '../Redux/actions/categories';
 import { fetchRecipientsRequest } from '../Redux/actions/recipients';
 import { fetchTransactionRequest } from '../Redux/actions/transactions';
+import { fetchCurrentMonthMoneyRequest } from '../Redux/actions/users';
 
 export default function HomeScreen({navigation}) {
   const [userName, setUserName] = useState('');
@@ -24,6 +25,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchCategoriesRequest());
     dispatch(fetchRecipientsRequest());
     dispatch(fetchTransactionRequest());
+    dispatch(fetchCurrentMonthMoneyRequest());
     updateData();
   },[])
   
