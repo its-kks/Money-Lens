@@ -17,14 +17,11 @@ export default function TransactionList({navigation}) {
   const fetchedTransactions = useSelector(state => state.transactions.transactions);
   const loading = useSelector(state => state.transactions.loading);
   const error = useSelector(state => state.transactions.error);
+  console.log(fetchedTransactions);
 
   const [showType,setShowType] = useState(false);
   const [showMonth,setShowMonth] = useState(false);
   const [showYear,setShowYear] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchTransactionRequest());
-  },[]);
 
   const handleAddNavigation = () => {
     const date = new Date();

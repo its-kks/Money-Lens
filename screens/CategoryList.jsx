@@ -14,10 +14,6 @@ export default function CategoryList({ navigation }) {
   const loading = useSelector(state => state.categories.loading);
   const error = useSelector(state => state.categories.error);
 
-  useEffect(() => {
-    dispatch(fetchCategoriesRequest());
-  }, [dispatch]);
-
   return (
     <View>
 
@@ -40,7 +36,7 @@ export default function CategoryList({ navigation }) {
                 id: 0,
                 name: '',
                 icon: '😊',
-                backgroundColor: '',
+                backgroundColor: 'red',
                 type: 'Expense',
                 addition: true
               })}
@@ -74,7 +70,7 @@ export default function CategoryList({ navigation }) {
                 id: 0,
                 name: '',
                 icon: '😊',
-                backgroundColor: '',
+                backgroundColor: 'red',
                 type: 'Income',
                 addition: true
               })}

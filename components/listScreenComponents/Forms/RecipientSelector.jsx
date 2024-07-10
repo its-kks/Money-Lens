@@ -5,7 +5,7 @@ import appColors from '../../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
 
-export default function RecipientSelector({ initialRecipient, setRecipient , disabled=false}) {
+export default function RecipientSelector({ initialRecipient, setRecipient , disabled=false, type}) {
   const fetchedRecipients = useSelector(state => state.recipients.recipients);
   const convertedObject = fetchedRecipients.reduce((acc, item) => {
     acc[item.id] = { ...item };
@@ -43,7 +43,7 @@ export default function RecipientSelector({ initialRecipient, setRecipient , dis
           persistentScrollbar={true}
         >
           {fetchedRecipients.map((item, index) => (
-
+            item.type === type ?
             <Pressable
               key={index}
               style={{
@@ -65,11 +65,11 @@ export default function RecipientSelector({ initialRecipient, setRecipient , dis
               <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
                 {item.icon}
               </Text>
-              <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 13, color: appColors.black }}>
+              <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 15, color: appColors.black }}>
                 {item.name}
               </Text>
             </Pressable>
-
+            : null
           ))}
         </ScrollView>
       </View>

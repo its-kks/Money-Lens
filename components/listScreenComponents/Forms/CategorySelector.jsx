@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
 
 export default function CategorySelector({ initialCategory, setCategory, type, disabled = false}) {
+  console.log(initialCategory);
   const fetchedCategories = useSelector(state => state.categories.categories);
   const convertedObject = fetchedCategories.reduce((acc, item) => {
     acc[item.id] = { ...item };

@@ -16,13 +16,14 @@ import {
 } from '../../../Redux/actions/transactions';
 import { ScrollView } from 'react-native-gesture-handler';
 import ConfirmationModal from './ConfirmationModal';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function TransactionForm({ route, navigation }) {
 
   const { id, name, amount, category, date, time, recipient, type, addition } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  
   const [transactionName, setTransactionName] = React.useState(name);
   const [transactionAmount, setTransactionAmount] = React.useState(Math.abs(amount) + '');
   const [transactionCategory, setTransactionCategory] = React.useState(category);
@@ -31,7 +32,16 @@ export default function TransactionForm({ route, navigation }) {
   const [transactionRecipient, setTransactionRecipient] = React.useState(recipient);
   const [transactionType, setTransactionType] = React.useState(type === 'Expense' ? '1' : '2');
 
-
+  useFocusEffect(() => {
+    setTransactionName(name);
+    setTransactionAmount(Math.abs(amount) + '');
+    setTransactionCategory(category);
+    setTransactionDate(date);
+    setTransactionTime(time);
+    setTransactionRecipient(recipient);
+    setTransactionType(type === 'Expense' ? '1' : '2');
+  });
+  
 
   const [udpdateState, setupdateState] = useState(false);
 
@@ -138,6 +148,7 @@ export default function TransactionForm({ route, navigation }) {
               initialRecipient={transactionRecipient}
               setRecipient={setTransactionRecipient}
               disabled={!addition && !udpdateState}
+              type={transactionType === '1' ? 'Recipient' : 'Payer'}
             />
 
             <DateTimeSelector initialDate={transactionDate} initialTime={transactionTime} setDate={setTransactionDate} setTime={setTransactionTime}

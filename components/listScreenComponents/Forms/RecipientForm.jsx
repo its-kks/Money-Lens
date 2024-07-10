@@ -8,11 +8,12 @@ import appColors from '../../../constants/colors';
 import ConfirmationModal from './ConfirmationModal';
 import ColorSelector from './ColorSelector';
 import emojiRegex from 'emoji-regex';
-import { addCategoryRequest, deleteCategoryRequest, updateCategoryRequest } from '../../../Redux/actions/categories'
+import { addRecipientRequest, deleteRecipientRequest, updateRecipientRequest } from '../../../Redux/actions/recipients'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
 
-export default function CategoryForm({ route, navigation }) {
-  const { id, name, icon, backgroundColor, type, addition } = route.params;
+export default function RecipientForm({ route, navigation }) {
+  const { id, name, icon, backgroundColor, type, url, addition } = route.params;
+  console.log(`This is ${backgroundColor}`);
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -30,53 +31,62 @@ export default function CategoryForm({ route, navigation }) {
   }
 
 
-  const [categoryName, setCategoryName] = React.useState(name);
-  const [categoryIcon, setCategoryIcon] = React.useState(icon);
-  const [categoryBackgroundColor, setCategoryBackgroundColor] = React.useState(backgroundColor);
-  const [categoryType, setCategoryType] = React.useState(type);
+  const [recipientName, setRecipientName] = React.useState(name);
+  const [recipientIcon, setRecipientIcon] = React.useState(icon);
+  const [recipientBackgroundColor, setRecipientBackgroundColor] = React.useState(backgroundColor);
+  const [recipientType, setRecipientType] = React.useState(type);
+  const [recipientUrl, setRecipientUrl] = React.useState(url);
 
   const [udpdateState, setupdateState] = useState(false);
 
   const dispatch = useDispatch();
 
-  const handleAddCategory = () => {
-    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)) {
+  const handleAddRecipient = () => {
+    if (recipientName.length === 0 || recipientName.length > 30 || isNotSingleEmoji(recipientIcon)) {
       return;
     }
-    dispatch(addCategoryRequest({
-      categoryName,
-      categoryType,
-      categoryIcon,
-      categoryBackgroundColor
-    }));
-    dispatch(fetchTransactionRequest());
-    navigation.navigate('CategoryList');
+    console.log({
+      recipientName,
+      recipientType,
+      recipientUrl,
+      recipientIcon,
+      recipientBackgroundColor
+    })
+    dispatch(addRecipientRequest({
+      recipientName,
+      recipientType,
+      recipientUrl,
+      recipientIcon,
+      recipientBackgroundColor
+    }))
+    dispatch(fetchTransactionRequest);
+    navigation.navigate('RecipientList');
   }
 
-  const handleDeleteCategory = () => {
+  const handleDeleteRecipient = () => {
     setShowModal(false);
-    dispatch(deleteCategoryRequest(id));
-    dispatch(fetchTransactionRequest());
-    navigation.navigate('CategoryList');
-    
+    dispatch(deleteRecipientRequest(id));
+    dispatch(fetchTransactionRequest);
+    navigation.navigate('RecipientList');
+
   }
 
-  const handleUpdateCategory = () => {
-    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)) {
+  const handleUpdateRecipient = () => {
+    if (recipientName.length === 0 || recipientName.length > 30 || isNotSingleEmoji(recipientIcon)) {
       return;
     }
-    dispatch(updateCategoryRequest(
-      {
-        categoryId:id,
-        categoryName,
-        categoryType,
-        categoryIcon,
-        categoryBackgroundColor
+    dispatch(updateRecipientRequest(
+      { recipientId: id,
+        recipientName,
+        recipientType,
+        recipientUrl,
+        recipientIcon,
+        recipientBackgroundColor
       }
 
-    ))
-    dispatch(fetchTransactionRequest());
-    navigation.navigate('CategoryList');
+    ));
+    dispatch(fetchTransactionRequest);
+    navigation.navigate('RecipientList');
 
   }
 
@@ -86,14 +96,14 @@ export default function CategoryForm({ route, navigation }) {
     // <ScrollView>
     <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: appColors.white }}>
       <ConfirmationModal
-        text={id === 1 || id===2 ?"This category can't be deleted"
-          : `If you delete this category all its transaction category will be set to miscellaneous. Do you want to continue?`
+        text={id === 1 || id === 2 ? `This ${type.toLowerCase()} can't be deleted`
+          : `If you delete this ${type.toLowerCase()} all its transaction's ${type.toLowerCase()} will be set to unknown. Do you want to continue?`
         }
         onCancel={() => { setShowModal(false) }}
         visible={showModal}
         setVisible={setShowModal}
-        onConfirm={handleDeleteCategory}
-        enableOk={id === 1 || id===2}
+        onConfirm={handleDeleteRecipient}
+        enableOk={id === 1 || id === 2}
       />
       <View>
         <SafeAreaView
@@ -104,30 +114,30 @@ export default function CategoryForm({ route, navigation }) {
           <View style={{ height: 600 }}>
 
             <TextField
-              placeholder={'Category Name'}
-              text={categoryName}
-              setText={setCategoryName}
+              placeholder={'Recipient Name'}
+              text={recipientName}
+              setText={setRecipientName}
               errorMessage={'Max 30 characters'}
               isRequired={true}
-              showErrorNow={categoryName.length === 0 || categoryName.length > 30 ? true : false}
+              showErrorNow={recipientName.length === 0 || recipientName.length > 30 ? true : false}
               submitPressed={submitPressed}
               disabled={!addition && !udpdateState}
             />
-            {console.log(isNotSingleEmoji(categoryIcon))}
+            {console.log(isNotSingleEmoji(recipientIcon))}
             <TextField
               placeholder={'Icon'}
-              text={categoryIcon}
-              setText={setCategoryIcon}
+              text={recipientIcon}
+              setText={setRecipientIcon}
               errorMessage={'The icon should consist of a single emoji'}
               isRequired={true}
-              showErrorNow={isNotSingleEmoji(categoryIcon)}
+              showErrorNow={isNotSingleEmoji(recipientIcon)}
               submitPressed={submitPressed}
               disabled={!addition && !udpdateState}
             />
 
             <ColorSelector
-              initialColor={categoryBackgroundColor}
-              setColor={setCategoryBackgroundColor}
+              initialColor={recipientBackgroundColor}
+              setColor={setRecipientBackgroundColor}
               disabled={!addition && !udpdateState}
             />
 
@@ -143,13 +153,13 @@ export default function CategoryForm({ route, navigation }) {
             {
               addition ?
                 <>
-                  <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 200 }}>
+                  <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 200 }}>
                     Cancel
                   </Button>
                   <Button mode='contained'
                     onPress={() => {
                       setSubmitPressed(true);
-                      handleAddCategory();
+                      handleAddRecipient();
                     }}
                     style={{ width: 200 }}>
                     Add
@@ -158,7 +168,7 @@ export default function CategoryForm({ route, navigation }) {
                 : (
                   udpdateState ?
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 120 }}>
+                      <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 120 }}>
                         Cancel
                       </Button>
                       <Button mode='contained' onPress={
@@ -172,7 +182,7 @@ export default function CategoryForm({ route, navigation }) {
                       <Button mode='contained' onPress={
                         () => {
                           setSubmitPressed(true);
-                          handleUpdateCategory();
+                          handleUpdateRecipient();
                         }
 
                       } style={{ width: 120 }}>
@@ -181,7 +191,7 @@ export default function CategoryForm({ route, navigation }) {
                     </>
                     :
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 200 }}>
+                      <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 200 }}>
                         Cancel
                       </Button>
                       <Button mode='contained' onPress={() => setupdateState(true)} style={{ width: 200 }}>

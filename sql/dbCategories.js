@@ -1,7 +1,7 @@
 import { getDBConnection } from "./dbServices";
 
 
-export const  addDefaultCategories = async ()=>{
+export const addDefaultCategories = async () => {
   const query = `
   INSERT INTO categories (name,type, icon, background_color)
   VALUES
@@ -23,32 +23,32 @@ export const  addDefaultCategories = async ()=>{
   ('EMI', 'Expense', '💳', 'red');
 
   `;
-  try{
+  try {
     const db = await getDBConnection();
     await db.executeSql(query);
     console.log('Default Categories Added');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 }
 
 
-export const fetchCategories = async ()=>{
+export const fetchCategories = async () => {
   const query = `SELECT * FROM categories`;
-  try{
+  try {
     const db = await getDBConnection();
     const [results] = await db.executeSql(query);
     const categories = results.rows.raw();
     return categories;
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 
 }
 
-export const addCategories = async ({categoryName, categoryType, categoryIcon, categoryBackgroundColor})=>{
+export const addCategories = async ({ categoryName, categoryType, categoryIcon, categoryBackgroundColor }) => {
   const query = `
   INSERT INTO categories (name,type, icon, background_color)
   VALUES
@@ -61,31 +61,43 @@ export const addCategories = async ({categoryName, categoryType, categoryIcon, c
     categoryBackgroundColor
   ];
   console.log(data);
-  try{
+  try {
     const db = await getDBConnection();
-    await db.executeSql(query,data);
+    await db.executeSql(query, data);
     console.log('Category Added');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 }
 
-export const deleteCategory = async (id)=>{
-  const query = ` DELETE FROM categories WHERE id = ?`;
+export const deleteCategory = async (id) => {
+  const queryDelete = `
+  DELETE FROM categories WHERE 
+  id = ?;
+  `
+  const queryUpdate = `
+  update transactions
+  set category_id = CASE
+    WHEN amount < 0 then 1
+      else 2
+  END
+  where category_id = ?; 
+  `
   const data = [id];
-  try{
+  try {
     const db = await getDBConnection();
-    await db.executeSql(query,data);
+    await db.executeSql(queryUpdate, data);
+    await db.executeSql(queryDelete, data);
     console.log('Category Deleted');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 
 }
 
-export const updateCategory = async ({categoryId, categoryName, categoryType, categoryIcon, categoryBackgroundColor})=>{
+export const updateCategory = async ({ categoryId, categoryName, categoryType, categoryIcon, categoryBackgroundColor }) => {
   const query = `
   UPDATE categories
   SET name = ?,
@@ -101,12 +113,12 @@ export const updateCategory = async ({categoryId, categoryName, categoryType, ca
     categoryBackgroundColor,
     categoryId
   ];
-  try{
+  try {
     const db = await getDBConnection();
-    await db.executeSql(query,data);
+    await db.executeSql(query, data);
     console.log('Category Updated');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 }

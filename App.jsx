@@ -22,6 +22,7 @@ import { Provider } from 'react-redux';
 import store from './Redux/store';
 import TransactionForm from './components/listScreenComponents/Forms/TransactionForm';
 import CategoryForm from './components/listScreenComponents/Forms/CategoryForm';
+import RecipientForm from './components/listScreenComponents/Forms/RecipientForm';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -59,9 +60,21 @@ const TopTabsLists = () => {
         tabBarInactiveTintColor: appColors.grey,
         tabBarScrollEnabled: true,
       }}
+      
     >
-      <TopTab.Screen name="Transactions" component={TransactionAndForm} />
-      <TopTab.Screen name="Recipients" component={RecipientList} />
+      <TopTab.Screen name="Transactions" component={TransactionAndForm} 
+        listeners={({ navigation, route }) => {
+          navigation.addListener('tabPress', e => {
+            e.preventDefault();
+            navigation.navigate('Transactions',
+              {
+                screen: 'TransactionList',
+              });
+          });
+        }
+        }
+      />
+      <TopTab.Screen name="Recipients" component={RecipientAndForm} />
       <TopTab.Screen name="Categories" component={CategoryAndForm} />
       <TopTab.Screen name="Recurring Payments" component={RecurringList} />
       <TopTab.Screen name="Savings" component={SavingsList} />
@@ -69,7 +82,7 @@ const TopTabsLists = () => {
   )
 }
 
-{/* Top Tabs Navigator with Edit forms stack */}
+{/* Top Tabs Navigator with Edit forms stack */ }
 
 const TransactionAndForm = () => {
   return (
@@ -92,6 +105,16 @@ const CategoryAndForm = () => {
     <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="CategoryList" component={CategoryList} />
       <StackNavigator.Screen name="CategoryForm" component={CategoryForm} />
+    </StackNavigator.Navigator>
+  )
+}
+
+const RecipientAndForm = () => {
+  return (
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <StackNavigator.Screen name='RecipientList' component={RecipientList} />
+      <StackNavigator.Screen name="RecipientForm" component={RecipientForm} />
+
     </StackNavigator.Navigator>
   )
 }
@@ -125,12 +148,26 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Lists</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Lists</Text>
           ),
           tabBarIcon: () => (
             <MaterialIcons name="view-list" size={30} color={appColors.blue} />
           ),
         }}
+        listeners={({ navigation, route }) => {
+          navigation.addListener('tabPress', e => {
+            e.preventDefault();
+            navigation.navigate('Lists',
+              {
+                screen: 'Transactions',
+                params:{
+                  screen: 'TransactionList'
+                }
+  
+              });
+          });
+        }
+        }
       />
 
       <BottomTab.Screen
@@ -139,7 +176,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Insights</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Insights</Text>
           ),
           tabBarIcon: () => (
             <MaterialCommunityIcons name="database-cog" size={30} color={appColors.blue} />
@@ -153,7 +190,7 @@ const BottomTabsHome = () => {
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
-            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light',  color: appColors.grey }}>Settings</Text>
+            <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Settings</Text>
           ),
           tabBarIcon: () => (
             <MaterialIcons name="settings" size={30} color={appColors.blue} />
