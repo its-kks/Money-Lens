@@ -18,12 +18,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ConfirmationModal from './ConfirmationModal';
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchCurrentMonthMoneyRequest } from '../../../Redux/actions/users';
+import { useSelector } from 'react-redux';
 
 export default function TransactionForm({ route, navigation }) {
 
   const { id, name, amount, category, date, time, recipient, type, addition } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showAddMoney, setShowAddMoney] = useState(false);
 
   const [transactionName, setTransactionName] = React.useState(name);
   const [transactionAmount, setTransactionAmount] = React.useState(Math.abs(amount) + '');
@@ -49,6 +51,19 @@ export default function TransactionForm({ route, navigation }) {
     }, [name, amount, category, date, time, recipient, type])
   );
 
+  const currentMonthMoney = useSelector(state => state.users.currentMonthMoney[0]);
+  let positive = 0;
+  let negative = 0;
+  if(currentMonthMoney){
+    positive = currentMonthMoney.positive;
+    negative = currentMonthMoney.negative;
+    if(!positive){
+      positive = 0;
+    }
+    if(!negative){
+      negative = 0;
+    }
+  }
 
   const [udpdateState, setupdateState] = useState(false);
 
@@ -63,8 +78,11 @@ export default function TransactionForm({ route, navigation }) {
     ) {
       return;
     }
-    console.log(typeof transactionDate)
-    console.warn(transactionDate);
+
+    if(positive<(parseFloat(transactionAmount) + Math.abs(negative) ) && transactionType=='1'){
+      setShowAddMoney(true);
+      return;
+    }
 
     dispatch(addTransactionRequest({
       transactionName,
@@ -120,6 +138,19 @@ export default function TransactionForm({ route, navigation }) {
         setVisible={setShowModal}
         onConfirm={handleTransactionDelete}
       />
+      <ConfirmationModal
+        text = {"Not enough money to for this expense"}
+        onCancel={()=>{
+          setShowAddMoney(false);
+        }}
+        onConfirm={()=>{
+          setShowAddMoney(false);
+        }}
+        setVisible={setShowAddMoney}
+        visible={showAddMoney}
+        enableOk={true}
+      />
+
       <ScrollView>
         <SafeAreaView
           style={{ height: 750, width: Dimensions.get('window').width }}
