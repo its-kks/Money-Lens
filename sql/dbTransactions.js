@@ -1,4 +1,5 @@
 import { getDBConnection } from "./dbServices";
+import to24Hour from "../utilities/dateTime";
 
 export const fetchTransactions = async () => {
   const db = await getDBConnection();
@@ -28,7 +29,7 @@ export const addTransaction = async ({
   const db = await getDBConnection();
 
   const [day, month, year] = transactionDate.split('/');
-  const formattedDateTime = `${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`;
+  const formattedDateTime = to24Hour(`${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`);
 
   const query = `INSERT INTO transactions (name, amount, category_id, recipient_id, tran_date_time) VALUES (?,?,?,?,?)`;
   const data = [
@@ -68,7 +69,7 @@ export const updateTransaction = async ({
   transactionRecipient,
   transactionType }) => {
   const [day, month, year] = transactionDate.split('/');
-  const formattedDateTime = `${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`;
+  const formattedDateTime = to24Hour(`${year}-${month.length === 1 ? '0'+month : month}-${ day.length === 1 ? '0'+day : day } ${transactionTime}`);
   const db = await getDBConnection();
   const query = `UPDATE transactions SET name = ?, amount = ?, category_id = ?, recipient_id = ?, tran_date_time = ? WHERE id = ?`;
   const data = [transactionName,
