@@ -48,7 +48,9 @@ export default function PayButtons({ navigation }) {
         icon={<MaterialIcons name="qr-code-2" size={35} color={appColors.orange} />}
         text={'Scan and Redirect'}
         iconColor={appColors.orange}
-        onPress={() => console.log('Scan and Redirect')}
+        onPress={
+          () => navigation.navigate('ScanAndRedirectScreen')
+        }
       />
       <ButtonPay
         icon={<MaterialCommunityIcons name="shopping" size={35} color={appColors.pink} />}

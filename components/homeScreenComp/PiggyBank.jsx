@@ -7,7 +7,7 @@ export default function PiggyBank({ moneyPos, moneyNeg }) {
     moneyPos = 1;
     moneyNeg = -1;
   }
-  console.warn(moneyNeg,moneyPos);
+
   const upperPercentange = Math.floor(Math.abs(moneyNeg) / (moneyPos) * 100);
   const lowerPercentange = 100 - upperPercentange;
   return (

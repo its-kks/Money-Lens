@@ -1,6 +1,6 @@
 
 const to24Hour = (timestamp) => {
-  console.warn(timestamp);
+
   let [date, time, ampm] = timestamp.split(' ')
   if(!ampm){
     return timestamp;

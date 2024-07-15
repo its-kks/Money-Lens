@@ -1,6 +1,5 @@
 import { LogBox, StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import HomeScreen from './screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,6 +22,7 @@ import store from './Redux/store';
 import TransactionForm from './components/listScreenComponents/Forms/TransactionForm';
 import CategoryForm from './components/listScreenComponents/Forms/CategoryForm';
 import RecipientForm from './components/listScreenComponents/Forms/RecipientForm';
+import HomeStack from './NavigationGroups/HomeStack';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -130,7 +130,7 @@ const BottomTabsHome = () => {
 
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
