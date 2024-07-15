@@ -1,5 +1,5 @@
 import { Dimensions, Linking, Pressable, StyleSheet, Text, View, Animated } from 'react-native'
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import appColors from '../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
@@ -69,24 +69,6 @@ export default function ScanAndRedirectScreen({ navigation }) {
     }
   })
 
-  const requestCameraPermission = useCallback(async () => {
-    try {
-      const status = await Camera.requestCameraPermission();
-      if (status === 'granted') {
-        console.log('Camera permission granted');
-      }
-      else {
-        Linking.openSettings();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  useEffect(() => {
-    requestCameraPermission();
-  }
-    , []);
 
 
   return (
@@ -179,8 +161,6 @@ export default function ScanAndRedirectScreen({ navigation }) {
                 isActive={true}
                 torch={flashOn ? 'on' : 'off'}
                 codeScanner={codeScanner}
-
-
               />
             </>
             :

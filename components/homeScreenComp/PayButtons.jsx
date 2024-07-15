@@ -1,11 +1,23 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native' // Step 1: Import Dimensions
+import { StyleSheet, Text, View, Dimensions, Linking } from 'react-native' // Step 1: Import Dimensions
 import React from 'react'
 import ButtonPay from './ButtonPay'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import appColors from '../../constants/colors'
+import {Camera} from 'react-native-vision-camera';
 
 export default function PayButtons({ navigation }) {
+  const handleScanAndRedirect = async () => {
+      const status = await Camera.requestCameraPermission();
+      if(status === 'granted'){
+        navigation.navigate('ScanAndRedirectScreen');
+      }
+      else{
+        alert('Please allow camera permission from settings to scan QR code');
+      }
+  }
+
+
   const handleAddNavigation = (type) => {
     const date = new Date();
     const formattedDate = [
@@ -49,7 +61,7 @@ export default function PayButtons({ navigation }) {
         text={'Scan and Redirect'}
         iconColor={appColors.orange}
         onPress={
-          () => navigation.navigate('ScanAndRedirectScreen')
+          () => handleScanAndRedirect()
         }
       />
       <ButtonPay
