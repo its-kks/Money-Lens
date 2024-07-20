@@ -4,12 +4,24 @@ import appColors from '../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
 import { Svg, Defs, Rect, Mask } from 'react-native-svg';
+import { fetchRecipientsRequest } from '../Redux/actions/recipients';
+import { useSelector } from 'react-redux';
 
 export default function ScanAndRedirectScreen({ navigation }) {
   const [flashOn, setFlashOn] = React.useState(false);
   const [displayMessage, setDisplayMessage] = useState('Place Merchant QR code withing the box');
   const prevQRCode = useRef('');
 
+  const recipients = useSelector(state => state.recipients.recipients);
+  let upiUrlKeyId = {};
+
+  for (const recipient of recipients) {
+    if (recipient.upiUrl) {
+      upiUrlKeyId[recipient.upiUrl] = recipient.id;
+    }
+  }
+  console.log(recipients);
+  console.log(upiUrlKeyId);
   // shaking animation
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -39,7 +51,7 @@ export default function ScanAndRedirectScreen({ navigation }) {
   };
 
 
-
+  // camera
   const device = useCameraDevice('back');
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
@@ -48,12 +60,17 @@ export default function ScanAndRedirectScreen({ navigation }) {
       if (upiId.search('mc=') !== -1) {
         const upiIdArray = upiId.split('://pay?')[1].split('&');
         let redirectUrl = 'upi://pay?';
+        let merchantName = '';
         for (const item of upiIdArray) {
           if (item.search('am') == -1) {
             redirectUrl += item + '&';
           }
+          if (item.search('pn=') !== -1) {
+            merchantName = item.split('=')[1];
+          }
         }
         console.log('Correct UPI URL');
+        handleAddNavigation(redirectUrl,merchantName);
       }
       else if (prevQRCode.current !== upiId) {
         prevQRCode.current = upiId;
@@ -68,6 +85,38 @@ export default function ScanAndRedirectScreen({ navigation }) {
 
     }
   })
+
+  // redirection to transaction form
+
+  const handleAddNavigation = (upiUrl,merchantName) => {
+    const date = new Date();
+    const formattedDate = [
+      date.getDate().toString().padStart(2, '0'),
+      (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
+      date.getFullYear(),
+    ].join('/');
+
+    const formattedTime = [
+      date.getHours().toString().padStart(2, '0'),
+      date.getMinutes().toString().padStart(2, '0'),
+      date.getSeconds().toString().padStart(2, '0'),
+    ].join(':');
+
+    navigation.navigate('QRCodeForm', {
+      id: '-1',
+      name: '',
+      amount: 0,
+      category: "1",
+      date: formattedDate,
+      time: formattedTime,
+      recipient: upiUrlKeyId[upiUrl] ? upiUrlKeyId[upiUrl] : '1',
+      type: 'Expense',
+      addition: true,
+      upiUrl,
+      merchantName,
+
+    });
+  }
 
 
 
