@@ -1,12 +1,12 @@
 import { Dimensions, StatusBar, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
-import appColors from '../constants/colors'
-import TopTitle from '../components/listScreenComponents/TopTitle'
+import appColors from '../../../constants/colors'
+import TopTitle from '../../../components/listScreenComponents/TopTitle'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import SearchBar from '../components/listScreenComponents/SearchBar'
-import ExpandingList from '../components/listScreenComponents/ExpandingList'
-import AscDescButton from '../components/listScreenComponents/AscDescButton'
-import SingleRecurringExpense from '../components/listScreenComponents/SingleRecurringExpense'
+import SearchBar from '../../../components/listScreenComponents/SearchBar'
+import ExpandingList from '../../../components/listScreenComponents/ExpandingList'
+import AscDescButton from '../../../components/listScreenComponents/AscDescButton'
+import SingleRecurringExpense from '../../../components/listScreenComponents/SingleRecurringExpense'
 
 export default function RecurringList() {
   return (

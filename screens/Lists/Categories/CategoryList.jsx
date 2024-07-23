@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Dimensions, StatusBar, ScrollView, SafeAreaView, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import appColors from '../constants/colors'
-import TopTitle from '../components/listScreenComponents/TopTitle'
-import SearchBar from '../components/listScreenComponents/SearchBar'
-import RecipientAndCategory from '../components/listScreenComponents/RecipientAndCategory'
-import AddCategoryRecipient from '../components/listScreenComponents/AddCategoryRecipient'
+import appColors from '../../../constants/colors'
+import TopTitle from '../../../components/listScreenComponents/TopTitle'
+import SearchBar from '../../../components/listScreenComponents/SearchBar'
+import RecipientAndCategory from '../../../components/listScreenComponents/RecipientAndCategory'
+import AddCategoryRecipient from '../../../components/listScreenComponents/AddCategoryRecipient'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCategoriesRequest } from '../Redux/actions/categories'
+import { fetchCategoriesRequest } from '../../../Redux/actions/categories'
 
 export default function CategoryList({ navigation }) {
   const dispatch = useDispatch();

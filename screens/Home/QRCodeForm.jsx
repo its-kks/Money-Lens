@@ -6,15 +6,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import ConfirmationModal from '../components/listScreenComponents/Forms/ConfirmationModal';
-import TextField from '../components/listScreenComponents/Forms/TextField';
-import CategorySelector from '../components/listScreenComponents/Forms/CategorySelector';
-import RecipientSelector from '../components/listScreenComponents/Forms/RecipientSelector';
-import appColors from '../constants/colors';
-import { addTransactionRequest } from '../Redux/actions/transactions';
-import { fetchCurrentMonthMoneyRequest } from '../Redux/actions/users';
-import DateTimeSelector from '../components/listScreenComponents/Forms/DateTimeSelector';
-import { addRecipientRequest } from '../Redux/actions/recipients';
+import appColors from '../../constants/colors';
+import { addTransactionRequest } from '../../Redux/actions/transactions';
+import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
+import DateTimeSelector from '../../components/listScreenComponents/Forms/DateTimeSelector';
+import { addRecipientRequest } from '../../Redux/actions/recipients';
+import ConfirmationModal from '../../components/listScreenComponents/Forms/ConfirmationModal';
+import TextField from '../../components/listScreenComponents/Forms/TextField';
+import CategorySelector from '../../components/listScreenComponents/Forms/CategorySelector';
+import RecipientSelector from '../../components/listScreenComponents/Forms/RecipientSelector';
 
 
 
@@ -81,7 +81,6 @@ export default function QRCodeForm({ route, navigation }) {
     ) {
       return;
     }
-    
     if (positive < (parseFloat(transactionAmount) + Math.abs(negative)) && transactionType == '1') {
       setShowAddMoney(true);
       return;
@@ -129,7 +128,6 @@ export default function QRCodeForm({ route, navigation }) {
         visible={showAddMoney}
         enableOk={true}
       />
-
       <ScrollView>
         <SafeAreaView
           style={{ height: 750, width: Dimensions.get('window').width }}

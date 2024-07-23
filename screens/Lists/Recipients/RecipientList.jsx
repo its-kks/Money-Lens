@@ -1,13 +1,13 @@
 import { StyleSheet, BackHandler, View, Dimensions, StatusBar, ScrollView, SafeAreaView, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import appColors from '../constants/colors'
-import TopTitle from '../components/listScreenComponents/TopTitle'
-import SearchBar from '../components/listScreenComponents/SearchBar'
+import appColors from '../../../constants/colors'
+import TopTitle from '../../../components/listScreenComponents/TopTitle'
+import SearchBar from '../../../components/listScreenComponents/SearchBar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import RecipientAndCategory from '../components/listScreenComponents/RecipientAndCategory'
-import AddCategoryRecipient from '../components/listScreenComponents/AddCategoryRecipient'
+import RecipientAndCategory from '../../../components/listScreenComponents/RecipientAndCategory'
+import AddCategoryRecipient from '../../../components/listScreenComponents/AddCategoryRecipient'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchRecipientsRequest } from '../Redux/actions/recipients'
+import { fetchRecipientsRequest } from '../../../Redux/actions/recipients'
 
 export default function RecipientList({navigation}) {
 
@@ -18,7 +18,7 @@ export default function RecipientList({navigation}) {
 
   return (
     <View>
-
+      
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
         <TopTitle title="Recipients / Payers:" />

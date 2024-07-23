@@ -1,10 +1,10 @@
 import { Dimensions, Linking, Pressable, StyleSheet, Text, View, Animated } from 'react-native'
 import React, { useState, useRef } from 'react'
-import appColors from '../constants/colors'
+import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
 import { Svg, Defs, Rect, Mask } from 'react-native-svg';
-import { fetchRecipientsRequest } from '../Redux/actions/recipients';
+import { fetchRecipientsRequest } from '../../Redux/actions/recipients';
 import { useSelector } from 'react-redux';
 
 export default function ScanAndRedirectScreen({ navigation }) {

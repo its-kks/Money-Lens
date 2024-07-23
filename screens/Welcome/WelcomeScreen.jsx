@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, StatusBar, SafeAreaView, TextInput, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import appColors from '../constants/colors';
-import AvatarChooser from '../components/initialStackComp/AvatarChooser';
-import NextButton from '../components/initialStackComp/NextButton';
-import { createTables } from '../sql/dbServices';
-import { addDefaultCategories } from '../sql/dbCategories';
-import { addDefaultRecipients } from '../sql/dbRecipients';
+import appColors from '../../constants/colors';
+import AvatarChooser from '../../components/initialStackComp/AvatarChooser';
+import NextButton from '../../components/initialStackComp/NextButton';
+import { createTables } from '../../sql/dbServices';
+import { addDefaultCategories } from '../../sql/dbCategories';
+import { addDefaultRecipients } from '../../sql/dbRecipients';
 
 export default function WelcomeScreen({ navigation }) {
   const [name, setName] = useState('');

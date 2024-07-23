@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/HomeScreen';
-import ScanAndRedirectScreen from '../screens/ScanAndRedirectScreen';
-import QRCodeForm from '../screens/QRCodeForm';
-import PayPreviousMerchantsForm from '../screens/PayPreviousMerchantsForm';
+import QRCodeForm from '../screens/Home/QRCodeForm';
+import PayPreviousMerchantsForm from '../screens/Home/PayPreviousMerchantsForm';
+import HomeScreen from '../screens/Home/HomeScreen';
+import ScanAndRedirectScreen from '../screens/Home/ScanAndRedirectScreen';
 
 
 const StackNavigator = createStackNavigator();
