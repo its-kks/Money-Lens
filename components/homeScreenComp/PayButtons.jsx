@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, Linking } from 'react-native' // Step 1: Import Dimensions
+import { StyleSheet, Text, View, Dimensions, Linking } from 'react-native'
 import React from 'react'
 import ButtonPay from './ButtonPay'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -15,6 +15,10 @@ export default function PayButtons({ navigation }) {
       else{
         alert('Please allow camera permission from settings to scan QR code');
       }
+  }
+
+  const handlePreviousMerchant = () => {
+    navigation.navigate('PayPreviousMerchantsForm');
   }
 
 
@@ -68,6 +72,7 @@ export default function PayButtons({ navigation }) {
         icon={<MaterialCommunityIcons name="shopping" size={35} color={appColors.pink} />}
         text="Pay Previous Recipients"
         iconColor={appColors.pink}
+        onPress={() => handlePreviousMerchant()}
       />
       <ButtonPay
         icon={<MaterialCommunityIcons name="cash-plus" size={35} color={appColors.green} />}
