@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, PaperProvider, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TextField from './TextField';
+import TextField from '../../../components/listScreenComponents/Forms/TextField';
 import appColors from '../../../constants/colors';
-import ConfirmationModal from './ConfirmationModal';
-import ColorSelector from './ColorSelector';
+import ConfirmationModal from '../../../components/listScreenComponents/Forms/ConfirmationModal';
+import ColorSelector from '../../../components/listScreenComponents/Forms/ColorSelector';
 import emojiRegex from 'emoji-regex';
 import { addRecipientRequest, deleteRecipientRequest, updateRecipientRequest } from '../../../Redux/actions/recipients'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions';

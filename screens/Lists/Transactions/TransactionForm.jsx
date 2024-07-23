@@ -3,19 +3,19 @@ import React, { useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, PaperProvider, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TextField from './TextField';
-import CategorySelector from './CategorySelector';
-import RecipientSelector from './RecipientSelector';
+import TextField from '../../../components/listScreenComponents/Forms/TextField';
+import CategorySelector from '../../../components/listScreenComponents/Forms/CategorySelector';
+import RecipientSelector from '../../../components/listScreenComponents/Forms/RecipientSelector';
 import appColors from '../../../constants/colors';
-import TransactionSelector from './TransactionSelector';
-import DateTimeSelector from './DateTimeSelector';
+import TransactionSelector from '../../../components/listScreenComponents/Forms/TransactionSelector';
+import DateTimeSelector from '../../../components/listScreenComponents/Forms/DateTimeSelector';
 import {
   addTransactionRequest,
   updateTransactionRequest,
   deleteTransactionRequest
 } from '../../../Redux/actions/transactions';
 import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmationModal from './ConfirmationModal';
+import ConfirmationModal from '../../../components/listScreenComponents/Forms/ConfirmationModal';
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchCurrentMonthMoneyRequest } from '../../../Redux/actions/users';
 import { useSelector } from 'react-redux';

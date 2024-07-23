@@ -19,9 +19,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoadScreen from './screens/Welcome/LoadScreen';
 import { Provider } from 'react-redux';
 import store from './Redux/store';
-import TransactionForm from './components/listScreenComponents/Forms/TransactionForm';
-import CategoryForm from './components/listScreenComponents/Forms/CategoryForm';
-import RecipientForm from './components/listScreenComponents/Forms/RecipientForm';
+import TransactionForm from './screens/Lists/Transactions/TransactionForm';
+import CategoryForm from './screens/Lists/Categories/CategoryForm';
+import RecipientForm from './screens/Lists/Recipients/RecipientForm';
 import HomeStack from './NavigationGroups/HomeStack';
 
 
