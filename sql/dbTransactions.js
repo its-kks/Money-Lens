@@ -1,5 +1,6 @@
+import { to24Hour } from "../utilities/dateTime";
 import { getDBConnection } from "./dbServices";
-import to24Hour from "../utilities/dateTime";
+
 
 export const fetchTransactions = async () => {
   const db = await getDBConnection();

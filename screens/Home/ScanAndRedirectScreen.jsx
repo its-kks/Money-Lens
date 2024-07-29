@@ -6,6 +6,7 @@ import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-cam
 import { Svg, Defs, Rect, Mask } from 'react-native-svg';
 import { fetchRecipientsRequest } from '../../Redux/actions/recipients';
 import { useSelector } from 'react-redux';
+import { formattedDate, formattedTime } from '../../utilities/dateTime';
 
 export default function ScanAndRedirectScreen({ navigation }) {
   const [flashOn, setFlashOn] = React.useState(false);
@@ -89,26 +90,14 @@ export default function ScanAndRedirectScreen({ navigation }) {
   // redirection to transaction form
 
   const handleAddNavigation = (upiUrl,merchantName) => {
-    const date = new Date();
-    const formattedDate = [
-      date.getDate().toString().padStart(2, '0'),
-      (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
-      date.getFullYear(),
-    ].join('/');
-
-    const formattedTime = [
-      date.getHours().toString().padStart(2, '0'),
-      date.getMinutes().toString().padStart(2, '0'),
-      date.getSeconds().toString().padStart(2, '0'),
-    ].join(':');
 
     navigation.navigate('QRCodeForm', {
       id: '-1',
       name: '',
       amount: 0,
       category: "1",
-      date: formattedDate,
-      time: formattedTime,
+      date: formattedDate(),
+      time: formattedTime(),
       recipient: upiUrlKeyId[upiUrl] ? upiUrlKeyId[upiUrl] : '1',
       type: 'Expense',
       addition: true,

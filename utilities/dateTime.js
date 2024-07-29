@@ -1,5 +1,5 @@
 
-const to24Hour = (timestamp) => {
+export function to24Hour (timestamp){
 
   let [date, time, ampm] = timestamp.split(' ')
   if(!ampm){
@@ -25,4 +25,20 @@ const to24Hour = (timestamp) => {
   return date + " " + time;
 }
 
-export default to24Hour;
+export function formattedDate(){
+  const date = new Date();
+  return [
+    date.getDate().toString().padStart(2, '0'),
+    (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
+    date.getFullYear(),
+  ].join('/');
+}
+
+export function formattedTime(){
+  const date = new Date();
+  return [
+    date.getHours().toString().padStart(2, '0'),
+    date.getMinutes().toString().padStart(2, '0'),
+    date.getSeconds().toString().padStart(2, '0'),
+  ].join(':');
+}
