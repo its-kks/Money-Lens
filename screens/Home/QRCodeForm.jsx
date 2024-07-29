@@ -166,12 +166,6 @@ export default function QRCodeForm({ route, navigation }) {
               disabled={!addition && !udpdateState}
             />
 
-            <RecipientSelector
-              initialRecipient={transactionRecipient}
-              setRecipient={setTransactionRecipient}
-              disabled={!addition && !udpdateState}
-              type={transactionType === '1' ? 'Recipient' : 'Payer'}
-            />
 
             <DateTimeSelector initialDate={transactionDate} initialTime={transactionTime} setDate={setTransactionDate} setTime={setTransactionTime}
               disabled={!addition && !udpdateState}
