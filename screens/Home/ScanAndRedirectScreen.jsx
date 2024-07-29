@@ -172,7 +172,7 @@ export default function ScanAndRedirectScreen({ navigation }) {
                   zIndex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  top: 520,
+                  bottom: 200,
                   width: Dimensions.get('screen').width,
                   transform: [{ translateX: shakeAnimation }],
                 }}
