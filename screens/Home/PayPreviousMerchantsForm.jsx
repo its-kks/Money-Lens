@@ -70,9 +70,11 @@ const styles = StyleSheet.create({
   titleContainer: {
     flex: 4,
     justifyContent: 'flex-end',
+    marginTop: 10,
+    marginBottom: 10,
   },
   searchContainer: {
-    flex: 8,
+    flex: 9,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
