@@ -91,7 +91,6 @@ export default function Recur({ route, navigation }) {
   }
 
   const handleRecPaymentDelete = () => {
-    console.log("Delete");
     dispatch(deleteRecurringPaymentRequest(id));
     setShowModal(false);
     navigation.goBack();
@@ -207,7 +206,7 @@ export default function Recur({ route, navigation }) {
                 : (
                   udpdateState ?
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('TransactionList')} style={{ width: 120 }}>
+                      <Button mode='outlined' onPress={() => navigation.goBack()} style={{ width: 120 }}>
                         Cancel
                       </Button>
                       <Button mode='contained' onPress={
