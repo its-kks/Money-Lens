@@ -40,7 +40,7 @@ export const addTransaction = async ({
     parseInt(transactionRecipient),
     formattedDateTime
   ];
-
+  console.log(data);
   try {
     await db.executeSql(query, data);
     console.log('Transaction added');

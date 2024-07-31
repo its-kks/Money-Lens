@@ -5,7 +5,7 @@ import appColors from '../../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
 
-export default function TransactionSelector({ initialType,setType , setCategory}) {
+export default function TransactionSelector({ initialType,setType , setCategory, heading = 'Transaction Type'}) {
   const fetchedExpenses = [{ "id": '1', "name": "Expense", "icon": "💸" }, { "id": '2', "name": "Income", "icon": "💰" }];
   const convertedObject = fetchedExpenses.reduce((acc, item) => {
     acc[item.id] = { ...item };
@@ -14,7 +14,7 @@ export default function TransactionSelector({ initialType,setType , setCategory}
   return (
     <>
       <TextField
-        placeholder={'Transaction Type'}
+        placeholder={heading}
         text={convertedObject[initialType].name}
         setText={setType}
         errorMessage={'Type is required'}

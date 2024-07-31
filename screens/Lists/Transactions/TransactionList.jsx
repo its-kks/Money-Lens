@@ -10,6 +10,7 @@ import AddBar from '../../../components/listScreenComponents/AddBar'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions'
 import { FlatList } from 'react-native-gesture-handler'
+import { formattedDate, formattedTime } from '../../../utilities/dateTime'
 
 
 export default function TransactionList({navigation}) {
@@ -23,26 +24,13 @@ export default function TransactionList({navigation}) {
   const [showYear,setShowYear] = useState(false);
 
   const handleAddNavigation = () => {
-    const date = new Date();
-    const formattedDate = [
-      date.getDate().toString().padStart(2, '0'),
-      (date.getMonth() + 1).toString().padStart(2, '0'), // Months are 0-based
-      date.getFullYear(),
-    ].join('/');
-  
-    const formattedTime = [
-      date.getHours().toString().padStart(2, '0'),
-      date.getMinutes().toString().padStart(2, '0'),
-      date.getSeconds().toString().padStart(2, '0'),
-    ].join(':');
-  
     navigation.navigate('TransactionForm', {
       id:'-1',
       name: '',
       amount: 0,
       category: "1",
-      date: formattedDate,
-      time: formattedTime, 
+      date: formattedDate(),
+      time: formattedTime(), 
       recipient: "1",
       type: 'Expense',
       addition: true

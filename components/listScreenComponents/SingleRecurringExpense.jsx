@@ -3,7 +3,7 @@ import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function SingleRecurringExpense({ itemName, itemIcon, repeat, price, itemBackgroundColor }) {
+export default function SingleRecurringExpense({ itemName, itemIcon, repeat, price, itemBackgroundColor, handleUpdate }) {
   return (
     <View style={styles.container}>
 
@@ -27,7 +27,9 @@ export default function SingleRecurringExpense({ itemName, itemIcon, repeat, pri
 
       <View style={styles.priceContainer}>
         <Text style={[styles.price, { color: (price < 0 ? appColors.red : appColors.green) }]}>{'$' + Math.abs(price)}</Text>
-        <TouchableOpacity style={styles.editIcon}>
+        <TouchableOpacity style={styles.editIcon}
+          onPress={handleUpdate}
+        >
           <MaterialCommunityIcons name="dots-vertical" size={30} color={appColors.lightGrey} />
         </TouchableOpacity>
       </View>

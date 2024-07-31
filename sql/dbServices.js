@@ -56,7 +56,9 @@ export const createTableRecurringPayments = async (db) => {
     start_date DATE NOT NULL,
     frequency INTEGER NOT NULL DEFAULT 1,
     category_id INTEGER,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE CASCADE
+    recipient_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES recipients(id) ON DELETE SET NULL ON UPDATE CASCADE
   );`;
   await db.executeSql(query);
   console.log('Recurring Payments Table Created');

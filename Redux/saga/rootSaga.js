@@ -18,6 +18,13 @@ import {
   watcUpdateTransactions
 } from './transactions';
 
+import {
+  watchFetchRecurringPayments,
+  watchAddRecurringPayment,
+  watchUpdateRecurringPayment,
+  watchDeleteRecurringPayment
+} from './recurringPayments'
+
 import { watchFetchCurrentMonthMoney } from './users';
 
 export default function* rootSaga() {
@@ -39,6 +46,12 @@ export default function* rootSaga() {
       watcDeleteTransactions(),
 
       watchFetchCurrentMonthMoney(),
+
+      watchFetchRecurringPayments(),
+      watchAddRecurringPayment(),
+      watchUpdateRecurringPayment(),
+      watchDeleteRecurringPayment(),
+
 
     ]
   );

@@ -9,6 +9,7 @@ import { fetchCategoriesRequest } from '../../Redux/actions/categories';
 import { fetchRecipientsRequest } from '../../Redux/actions/recipients';
 import { fetchTransactionRequest } from '../../Redux/actions/transactions';
 import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
+import { fetchRecurringPaymentsRequest } from '../../Redux/actions/recurringPayments';
 
 export default function HomeScreen({navigation}) {
   const [userName, setUserName] = useState('');
@@ -26,6 +27,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchRecipientsRequest());
     dispatch(fetchTransactionRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
+    dispatch(fetchRecurringPaymentsRequest());
     updateData();
   },[])
 

@@ -23,6 +23,7 @@ import TransactionForm from './screens/Lists/Transactions/TransactionForm';
 import CategoryForm from './screens/Lists/Categories/CategoryForm';
 import RecipientForm from './screens/Lists/Recipients/RecipientForm';
 import HomeStack from './NavigationGroups/HomeStack';
+import RecurringForm from './screens/Lists/Recurring Payments/RecurringForm';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -76,7 +77,7 @@ const TopTabsLists = () => {
       />
       <TopTab.Screen name="Recipients" component={RecipientAndForm} />
       <TopTab.Screen name="Categories" component={CategoryAndForm} />
-      <TopTab.Screen name="Recurring Payments" component={RecurringList} />
+      <TopTab.Screen name="Recurring Payments" component={RecurringPaymentsAndForm} />
       <TopTab.Screen name="Savings" component={SavingsList} />
     </TopTab.Navigator>
   )
@@ -115,6 +116,15 @@ const RecipientAndForm = () => {
       <StackNavigator.Screen name='RecipientList' component={RecipientList} />
       <StackNavigator.Screen name="RecipientForm" component={RecipientForm} />
 
+    </StackNavigator.Navigator>
+  )
+}
+
+const RecurringPaymentsAndForm = () => {
+  return (
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <StackNavigator.Screen name='RecurringList' component={RecurringList} />
+      <StackNavigator.Screen name="RecurringForm" component={RecurringForm} />
     </StackNavigator.Navigator>
   )
 }
