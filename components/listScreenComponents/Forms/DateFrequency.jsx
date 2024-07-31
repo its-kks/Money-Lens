@@ -40,6 +40,7 @@ export default function DateFrequency({ recPaymentNextPayment, setRecPaymentNext
             mode="date"
             display="default"
             onChange={onChangeDate}
+            minimumDate={new Date()}
           />
         )}
       </View>
