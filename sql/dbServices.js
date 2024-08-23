@@ -88,6 +88,7 @@ export const createTableSavings = async (db) => {
     amount REAL NOT NULL,
     saved REAL NOT NULL DEFAULT 0,
     category_id INTEGER,
+    buy_date DATE NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE CASCADE
   );`;
   await db.executeSql(query);

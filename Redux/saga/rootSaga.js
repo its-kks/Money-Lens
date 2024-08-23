@@ -25,6 +25,14 @@ import {
   watchDeleteRecurringPayment
 } from './recurringPayments'
 
+import {
+  watchAddSavings,
+  watchFetchSavings,
+  watchUpdateSavings,
+  watchDeleteSavings
+  
+} from './savings'
+
 import { watchFetchCurrentMonthMoney } from './users';
 
 export default function* rootSaga() {
@@ -51,6 +59,11 @@ export default function* rootSaga() {
       watchAddRecurringPayment(),
       watchUpdateRecurringPayment(),
       watchDeleteRecurringPayment(),
+
+      watchAddSavings(),
+      watchFetchSavings(),
+      watchUpdateSavings(),
+      watchDeleteSavings()
 
 
     ]
