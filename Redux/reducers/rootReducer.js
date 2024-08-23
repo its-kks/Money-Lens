@@ -4,6 +4,7 @@ import recipientReducer from "./recipients";
 import transactionReducer from "./transactions";
 import userReducer from "./users";
 import recurringPaymentsReducer from './recurringPayments';
+import savingsReducer from "./savings";
 
 const rootReducer = combineReducers(
   {
@@ -11,8 +12,8 @@ const rootReducer = combineReducers(
     recipients: recipientReducer,
     transactions: transactionReducer,
     users: userReducer,
-    recurringPayments: recurringPaymentsReducer
-
+    recurringPayments: recurringPaymentsReducer,
+    savings: savingsReducer
   }
 
 )

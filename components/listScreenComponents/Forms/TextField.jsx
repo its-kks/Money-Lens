@@ -22,9 +22,6 @@ export default function TextField({ text, setText, placeholder, errorMessage, sh
   }, [text]);
   return (
     <View style={styles.container}>
-      <Animated.Text style={[styles.placeholder, { transform: [{ translateY: jumpAnim }] }]}>
-        {text.length > 0 ? placeholder : ''}
-      </Animated.Text>
       <TextInput
         style={styles.textInput}
         placeholder={placeholder}
@@ -38,6 +35,9 @@ export default function TextField({ text, setText, placeholder, errorMessage, sh
         keyboardType={keyboardType}
         placeholderTextColor={appColors.grey}
       />
+      <Animated.Text style={[styles.placeholder, { transform: [{ translateY: jumpAnim }] }]}>
+        {text.length > 0 ? placeholder : ''}
+      </Animated.Text>
       {isRequired && submitPressed && text.length === 0 ? <Text style={styles.errorText}>Required</Text> : null}
       {showErrorNow && submitPressed ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
@@ -58,15 +58,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: appColors.purple,
     fontFamily: 'Roboto-Regular',
+    backgroundColor: appColors.white,
+    paddingLeft: 5,
+    paddingRight: 5
   },
   textInput: {
     width: '100%',
-    padding: 10,
-    borderBottomWidth: 2,
+    padding: 18,
+    borderWidth: 2,
     borderColor: appColors.purple,
     fontSize: 18,
     fontFamily: 'Roboto-Regular',
     color: appColors.black,
+    borderRadius: 10
   },
   errorText: {
     color: 'red',
