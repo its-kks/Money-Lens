@@ -78,7 +78,7 @@ const TopTabsLists = () => {
       <TopTab.Screen name="Recipients" component={RecipientAndForm} />
       <TopTab.Screen name="Categories" component={CategoryAndForm} />
       <TopTab.Screen name="Recurring Payments" component={RecurringPaymentsAndForm} />
-      <TopTab.Screen name="Savings" component={SavingsList} />
+      {/* <TopTab.Screen name="Savings" component={SavingsList} /> */}
     </TopTab.Navigator>
   )
 }
