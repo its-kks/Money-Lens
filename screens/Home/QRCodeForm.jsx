@@ -15,6 +15,7 @@ import ConfirmationModal from '../../components/listScreenComponents/Forms/Confi
 import TextField from '../../components/listScreenComponents/Forms/TextField';
 import CategorySelector from '../../components/listScreenComponents/Forms/CategorySelector';
 import RecipientSelector from '../../components/listScreenComponents/Forms/RecipientSelector';
+import Buttons from '../../components/listScreenComponents/Forms/Buttons';
 
 
 
@@ -85,8 +86,8 @@ export default function QRCodeForm({ route, navigation }) {
       setShowAddMoney(true);
       return;
     }
-    
-    Linking.openURL(upiUrl+'&am='+transactionAmount);
+
+    Linking.openURL(upiUrl + '&am=' + transactionAmount);
 
     if (transactionRecipient === '1') {
       dispatch(addRecipientRequest({
@@ -99,7 +100,7 @@ export default function QRCodeForm({ route, navigation }) {
     }
     const newRecipientId = recipients[recipients.length - 1].id;
     setTransactionRecipient(newRecipientId);
-    
+
     dispatch(addTransactionRequest({
       transactionName,
       transactionAmount,
@@ -128,13 +129,13 @@ export default function QRCodeForm({ route, navigation }) {
         visible={showAddMoney}
         enableOk={true}
       />
-      <ScrollView>
-        <SafeAreaView
-          style={{ height: 750, width: Dimensions.get('window').width }}
+      <View>
+        <View
+          style={{ flex: 1, width: Dimensions.get('window').width }}
         >
 
           {/* Form Section */}
-          <View style={{ height: 700 }}>
+          <ScrollView style={{ flex: 1 }}>
 
             <TextField
               placeholder={'Transaction Name'}
@@ -171,7 +172,7 @@ export default function QRCodeForm({ route, navigation }) {
               disabled={!addition && !udpdateState}
             />
 
-          </View>
+          </ScrollView>
 
 
 
@@ -180,23 +181,27 @@ export default function QRCodeForm({ route, navigation }) {
 
 
           <View
-            style={{ flexDirection: 'row', alignItems: 'flex-end', height: 50, justifyContent: 'space-evenly' }}
+            style={{
+              flexDirection: 'row', alignItems: 'flex-start', height: 60, justifyContent: 'space-evenly', flexShrink: 0,
+              elevation: 1
+            }}
           >
 
             {
               addition ?
                 <>
-                  <Button mode='outlined' onPress={() => navigation.goBack()} style={{ width: 200 }}>
-                    Cancel
-                  </Button>
-                  <Button mode='contained'
-                    onPress={() => {
-                      setSubmitPressed(true);
-                      handleProcessPayment();
-                    }}
-                    style={{ width: 200 }}>
-                    Pay
-                  </Button>
+                  <>
+                    <Buttons onPress={() => navigation.goBack()} value={'Cancel'} color={appColors.red} />
+                    <Buttons 
+                      onPress={() => {
+                        setSubmitPressed(true);
+                        handleProcessPayment();
+                      }}
+                      style={{ width: 200 }}
+                      value={'Add'}
+                      color={appColors.blue}
+                    />
+                  </>
                 </>
                 : <></>
             }
@@ -206,8 +211,8 @@ export default function QRCodeForm({ route, navigation }) {
           </View>
 
 
-        </SafeAreaView>
-      </ScrollView>
+        </View>
+      </View>
 
     </View>
   )
