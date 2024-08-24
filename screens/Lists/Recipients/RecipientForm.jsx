@@ -1,8 +1,6 @@
 import { Dimensions, StyleSheet, View, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Button, PaperProvider, TextInput } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import TextField from '../../../components/listScreenComponents/Forms/TextField';
 import appColors from '../../../constants/colors';
 import ConfirmationModal from '../../../components/listScreenComponents/Forms/ConfirmationModal';
@@ -10,6 +8,7 @@ import ColorSelector from '../../../components/listScreenComponents/Forms/ColorS
 import emojiRegex from 'emoji-regex';
 import { addRecipientRequest, deleteRecipientRequest, updateRecipientRequest } from '../../../Redux/actions/recipients'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
+import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
 
 export default function RecipientForm({ route, navigation }) {
   const { id, name, icon, backgroundColor, type, url, addition } = route.params;
@@ -68,7 +67,8 @@ export default function RecipientForm({ route, navigation }) {
       return;
     }
     dispatch(updateRecipientRequest(
-      { recipientId: id,
+      {
+        recipientId: id,
         recipientName,
         recipientType,
         recipientUrl,
@@ -98,12 +98,12 @@ export default function RecipientForm({ route, navigation }) {
         enableOk={id === 1 || id === 2}
       />
       <View>
-        <SafeAreaView
-          style={{ height: 650, width: Dimensions.get('window').width }}
+        <View
+          style={{ flex: 1, width: Dimensions.get('window').width }}
         >
 
           {/* Form Section */}
-          <View style={{ height: 600 }}>
+          <ScrollView style={{ flex: 1 }}>
 
             <TextField
               placeholder={'Recipient Name'}
@@ -131,63 +131,67 @@ export default function RecipientForm({ route, navigation }) {
               setColor={setRecipientBackgroundColor}
               disabled={!addition && !udpdateState}
             />
+            <View style={{ height: 30 }}>
+            </View>
 
-          </View>
+          </ScrollView>
 
           {/* Button Section */}
 
 
           <View
-            style={{ flexDirection: 'row', alignItems: 'flex-end', height: 50, justifyContent: 'space-evenly' }}
+            style={{
+              flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-evenly',
+              height: 60, flexShrink: 0
+            }}
           >
 
             {
               addition ?
                 <>
-                  <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 200 }}>
-                    Cancel
-                  </Button>
-                  <Button mode='contained'
+                  <Buttons onPress={() => navigation.navigate('RecipientList')} color={appColors.red} value={'Cancel'}>
+                  </Buttons>
+                  <Buttons
                     onPress={() => {
                       setSubmitPressed(true);
                       handleAddRecipient();
                     }}
-                    style={{ width: 200 }}>
-                    Add
-                  </Button>
+                    color={appColors.blue}
+                    value={'Add'}
+                    >
+                  </Buttons>
                 </>
                 : (
                   udpdateState ?
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 120 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={
+                      <Buttons onPress={() => navigation.navigate('RecipientList')} color={appColors.grey} value={'Cancel'} percentWidth={0.3}>
+                      </Buttons>
+                      <Buttons onPress={
                         () => {
                           setShowModal(true);
                         }}
-                        style={{ width: 120 }}
+                        color={appColors.red}
+                        value={'Delete'} percentWidth={0.3}
                       >
-                        Delete
-                      </Button>
-                      <Button mode='contained' onPress={
+                      </Buttons>
+                      <Buttons onPress={
                         () => {
                           setSubmitPressed(true);
                           handleUpdateRecipient();
                         }
 
-                      } style={{ width: 120 }}>
-                        Update
-                      </Button>
+                      }
+                        color={appColors.blue}
+                        value={'Update'} percentWidth={0.3}
+                      >
+                      </Buttons>
                     </>
                     :
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('RecipientList')} style={{ width: 200 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={() => setupdateState(true)} style={{ width: 200 }}>
-                        Edit
-                      </Button>
+                      <Buttons onPress={() => navigation.navigate('RecipientList')} color={appColors.red} value={'Cancel'}>
+                      </Buttons>
+                      <Buttons onPress={() => setupdateState(true)} color={appColors.blue} value={'Edit'}>
+                      </Buttons>
                     </>
                 )
             }
@@ -197,7 +201,7 @@ export default function RecipientForm({ route, navigation }) {
           </View>
 
 
-        </SafeAreaView>
+        </View>
       </View>
     </View>
   )

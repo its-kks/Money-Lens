@@ -135,6 +135,7 @@ const BottomTabsHome = () => {
     <BottomTab.Navigator
       screenOptions={{
         tabBarHideOnKeyboard: true,
+        tabBarStyle: {height: 60},
       }}
     >
 
@@ -146,8 +147,8 @@ const BottomTabsHome = () => {
           tabBarLabel: ({ focused }) => (
             <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Home</Text>
           ),
-          tabBarIcon: () => (
-            <MaterialCommunityIcons name="home" size={30} color={appColors.blue} />
+          tabBarIcon: ({focused}) => (
+            <MaterialCommunityIcons name="home" size={30} color={focused ? appColors.blue : appColors.grey} />
           ),
         }}
       />
@@ -160,8 +161,8 @@ const BottomTabsHome = () => {
           tabBarLabel: ({ focused }) => (
             <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Lists</Text>
           ),
-          tabBarIcon: () => (
-            <MaterialIcons name="view-list" size={30} color={appColors.blue} />
+          tabBarIcon: ({focused}) => (
+            <MaterialIcons name="view-list" size={30} color={focused ? appColors.blue : appColors.grey} />
           ),
         }}
         listeners={({ navigation, route }) => {
@@ -188,8 +189,8 @@ const BottomTabsHome = () => {
           tabBarLabel: ({ focused }) => (
             <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Insights</Text>
           ),
-          tabBarIcon: () => (
-            <MaterialCommunityIcons name="database-cog" size={30} color={appColors.blue} />
+          tabBarIcon: ({focused}) => (
+            <MaterialCommunityIcons name="database-cog" size={30} color={focused ? appColors.blue : appColors.grey} />
           ),
         }}
       />
@@ -202,8 +203,8 @@ const BottomTabsHome = () => {
           tabBarLabel: ({ focused }) => (
             <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontFamily: 'Roboto-Light', color: appColors.grey }}>Settings</Text>
           ),
-          tabBarIcon: () => (
-            <MaterialIcons name="settings" size={30} color={appColors.blue} />
+          tabBarIcon: ({focused}) => (
+            <MaterialIcons name="settings" size={30} color={focused ? appColors.blue : appColors.grey} />
           ),
         }}
       />

@@ -25,7 +25,7 @@ export default function RecipientSelector({ initialRecipient, setRecipient , dis
       />
 
       <View style={{
-        height: 75,
+        height: 100,
         marginTop: 5,
         marginBottom: 5,
         marginLeft: 10,
@@ -49,7 +49,7 @@ export default function RecipientSelector({ initialRecipient, setRecipient , dis
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                padding: 2,
+                padding: 4,
                 backgroundColor: appColors.lightGrey,
                 borderRadius: 20,
                 paddingLeft: 5,
@@ -62,7 +62,7 @@ export default function RecipientSelector({ initialRecipient, setRecipient , dis
               }
               disabled={disabled}
             >
-              <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
+              <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 16 }}>
                 {item.icon}
               </Text>
               <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 15, color: appColors.black }}>

@@ -24,7 +24,7 @@ export default function TransactionSelector({ initialType,setType , setCategory,
         disabled={true}
       />
 
-      <View style={{ height: 40, margin: 5 }}>
+      <View style={{ height: 60, margin: 5 }}>
         <ScrollView
           contentContainerStyle={{
             flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap',
@@ -39,7 +39,7 @@ export default function TransactionSelector({ initialType,setType , setCategory,
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  padding: 2,
+                  padding: 4,
                   backgroundColor: appColors.lightGrey,
                   borderRadius: 20,
                   paddingLeft: 5,
@@ -53,7 +53,7 @@ export default function TransactionSelector({ initialType,setType , setCategory,
                 }
                 }
               >
-                <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
+                <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 18 }}>
                   {item.icon}
             
                 </Text>

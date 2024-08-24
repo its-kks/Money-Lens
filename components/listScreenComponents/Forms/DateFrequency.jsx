@@ -46,7 +46,7 @@ export default function DateFrequency({ recPaymentNextPayment, setRecPaymentNext
       </View>
       <View style={{flexDirection:'row', alignItems:'center'}}>
         <TextField
-          placeholder="Frequency (months)"
+          placeholder="Frequency"
           text={recPaymentFrequency.toString()}
           setText={setRecPaymentFrequency}
           errorMessage="Frequency is required"
@@ -60,12 +60,12 @@ export default function DateFrequency({ recPaymentNextPayment, setRecPaymentNext
           <TouchableOpacity onPress={() => setRecPaymentFrequency(recPaymentFrequency + 1) }
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="arrow-up" size={25} color={appColors.lightBlack} />
+            <MaterialCommunityIcons name="arrow-up" size={30} color={appColors.lightBlack} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setRecPaymentFrequency(recPaymentFrequency - 1)}
             disabled={disabled || recPaymentFrequency === 1}
           >
-            <MaterialCommunityIcons name="arrow-down" size={25} color={recPaymentFrequency>1 ? appColors.lightBlack : appColors.grey} />
+            <MaterialCommunityIcons name="arrow-down" size={30} color={recPaymentFrequency>1 ? appColors.lightBlack : appColors.grey} />
           </TouchableOpacity>
         </View>
 

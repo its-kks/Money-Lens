@@ -10,6 +10,7 @@ import ColorSelector from '../../../components/listScreenComponents/Forms/ColorS
 import emojiRegex from 'emoji-regex';
 import { addCategoryRequest, deleteCategoryRequest, updateCategoryRequest } from '../../../Redux/actions/categories'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
+import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
 
 export default function CategoryForm({ route, navigation }) {
   const { id, name, icon, backgroundColor, type, addition } = route.params;
@@ -58,7 +59,7 @@ export default function CategoryForm({ route, navigation }) {
     dispatch(deleteCategoryRequest(id));
     dispatch(fetchTransactionRequest());
     navigation.navigate('CategoryList');
-    
+
   }
 
   const handleUpdateCategory = () => {
@@ -67,7 +68,7 @@ export default function CategoryForm({ route, navigation }) {
     }
     dispatch(updateCategoryRequest(
       {
-        categoryId:id,
+        categoryId: id,
         categoryName,
         categoryType,
         categoryIcon,
@@ -86,22 +87,22 @@ export default function CategoryForm({ route, navigation }) {
     // <ScrollView>
     <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: appColors.white }}>
       <ConfirmationModal
-        text={id === 1 || id===2 ?"This category can't be deleted"
+        text={id === 1 || id === 2 ? "This category can't be deleted"
           : `If you delete this category all its transaction category will be set to miscellaneous. Do you want to continue?`
         }
         onCancel={() => { setShowModal(false) }}
         visible={showModal}
         setVisible={setShowModal}
         onConfirm={handleDeleteCategory}
-        enableOk={id === 1 || id===2}
+        enableOk={id === 1 || id === 2}
       />
       <View>
-        <SafeAreaView
-          style={{ height: 650, width: Dimensions.get('window').width }}
+        <View
+          style={{ flex: 1, width: Dimensions.get('window').width }}
         >
 
           {/* Form Section */}
-          <View style={{ height: 600 }}>
+          <ScrollView style={{ flex: 1 }}>
 
             <TextField
               placeholder={'Category Name'}
@@ -130,62 +131,64 @@ export default function CategoryForm({ route, navigation }) {
               disabled={!addition && !udpdateState}
             />
 
-          </View>
+          </ScrollView>
 
           {/* Button Section */}
 
 
           <View
-            style={{ flexDirection: 'row', alignItems: 'flex-end', height: 50, justifyContent: 'space-evenly' }}
+            style={{
+              flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-evenly',
+              height: 60, flexShrink: 0
+            }}
           >
 
             {
               addition ?
                 <>
-                  <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 200 }}>
-                    Cancel
-                  </Button>
-                  <Button mode='contained'
+                  <Buttons onPress={() => navigation.navigate('CategoryList')} color={appColors.red} value={'Cancel'}>
+                  </Buttons>
+                  <Buttons
                     onPress={() => {
                       setSubmitPressed(true);
                       handleAddCategory();
                     }}
-                    style={{ width: 200 }}>
-                    Add
-                  </Button>
+                    color={appColors.blue}
+                    value={'Add'}
+                  >
+                  </Buttons>
                 </>
                 : (
                   udpdateState ?
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 120 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={
+                      <Buttons onPress={() => navigation.navigate('CategoryList')} color={appColors.grey} value={'Cancel'} percentWidth={0.3}>
+                      </Buttons>
+                      <Buttons onPress={
                         () => {
                           setShowModal(true);
                         }}
-                        style={{ width: 120 }}
+                        color={appColors.red}
+                        value={'Delete'} percentWidth={0.3}
                       >
-                        Delete
-                      </Button>
-                      <Button mode='contained' onPress={
+                      </Buttons>
+                      <Buttons onPress={
                         () => {
                           setSubmitPressed(true);
                           handleUpdateCategory();
                         }
 
-                      } style={{ width: 120 }}>
-                        Update
-                      </Button>
+                      }
+                        color={appColors.blue}
+                        value={'Update'} percentWidth={0.3}
+                      >
+                      </Buttons>
                     </>
                     :
                     <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('CategoryList')} style={{ width: 200 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={() => setupdateState(true)} style={{ width: 200 }}>
-                        Edit
-                      </Button>
+                      <Buttons onPress={() => navigation.navigate('CategoryList')} color={appColors.red} value={'Cancel'}>
+                      </Buttons>
+                      <Buttons onPress={() => setupdateState(true)} color={appColors.blue} value={'Edit'}>
+                      </Buttons>
                     </>
                 )
             }
@@ -195,7 +198,7 @@ export default function CategoryForm({ route, navigation }) {
           </View>
 
 
-        </SafeAreaView>
+        </View>
       </View>
     </View>
   )

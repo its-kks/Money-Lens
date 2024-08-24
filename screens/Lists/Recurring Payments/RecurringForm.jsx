@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import DateFrequency from '../../../components/listScreenComponents/Forms/DateFrequency';
 import TransactionSelector from '../../../components/listScreenComponents/Forms/TransactionSelector';
 import { addRecurringPaymentRequest, deleteRecurringPaymentRequest, updateRecurringPaymentRequest } from '../../../Redux/actions/recurringPayments';
+import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
 
 export default function Recur({ route, navigation }) {
 
@@ -109,13 +110,13 @@ export default function Recur({ route, navigation }) {
         onConfirm={handleRecPaymentDelete}
       />
 
-      <ScrollView>
-        <SafeAreaView
-          style={{ height: 750, width: Dimensions.get('window').width }}
+      <View>
+        <View
+          style={{ flex: 1, width: Dimensions.get('window').width }}
         >
 
           {/* Form Section */}
-          <View style={{ height: 700 }}>
+          <ScrollView style={{ flex: 1 }}>
 
             <TextField
               placeholder={'Recurring Payment Name'}
@@ -176,7 +177,7 @@ export default function Recur({ route, navigation }) {
 
 
 
-          </View>
+          </ScrollView>
 
 
 
@@ -185,58 +186,55 @@ export default function Recur({ route, navigation }) {
 
 
           <View
-            style={{ flexDirection: 'row', alignItems: 'flex-end', height: 50, justifyContent: 'space-evenly' }}
+            style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-evenly', height: 60,
+              flexShrink: 0
+             }}
           >
 
             {
               addition ?
-                <>
-                  <Button mode='outlined' onPress={() => navigation.goBack()} style={{ width: 200 }}>
-                    Cancel
-                  </Button>
-                  <Button mode='contained'
-                    onPress={() => {
-                      setSubmitPressed(true);
-                      handleRecPaymentAddition();
-                    }}
-                    style={{ width: 200 }}>
-                    Add
-                  </Button>
-                </>
-                : (
-                  udpdateState ?
-                    <>
-                      <Button mode='outlined' onPress={() => navigation.goBack()} style={{ width: 120 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={
-                        () => {
-                          setShowModal(true);
-                        }}
-                        style={{ width: 120 }}
-                      >
-                        Delete
-                      </Button>
-                      <Button mode='contained' onPress={
-                        () => {
-                          setSubmitPressed(true);
-                          handleRecPaymentUpdate();
-                        }
+              <>
+                <Buttons onPress={() => navigation.goBack()} value={'Cancel'} color={appColors.red} />
+                <Buttons mode='contained'
+                  onPress={() => {
+                    setSubmitPressed(true);
+                    handleRecPaymentAddition();
+                  }}
+                  style={{ width: 200 }}
+                  value={'Add'}
+                  color={appColors.blue}
+                />
+              </>
+              : (
+                udpdateState ?
+                  <>
+                    <Buttons onPress={() => navigation.goBack()} value={'Cancel'} color={appColors.grey} percentWidth={0.30} />
+                    <Buttons onPress={
+                      () => {
+                        setShowModal(true);
+                      }}
+                      value={'Delete'}
+                      percentWidth={0.30}
+                      color={appColors.red}
+                    />
+                    <Buttons onPress={
+                      () => {
+                        setSubmitPressed(true);
+                        handleRecPaymentUpdate();
+                      }
 
-                      } style={{ width: 120 }}>
-                        Update
-                      </Button>
-                    </>
-                    :
-                    <>
-                      <Button mode='outlined' onPress={() => navigation.goBack()} style={{ width: 200 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={() => setupdateState(true)} style={{ width: 200 }}>
-                        Edit
-                      </Button>
-                    </>
-                )
+                    }
+                      value={'Update'}
+                      percentWidth={0.30}
+                      color={appColors.blue}
+                    />
+                  </>
+                  :
+                  <>
+                    <Buttons onPress={() => navigation.goBack()} value={'Cancel'} color={appColors.red} />
+                    <Buttons onPress={() => setupdateState(true)} value={'Edit'} color={appColors.blue} />
+                  </>
+              )
             }
 
 
@@ -244,8 +242,8 @@ export default function Recur({ route, navigation }) {
           </View>
 
 
-        </SafeAreaView>
-      </ScrollView>
+        </View>
+      </View>
 
     </View>
   )

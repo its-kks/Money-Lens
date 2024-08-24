@@ -24,7 +24,7 @@ export default function ColorSelector({ initialColor, setColor, disabled = false
       />
 
       <View style={{
-        height: 95,
+        height: 100,
         marginTop: 5,
         marginBottom: 5,
         marginLeft: 10,
@@ -65,8 +65,10 @@ export default function ColorSelector({ initialColor, setColor, disabled = false
                   alignItems: 'center',
                   backgroundColor: appColors[item] + '50',
                   borderRadius: 20,
-                  paddingLeft: 5,
-                  paddingRight: 10,
+                  paddingLeft: 10,
+                  paddingRight: 15,
+                  paddingTop: 5,
+                  paddingBottom: 5,
                   margin:1
 
                 }}
@@ -74,7 +76,7 @@ export default function ColorSelector({ initialColor, setColor, disabled = false
                 <Text style={{ padding: 2, borderRadius: 50, color: appColors.white, fontSize: 15 }}>
                   <MaterialCommunityIcons name="circle" size={15} color={appColors[item]} />
                 </Text>
-                <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 15, color: appColors.black }}>
+                <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 16, color: appColors.black }}>
                   {item}
                 </Text>
               </View>

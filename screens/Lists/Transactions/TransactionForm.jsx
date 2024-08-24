@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet, Text, View, } from 'react-native'
 import React, { useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { Button, PaperProvider, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TextField from '../../../components/listScreenComponents/Forms/TextField';
 import CategorySelector from '../../../components/listScreenComponents/Forms/CategorySelector';
@@ -19,6 +18,7 @@ import ConfirmationModal from '../../../components/listScreenComponents/Forms/Co
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchCurrentMonthMoneyRequest } from '../../../Redux/actions/users';
 import { useSelector } from 'react-redux';
+import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
 
 export default function TransactionForm({ route, navigation }) {
 
@@ -54,13 +54,13 @@ export default function TransactionForm({ route, navigation }) {
   const currentMonthMoney = useSelector(state => state.users.currentMonthMoney[0]);
   let positive = 0;
   let negative = 0;
-  if(currentMonthMoney){
+  if (currentMonthMoney) {
     positive = currentMonthMoney.positive;
     negative = currentMonthMoney.negative;
-    if(!positive){
+    if (!positive) {
       positive = 0;
     }
-    if(!negative){
+    if (!negative) {
       negative = 0;
     }
   }
@@ -79,7 +79,7 @@ export default function TransactionForm({ route, navigation }) {
       return;
     }
 
-    if(positive<(parseFloat(transactionAmount) + Math.abs(negative) ) && transactionType=='1'){
+    if (positive < (parseFloat(transactionAmount) + Math.abs(negative)) && transactionType == '1') {
       setShowAddMoney(true);
       return;
     }
@@ -139,11 +139,11 @@ export default function TransactionForm({ route, navigation }) {
         onConfirm={handleTransactionDelete}
       />
       <ConfirmationModal
-        text = {"Not enough money to for this expense"}
-        onCancel={()=>{
+        text={"Not enough money to for this expense"}
+        onCancel={() => {
           setShowAddMoney(false);
         }}
-        onConfirm={()=>{
+        onConfirm={() => {
           setShowAddMoney(false);
         }}
         setVisible={setShowAddMoney}
@@ -151,134 +151,129 @@ export default function TransactionForm({ route, navigation }) {
         enableOk={true}
       />
 
-      <ScrollView>
-        <SafeAreaView
-          style={{ height: 750, width: Dimensions.get('window').width }}
+
+      <View
+        style={{ flex: 1, width: Dimensions.get('window').width }}
+      >
+
+        {/* Form Section */}
+        <ScrollView style={{ flex: 1 }}>
+
+          <TextField
+            placeholder={'Transaction Name'}
+            text={transactionName}
+            setText={setTransactionName}
+            errorMessage={'Max 30 characters'}
+            isRequired={true}
+            showErrorNow={transactionName.length === 0 || transactionName.length > 30 ? true : false}
+            submitPressed={submitPressed}
+            disabled={!addition && !udpdateState}
+          />
+
+          <TextField
+            placeholder={'Amount'}
+            text={transactionAmount}
+            setText={setTransactionAmount}
+            errorMessage={'Amount should be valid and greater than 0'}
+            isRequired={true}
+            showErrorNow={transactionAmount.length === 0 || isNaN(transactionAmount) || parseFloat(transactionAmount) <= 0 ? true : false}
+            submitPressed={submitPressed}
+            disabled={!addition && !udpdateState}
+            keyboardType='decimal-pad'
+          />
+
+          <CategorySelector
+            initialCategory={transactionCategory}
+            setCategory={setTransactionCategory}
+            type={transactionType === '1' ? 'Expense' : 'Income'}
+            disabled={!addition && !udpdateState}
+          />
+
+          <RecipientSelector
+            initialRecipient={transactionRecipient}
+            setRecipient={setTransactionRecipient}
+            disabled={!addition && !udpdateState}
+            type={transactionType === '1' ? 'Recipient' : 'Payer'}
+          />
+
+          <DateTimeSelector initialDate={transactionDate} initialTime={transactionTime} setDate={setTransactionDate} setTime={setTransactionTime}
+            disabled={!addition && !udpdateState}
+          />
+
+          {
+            !addition ? null : (
+              <TransactionSelector initialType={transactionType} setType={setTransactionType} setCategory={setTransactionCategory} />
+            )
+          }
+          <View style={{ height: 50 }}>
+          </View>
+        </ScrollView>
+
+
+
+
+        {/* Button Section */}
+
+
+        <View
+          style={{
+            flexDirection: 'row', alignItems: 'flex-start', height: 60, justifyContent: 'space-evenly', flexShrink: 0,
+            elevation: 1
+          }}
         >
 
-          {/* Form Section */}
-          <View style={{ height: 700 }}>
+          {
+            addition ?
+              <>
+                <Buttons onPress={() => navigation.navigate('TransactionList')} value={'Cancel'} color={appColors.red} />
+                <Buttons mode='contained'
+                  onPress={() => {
+                    setSubmitPressed(true);
+                    handleTransactionAddition();
+                  }}
+                  style={{ width: 200 }}
+                  value={'Add'}
+                  color={appColors.blue}
+                />
+              </>
+              : (
+                udpdateState ?
+                  <>
+                    <Buttons onPress={() => navigation.navigate('TransactionList')} value={'Cancel'} color={appColors.grey} percentWidth={0.30} />
+                    <Buttons onPress={
+                      () => {
+                        setShowModal(true);
+                      }}
+                      value={'Delete'}
+                      percentWidth={0.30}
+                      color={appColors.red}
+                    />
+                    <Buttons onPress={
+                      () => {
+                        setSubmitPressed(true);
+                        handleTransactionUpdate();
+                      }
 
-            <TextField
-              placeholder={'Transaction Name'}
-              text={transactionName}
-              setText={setTransactionName}
-              errorMessage={'Max 30 characters'}
-              isRequired={true}
-              showErrorNow={transactionName.length === 0 || transactionName.length > 30 ? true : false}
-              submitPressed={submitPressed}
-              disabled={!addition && !udpdateState}
-            />
-
-            <TextField
-              placeholder={'Amount'}
-              text={transactionAmount}
-              setText={setTransactionAmount}
-              errorMessage={'Amount should be valid and greater than 0'}
-              isRequired={true}
-              showErrorNow={transactionAmount.length === 0 || isNaN(transactionAmount) || parseFloat(transactionAmount) <= 0 ? true : false}
-              submitPressed={submitPressed}
-              disabled={!addition && !udpdateState}
-              keyboardType='decimal-pad'
-            />
-
-            <CategorySelector
-              initialCategory={transactionCategory}
-              setCategory={setTransactionCategory}
-              type={transactionType === '1' ? 'Expense' : 'Income'}
-              disabled={!addition && !udpdateState}
-            />
-
-            <RecipientSelector
-              initialRecipient={transactionRecipient}
-              setRecipient={setTransactionRecipient}
-              disabled={!addition && !udpdateState}
-              type={transactionType === '1' ? 'Recipient' : 'Payer'}
-            />
-
-            <DateTimeSelector initialDate={transactionDate} initialTime={transactionTime} setDate={setTransactionDate} setTime={setTransactionTime}
-              disabled={!addition && !udpdateState}
-            />
-
-            {
-              !addition ? null : (
-                <TransactionSelector initialType={transactionType} setType={setTransactionType} setCategory={setTransactionCategory} />
+                    }
+                      value={'Update'}
+                      percentWidth={0.30}
+                      color={appColors.blue}
+                    />
+                  </>
+                  :
+                  <>
+                    <Buttons onPress={() => navigation.navigate('TransactionList')} value={'Cancel'} color={appColors.red} />
+                    <Buttons onPress={() => setupdateState(true)} value={'Edit'} color={appColors.blue} />
+                  </>
               )
-            }
+          }
 
 
 
-
-          </View>
-
+        </View>
 
 
-
-          {/* Button Section */}
-
-
-          <View
-            style={{ flexDirection: 'row', alignItems: 'flex-end', height: 50, justifyContent: 'space-evenly' }}
-          >
-
-            {
-              addition ?
-                <>
-                  <Button mode='outlined' onPress={() => navigation.navigate('TransactionList')} style={{ width: 200 }}>
-                    Cancel
-                  </Button>
-                  <Button mode='contained'
-                    onPress={() => {
-                      setSubmitPressed(true);
-                      handleTransactionAddition();
-                    }}
-                    style={{ width: 200 }}>
-                    Add
-                  </Button>
-                </>
-                : (
-                  udpdateState ?
-                    <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('TransactionList')} style={{ width: 120 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={
-                        () => {
-                          setShowModal(true);
-                        }}
-                        style={{ width: 120 }}
-                      >
-                        Delete
-                      </Button>
-                      <Button mode='contained' onPress={
-                        () => {
-                          setSubmitPressed(true);
-                          handleTransactionUpdate();
-                        }
-
-                      } style={{ width: 120 }}>
-                        Update
-                      </Button>
-                    </>
-                    :
-                    <>
-                      <Button mode='outlined' onPress={() => navigation.navigate('TransactionList')} style={{ width: 200 }}>
-                        Cancel
-                      </Button>
-                      <Button mode='contained' onPress={() => setupdateState(true)} style={{ width: 200 }}>
-                        Edit
-                      </Button>
-                    </>
-                )
-            }
-
-
-
-          </View>
-
-
-        </SafeAreaView>
-      </ScrollView>
+      </View>
 
     </View>
   )
