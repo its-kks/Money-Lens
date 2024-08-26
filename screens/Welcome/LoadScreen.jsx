@@ -2,15 +2,22 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import appColors from '../../constants/colors';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchRecurringPaymentsRequest } from '../../Redux/actions/recurringPayments';
 
-const addActions = (recurringPayments) => {
+
+
+const addActions = (recurringPayments, actionsAdded, setActionsAdded) => {
   return new Promise((resolve, reject) => {
     try {
-      setTimeout(() => {
-        console.log("Actions Added")
-        resolve('Actions added successfully')
-      }, 2000)
+      if (!actionsAdded) {
+        setTimeout(() => {
+          console.warn(recurringPayments);
+          console.log("Actions Added")
+          setActionsAdded(true);
+          resolve('Actions added successfully')
+        }, 2000)
+      }
     }
     catch (err) {
       console.log(err);
@@ -22,6 +29,10 @@ const addActions = (recurringPayments) => {
 export default function LoadScreen({ navigation }) {
   const recurringPayments = useSelector(state => state.recurringPayments.recurringPayments);
   const [recurrCount, setRecurrCount] = useState(-1);
+  const [actionsAdded, setActionsAdded] = useState(false);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function checkUser() {
       try {
@@ -31,6 +42,7 @@ export default function LoadScreen({ navigation }) {
           navigation.replace('Welcome');
         }
         else {
+          dispatch(fetchRecurringPaymentsRequest());
           const count = await AsyncStorage.getItem('recurrCount');
           setRecurrCount(count);
         }
@@ -47,8 +59,9 @@ export default function LoadScreen({ navigation }) {
     }
     else if (recurrCount > 0) {
       async function addActionsAsync() {
+
         try {
-          await addActions(recurringPayments);
+          await addActions(recurringPayments, actionsAdded, setActionsAdded);
           navigation.replace('BottomTabsHome');
         } catch (error) {
           console.error(error);
@@ -56,7 +69,7 @@ export default function LoadScreen({ navigation }) {
       }
       addActionsAsync();
     }
-  }, [recurrCount]);
+  }, [recurringPayments]);
 
   return (
     <View style={{ flex: 1, backgroundColor: appColors.lightGrey }}>
