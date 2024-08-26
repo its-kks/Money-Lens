@@ -13,6 +13,8 @@ const addActions = (recurringPayments, actionsAdded, setActionsAdded) => {
       if (!actionsAdded) {
         setTimeout(() => {
           console.warn(recurringPayments);
+          
+
           console.log("Actions Added")
           setActionsAdded(true);
           resolve('Actions added successfully')
