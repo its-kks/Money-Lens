@@ -42,3 +42,23 @@ export function formattedTime(){
     date.getSeconds().toString().padStart(2, '0'),
   ].join(':');
 }
+
+export function addMonths(dateStr, n) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  const newDate = new Date(date.getTime());
+  newDate.setMonth(newDate.getMonth() + n);
+
+  // check if the new date's day is different after adding the months
+  if (newDate.getDate() < day) {
+      // set the date to the last day of the previous month
+      newDate.setDate(0);
+  }
+
+  const newYear = newDate.getFullYear();
+  const newMonth = String(newDate.getMonth() + 1).padStart(2, '0');
+  const newDay = String(newDate.getDate()).padStart(2, '0');
+
+  return `${newYear}-${newMonth}-${newDay}`;
+}

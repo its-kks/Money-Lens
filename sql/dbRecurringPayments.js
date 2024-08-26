@@ -1,3 +1,4 @@
+import { addMonths } from "../utilities/dateTime";
 import { getDBConnection } from "./dbServices";
 
 export const fetchRecurringPayments = async () => {
@@ -29,15 +30,19 @@ export const addRecurringPayments = async ({
 }) => {
   const db = await getDBConnection();
   const query = `
-  INSERT INTO recurring_payments (name, amount, start_date, frequency, category_id, recipient_id)
-  VALUES (?, ?, ?, ?, ?, ?)
+  INSERT INTO recurring_payments (name, amount, start_date, frequency, next_date, category_id, recipient_id)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
+
+  const start_date = recPaymentNextPayment.split('/').reverse().join('-');
+  const next_date = addMonths(start_date, recPaymentFrequency);
 
   const data = [
     recPaymentName,
     Math.abs(recPaymentAmount) * (recPaymentType === '1' ? -1 : 1),
-    recPaymentNextPayment.split('/').reverse().join('-'),
+    start_date,
     recPaymentFrequency,
+    next_date,
     parseInt(recPaymentCategory),
     parseInt(recPaymentRecipient)
   ]
@@ -50,16 +55,16 @@ export const addRecurringPayments = async ({
   }
 }
 
-export const deleteRecurringPayments = async (id) =>{
+export const deleteRecurringPayments = async (id) => {
   const db = await getDBConnection();
   const query = `DELETE FROM recurring_payments
   WHERE id = ?
   `
-  try{
-    await db.executeSql(query,[id]);
+  try {
+    await db.executeSql(query, [id]);
     console.log('Recurring Payment Deleted');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 
@@ -74,32 +79,36 @@ export const updateRecurringPayments = async ({
   recPaymentNextPayment,
   recPaymentFrequency,
   recPaymentType
-}) =>{
+}) => {
   const query = `
   UPDATE recurring_payments
   SET name = ?,
   amount = ?,
   start_date = ?,
   frequency = ?,
+  next_date = ?,
   category_id = ?,
   recipient_id = ?
   WHERE id = ?
   `
+  const start_date_updated = recPaymentNextPayment.split('/').reverse().join('-');
+  const next_date_updated = addMonths(start_date_updated, recPaymentFrequency);
   const data = [
     recPaymentName,
     Math.abs(recPaymentAmount) * (recPaymentType === '1' ? -1 : 1),
-    recPaymentNextPayment.split('/').reverse().join('-'),
+    start_date_updated,
     recPaymentFrequency,
+    next_date_updated,
     parseInt(recPaymentCategory),
     parseInt(recPaymentRecipient),
     recPaymentID
   ]
   const db = await getDBConnection();
-  try{
-    await db.executeSql(query,data);
+  try {
+    await db.executeSql(query, data);
     console.log('Recurring Payments Updated');
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
 }
