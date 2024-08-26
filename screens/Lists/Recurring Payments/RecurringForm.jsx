@@ -14,6 +14,7 @@ import DateFrequency from '../../../components/listScreenComponents/Forms/DateFr
 import TransactionSelector from '../../../components/listScreenComponents/Forms/TransactionSelector';
 import { addRecurringPaymentRequest, deleteRecurringPaymentRequest, updateRecurringPaymentRequest } from '../../../Redux/actions/recurringPayments';
 import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Recur({ route, navigation }) {
 
@@ -56,6 +57,16 @@ export default function Recur({ route, navigation }) {
     ) {
       return;
     }
+    async function increaseCount() {
+      try {
+        const count = await AsyncStorage.getItem('recurrCount');
+        await AsyncStorage.setItem('recurrCount', (parseInt(count) + 1) + '');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    increaseCount();
+
     dispatch(addRecurringPaymentRequest({
       recPaymentName,
       recPaymentAmount,
@@ -92,6 +103,15 @@ export default function Recur({ route, navigation }) {
   }
 
   const handleRecPaymentDelete = () => {
+    async function decreaseCount() {
+      try {
+        const count = await AsyncStorage.getItem('recurrCount');
+        await AsyncStorage.setItem('recurrCount', (parseInt(count) - 1) + '');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    decreaseCount();
     dispatch(deleteRecurringPaymentRequest(id));
     setShowModal(false);
     navigation.goBack();
