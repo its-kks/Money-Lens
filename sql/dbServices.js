@@ -56,7 +56,8 @@ export const createTableRecurringPayments = async (db) => {
     start_date DATE NOT NULL,
     frequency INTEGER NOT NULL DEFAULT 1,
     next_date DATE NOT NULL,
-    action_added DATE NOT NULL DEFAULT '1900-01-01'
+    action_added DATE NOT NULL DEFAULT '1900-01-01',
+    money_saved INTEGER NOT NULL DEFAULT 0,
     category_id INTEGER,
     recipient_id INTEGER,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE CASCADE,
