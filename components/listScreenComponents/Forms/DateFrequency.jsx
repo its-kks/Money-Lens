@@ -12,7 +12,8 @@ export default function DateFrequency({ recPaymentNextPayment, setRecPaymentNext
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      setRecPaymentNextPayment(selectedDate.toLocaleDateString());
+      const formattedDate = new Intl.DateTimeFormat('en-GB').format(selectedDate);
+      setRecPaymentNextPayment(formattedDate);
     }
   };
 

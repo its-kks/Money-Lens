@@ -12,7 +12,8 @@ export default function DateTimeSelector({ initialDate, initialTime, setDate, se
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      setDate(selectedDate.toLocaleDateString());
+      const formattedDate = new Intl.DateTimeFormat('en-GB').format(selectedDate);
+      setDate(formattedDate);
     }
   };
 
