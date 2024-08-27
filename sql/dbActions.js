@@ -2,7 +2,7 @@ import { getDBConnection } from "./dbServices";
 
 
 export const fetchActions = async () => {
-  const query = `SELECT * FROM actons`
+  const query = `SELECT * FROM actions`
   try {
     const db = await getDBConnection();
     const [results] = await db.executeSql(query);

@@ -77,10 +77,10 @@ export function deleteTransactionFailure(error){
   }
 }
 
-export function updateTransactionRequest(id){
+export function updateTransactionRequest(transactions){
   return {
     type: UPDATE_TRANSACTION_REQUEST,
-    payload: id
+    payload: transactions
   }
 }
 

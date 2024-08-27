@@ -90,10 +90,11 @@ export const updateRecurringPayments = async ({
   frequency = ?,
   next_date = ?,
   category_id = ?,
-  recipient_id = ?
+  recipient_id = ?,
   action_added = ?
   WHERE id = ?
   `
+
   const start_date_updated = recPaymentNextPayment.split('/').reverse().join('-');
   const next_date_updated = addMonths(start_date_updated, recPaymentFrequency);
   const data = [
@@ -104,7 +105,7 @@ export const updateRecurringPayments = async ({
     next_date_updated,
     parseInt(recPaymentCategory),
     parseInt(recPaymentRecipient),
-    recPaymentActionAdded,
+    recPaymentActionAdded.split('/').reverse().join('-'),
     recPaymentID
   ]
   const db = await getDBConnection();

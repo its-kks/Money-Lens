@@ -3,53 +3,56 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import appColors from '../../constants/colors';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchRecurringPaymentsRequest } from '../../Redux/actions/recurringPayments';
+import { fetchRecurringPaymentsRequest, updateRecurringPaymentRequest } from '../../Redux/actions/recurringPayments';
 import { addActionRequest } from '../../Redux/actions/actions';
-import { updateTransactionRequest } from '../../Redux/actions/transactions';
 
 
 
 
 const addActions = (recurringPayments, actionsAdded, setActionsAdded, dispatch) => {
+
   return new Promise((resolve, reject) => {
     try {
       if (!actionsAdded) {
+        console.log(recurringPayments);
         const todays_date = new Date();
         for (let i = 0; i < recurringPayments.length; i++) {
-          const { pay_date, saved, action_added, amount, id, name, categoryID, recipientID, frequncy } = recurringPayments[i];
+          let { pay_date, saved, action_added, amount, id, name, categoryID, recipientID, frequency } = recurringPayments[i];
           if (amount > 0) {
             // this is an recurring income
             continue;
           }
           pay_date = pay_date.split('-')
           action_added = action_added.split('-')
-          if (pay_date[0] >= todays_date.getFullYear() &&
-            pay_date[1] >= todays_date.getMonth() + 1
+          if (
+            pay_date[0] > todays_date.getFullYear() ||
+            (pay_date[0] == todays_date.getFullYear() && pay_date[1] > (todays_date.getMonth() + 1))
           ) {
 
             if (todays_date.getMonth() + 1 == pay_date[1] &&
               pay_date[2] <= todays_date.getDate() &&
               action_added[1] != todays_date.getMonth() + 1) {
-
               dispatch(addActionRequest({ actionAmount: Math.abs(amount) - saved, actionType: 'Pay', recurringPaymentID: id }));
 
             }
             else if (todays_date.getDate() >= 25 &&
               action_added[1] != todays_date.getMonth() + 1
             ) {
-              const month_diff = parseInt(pay_date[2]) - todays_date.getDate() + 1
-              dispatch(addActionRequest({ actionAmount: (Math.abs(amount) - saved) / month_diff, actionType: 'Save', recurringPaymentID: id }))
+              const month_diff = (parseInt(pay_date[0]) - todays_date.getFullYear()) * 12 +
+                parseInt(pay_date[1]) - (todays_date.getMonth() + 1) + 1;
+              
+              dispatch(addActionRequest({ actionAmount: Math.floor((Math.abs(amount) - saved) / month_diff), actionType: 'Save', recurringPaymentID: id }))
 
             }
             // update actionAdded
-            dispatch(updateTransactionRequest({
+            dispatch(updateRecurringPaymentRequest({
               recPaymentID: id,
               recPaymentName: name,
               recPaymentAmount: amount,
               recPaymentCategory: categoryID,
               recPaymentRecipient: recipientID,
-              recPaymentNextPayment: pay_date,
-              recPaymentFrequency: frequncy,
+              recPaymentNextPayment: pay_date.reverse().join('/'),
+              recPaymentFrequency: frequency,
               recPaymentType: '1',
               recPaymentActionAdded: new Intl.DateTimeFormat('en-GB').format(todays_date)
             }))
@@ -60,16 +63,14 @@ const addActions = (recurringPayments, actionsAdded, setActionsAdded, dispatch) 
           }
         }
 
-        setTimeout(() => {
-          console.warn(recurringPayments);
-          console.log("Actions Added")
-          setActionsAdded(true);
-          resolve('Actions added successfully')
-        }, 2000)
+        setActionsAdded(true);
+        console.log("Actions Added")
+        resolve('Added actions succesfully');
+
       }
     }
     catch (err) {
-      console.log(err);
+      console.error(err);
       reject('Failed to add actions');
     }
   });

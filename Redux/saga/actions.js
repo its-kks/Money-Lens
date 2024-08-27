@@ -28,10 +28,11 @@ function* addActionSaga(action) {
     const actionData = action.payload;
     yield call(addActions, actionData);
     const actions = yield call(fetchActions);
-    yield put(addActionSuccess, actions);
+    yield put(addActionSuccess(actions));
   }
   catch (error) {
-    yield put(addActionFailure, error);
+    console.error(error);
+    yield put(addActionFailure(error));
   }
 }
 
@@ -42,10 +43,10 @@ export function* watchAddActions() {
 function* fetchActionSaga() {
   try {
     const actions = yield call(fetchActions);
-    yield put(fetchActionsSuccess, actions);
+    yield put(fetchActionsSuccess(actions));
   }
   catch (error) {
-    yield put(fetchActionsFailure, error);
+    yield put(fetchActionsFailure(error));
   }
 }
 
