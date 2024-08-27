@@ -98,6 +98,14 @@ export const createTableSavings = async (db) => {
   console.log('Savings Table Created');
 };
 
+export const createTableActions = async (db) => {
+  const query = `
+  CREATE TABLE IF NOT EXISTS actions (
+  
+  )
+  `
+}
+
 export const createTables = async () => {
   try {
     const db = await getDBConnection();
