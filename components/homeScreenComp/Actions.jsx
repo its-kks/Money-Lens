@@ -4,6 +4,7 @@ import appColors from '../../constants/colors'
 import { useSelector } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FlatList } from 'react-native-gesture-handler';
+import SingleAction from './SingleAction';
 
 export default function Actions() {
   const [sort, setSort] = useState('asc');
@@ -42,12 +43,9 @@ export default function Actions() {
                 <View style={{ flex: 1 }}>
                   <FlatList
                     data={fetchedActions}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item.act_id}
                     renderItem={({ item }) => (
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: appColors.grey }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'Roboto-Light', fontWeight: '600', color: appColors.black }}>{item.amount}</Text>
-                        <Text style={{ fontSize: 20, fontFamily: 'Roboto-Light', fontWeight: '600', color: appColors.black }}>{item.date}</Text>
-                      </View>
+                      <SingleAction name={item.name} act_id={item.act_id} amount={item.amount} type={item.type} rp_id={item.rp_id} />
                     )}
                   />
                 </View>

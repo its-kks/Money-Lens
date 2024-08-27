@@ -2,7 +2,11 @@ import { getDBConnection } from "./dbServices";
 
 
 export const fetchActions = async () => {
-  const query = `SELECT * FROM actions`
+  const query = `SELECT rp.name as name, act.amount as amount, act.type as type, act.id as act_id, act.recurring_payment_id as rp_id
+  from actions as act,
+  recurring_payments as rp
+  WHERE act.recurring_payment_id = rp.id
+  `
   try {
     const db = await getDBConnection();
     const [results] = await db.executeSql(query);
