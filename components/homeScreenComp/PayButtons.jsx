@@ -92,11 +92,12 @@ export default function PayButtons({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 25,
     width: Dimensions.get('window').width,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 175,
+    flexShrink: 0
 
     // backgroundColor:'red'
   }

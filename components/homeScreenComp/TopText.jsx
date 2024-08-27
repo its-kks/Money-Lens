@@ -21,22 +21,22 @@ export default function TopText({userName, src, moneyPos, moneyNeg}) {
             <Image source={src} style={styles.avatarImage}/>
           </View>
           <View style={{marginLeft:10}}>
-            <Text style={{fontSize:25, fontFamily:'Roboto-Bold', color:appColors.white}}>Welcome</Text>
-            <Text style={{fontSize:14, fontFamily:'Roboto-Regular'}}>{userName}</Text>
+            <Text style={{fontSize:30, fontFamily:'Roboto-Bold', color:appColors.white}}>Welcome</Text>
+            <Text style={{fontSize:18, fontFamily:'Roboto-Regular'}}>{userName}</Text>
           </View>
         </View>
-        <View style={{flex:60, alignItems:'flex-start', justifyContent:'flex-start'}}>
-          <Text style={{fontSize:18, fontFamily:'Roboto-Bold', marginLeft:10}}>Your Balance:</Text>
+        <Pressable style={{flex:60, alignItems:'flex-start', justifyContent:'flex-start'}} onPress={handleShowWords}>
+          <Text style={{fontSize:20, fontFamily:'Roboto-Bold', marginLeft:10}}>Your Balance:</Text>
           {showWords ?
           (
             <Text style={styles.moneyWordsText}>{numToWords(moneyPos+moneyNeg)}</Text>
           ) : 
           (
-            <Pressable onPress={handleShowWords}>
+            <View >
               <Text style={styles.moneyText}>{moneyPos+moneyNeg}</Text>
-            </Pressable>
+            </View>
           )}
-        </View>
+        </Pressable>
       </View>
       <View style={{ flex: 2.5, justifyContent: 'center', alignItems: 'center' , marginBottom:1}}>
         <PiggyBank moneyNeg={moneyNeg} moneyPos={moneyPos} />
@@ -48,14 +48,15 @@ export default function TopText({userName, src, moneyPos, moneyNeg}) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: appColors.blue,
-    flex: 30,
     width: Dimensions.get('window').width,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    height: 250,
+    flexShrink: 0
   },
   appName: {
     color: appColors.white,
@@ -66,13 +67,13 @@ const styles = StyleSheet.create({
   moneyText: {
     marginLeft:10,
     fontFamily:'PTSansNarrow-Regular',
-    fontSize:70,
+    fontSize:75,
     color:appColors.white
   },
   moneyWordsText: {
     marginLeft:10,
     fontFamily:'Roboto-Light',
-    fontSize:22,
+    fontSize:24,
     color:appColors.white
   },
   textContainer: { 
@@ -82,9 +83,9 @@ const styles = StyleSheet.create({
 
   },
   avatarImage: {
-    height:44,
-    width:44,
-    borderRadius:22,
+    height:60,
+    width:60,
+    borderRadius:30,
     marginLeft:10
 
   },

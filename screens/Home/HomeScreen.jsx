@@ -2,7 +2,6 @@ import { Dimensions, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View
 import React, { useEffect, useState } from 'react';
 import TopText from '../../components/homeScreenComp/TopText';
 import PayButtons from '../../components/homeScreenComp/PayButtons';
-import Transactions from '../../components/homeScreenComp/Transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategoriesRequest } from '../../Redux/actions/categories';
@@ -10,6 +9,8 @@ import { fetchRecipientsRequest } from '../../Redux/actions/recipients';
 import { fetchTransactionRequest } from '../../Redux/actions/transactions';
 import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
 import { fetchRecurringPaymentsRequest } from '../../Redux/actions/recurringPayments';
+import Actions from '../../components/homeScreenComp/Actions';
+import { fetchActionsRequest } from '../../Redux/actions/actions';
 
 export default function HomeScreen({navigation}) {
   const [userName, setUserName] = useState('');
@@ -28,6 +29,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchTransactionRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
     dispatch(fetchRecurringPaymentsRequest());
+    dispatch(fetchActionsRequest());
     updateData();
   },[])
 
@@ -52,7 +54,7 @@ export default function HomeScreen({navigation}) {
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
         <TopText userName={userName} src={avatar} moneyPos={positive} moneyNeg={negative}/>
         <PayButtons navigation={navigation}/>
-        <Transactions />
+        <Actions />
       </SafeAreaView>
     
   );

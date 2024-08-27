@@ -23,7 +23,7 @@ const actionReducer = (state = initialState, action) => {
     case FETCH_ACTIONS_FAILURE:
       return {...state, loading: false, error: action.payload }
     case FETCH_ACTIONS_SUCCESS:
-      return {...state, loading: false, action: action.payload}
+      return {...state, loading: false, actions: action.payload}
     case ADD_ACTIONS_REQUEST:
       return {...state, loading: true}
     case ADD_ACTIONS_FAILURE:
