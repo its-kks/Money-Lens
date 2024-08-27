@@ -101,9 +101,15 @@ export const createTableSavings = async (db) => {
 export const createTableActions = async (db) => {
   const query = `
   CREATE TABLE IF NOT EXISTS actions (
-  
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  amount REAL NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('Save', 'Pay')),
+  recurring_payment_id INTEGER,
+  FOREIGN KEY (recurring_payment_id) REFERENCES recurring_payments(id) ON DELETE SET NULL ON UPDATE CASCADE
   )
   `
+  await db.executeSql(query);
+  console.log('Actions Table Created');
 }
 
 export const createTables = async () => {
@@ -114,6 +120,7 @@ export const createTables = async () => {
     await createTableRecurringPayments(db);
     await createTableTransactions(db);
     await createTableSavings(db);
+    await createTableActions(db);
     console.log('All tables created successfully');
     console.log('Creating misc data');
   } catch (error) {
