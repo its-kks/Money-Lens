@@ -5,6 +5,7 @@ import transactionReducer from "./transactions";
 import userReducer from "./users";
 import recurringPaymentsReducer from './recurringPayments';
 import savingsReducer from "./savings";
+import actionReducer from "./actions";
 
 const rootReducer = combineReducers(
   {
@@ -13,7 +14,8 @@ const rootReducer = combineReducers(
     transactions: transactionReducer,
     users: userReducer,
     recurringPayments: recurringPaymentsReducer,
-    savings: savingsReducer
+    savings: savingsReducer,
+    actions: actionReducer
   }
 
 )

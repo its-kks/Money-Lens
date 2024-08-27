@@ -33,6 +33,12 @@ import {
   
 } from './savings'
 
+import {
+  watchAddActions,
+  watchDeleteActions,
+  watchFetchActions
+} from './actions'
+
 import { watchFetchCurrentMonthMoney } from './users';
 
 export default function* rootSaga() {
@@ -63,7 +69,11 @@ export default function* rootSaga() {
       watchAddSavings(),
       watchFetchSavings(),
       watchUpdateSavings(),
-      watchDeleteSavings()
+      watchDeleteSavings(),
+
+      watchAddActions(),
+      watchDeleteActions(),
+      watchFetchActions(),
 
 
     ]

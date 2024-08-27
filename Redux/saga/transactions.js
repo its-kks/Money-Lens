@@ -70,8 +70,8 @@ export function* watcUpdateTransactions(){
 
 function* deleteTransactionSaga(action){
   try{
-    const transactionData = action.payload;
-    yield call(deleteTransaction, transactionData);
+    const id = action.payload;
+    yield call(deleteTransaction, id);
     const transactions = yield call(fetchTransactions);
     yield put(deleteTransactionSuccess(transactions));
   }
