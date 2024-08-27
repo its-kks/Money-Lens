@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Recur({ route, navigation }) {
 
-  const { id, name, amount, category, nextPayment, frequency, recipient, addition, type } = route.params;
+  const { id, name, amount, category, nextPayment, frequency, recipient, addition, type, action_added } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -29,6 +29,7 @@ export default function Recur({ route, navigation }) {
   const [recPaymentNextPayment, setRecPaymentNextPayment] = React.useState(nextPayment);
   const [recPaymentFrequency, setRecPaymentFrequency] = React.useState(frequency);
   const [recPaymentType, setRecPaymentType] = React.useState(type === 'Expense' ? '1' : '2');
+  const [recPaymentActionAdded, setRecPaymentActionAdded] = useState(action_added);
 
   const dispatch = useDispatch();
 
@@ -97,7 +98,8 @@ export default function Recur({ route, navigation }) {
       recPaymentRecipient,
       recPaymentNextPayment,
       recPaymentFrequency,
-      recPaymentType
+      recPaymentType,
+      recPaymentActionAdded
     }));
     navigation.goBack();
   }

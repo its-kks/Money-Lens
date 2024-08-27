@@ -5,7 +5,8 @@ export const fetchRecurringPayments = async () => {
   const db = await getDBConnection();
   const query = `
   SELECT rp.id AS id, rp.name AS name, rp.amount AS amount, rp.start_date AS pay_date, rp.frequency AS frequency,
-  c.icon as categoryIcon , c.background_color as categoryColor, rp.category_id AS categoryID, rp.recipient_id AS recipientID
+  rp.next_date AS next_date, rp.action_added AS action_added, rp.money_saved as saved, c.icon as categoryIcon , 
+  c.background_color as categoryColor, rp.category_id AS categoryID, rp.recipient_id AS recipientID
   FROM recurring_payments rp,
   categories c
   WHERE rp.category_id = c.id
@@ -78,7 +79,8 @@ export const updateRecurringPayments = async ({
   recPaymentRecipient,
   recPaymentNextPayment,
   recPaymentFrequency,
-  recPaymentType
+  recPaymentType,
+  recPaymentActionAdded
 }) => {
   const query = `
   UPDATE recurring_payments
@@ -89,6 +91,7 @@ export const updateRecurringPayments = async ({
   next_date = ?,
   category_id = ?,
   recipient_id = ?
+  action_added = ?
   WHERE id = ?
   `
   const start_date_updated = recPaymentNextPayment.split('/').reverse().join('-');
@@ -101,6 +104,7 @@ export const updateRecurringPayments = async ({
     next_date_updated,
     parseInt(recPaymentCategory),
     parseInt(recPaymentRecipient),
+    recPaymentActionAdded,
     recPaymentID
   ]
   const db = await getDBConnection();

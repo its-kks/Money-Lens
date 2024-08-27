@@ -86,7 +86,8 @@ export default function RecurringList({ navigation }) {
                       frequency: item.frequency,
                       recipient: item.recipientID,
                       addition: false,
-                      type: item.amount<0 ? 'Expense' : 'Income'
+                      type: item.amount<0 ? 'Expense' : 'Income',
+                      action_added: item.action_added
                     }
                   );
                 }}
