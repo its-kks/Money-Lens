@@ -1,5 +1,5 @@
 import { Dimensions, StatusBar, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View, FlatList, Pressable } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import appColors from '../../../constants/colors'
 import TopTitle from '../../../components/listScreenComponents/TopTitle'
 import SearchBar from '../../../components/listScreenComponents/SearchBar'
@@ -19,6 +19,10 @@ export default function RecurringList({ navigation }) {
   const [showType, setShowType] = React.useState(false);
   const [showFrequency, setShowFrequency] = React.useState(false);
 
+  const [type, setType] = useState('Any')
+  const [frequency, setFrequency] = useState('All')
+  const [sort, setSort] = useState('');
+
   const handleAddFunction = () => {
     navigation.navigate('RecurringForm',
       {
@@ -37,14 +41,14 @@ export default function RecurringList({ navigation }) {
   }
 
   return (
-    <Pressable
+    <View
       onPress={() => {
         setShowType(false);
         setShowFrequency(false);
       }
       }
+      style={{flex:1, backgroundColor:appColors.white}}
     >
-      <SafeAreaView style={styles.container}>
         {/* title */}
         <View style={styles.titleContainer}>
           <TopTitle title="Recurring Payments:" />
@@ -57,9 +61,13 @@ export default function RecurringList({ navigation }) {
 
         {/* filters  */}
         <View style={styles.filterContainer}>
-          <ExpandingList listItem={['All', 'Monthly', 'Yearly', 'Quaterly']} showList={showFrequency} setShowList={setShowFrequency} />
-          <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType} />
-          <AscDescButton />
+          <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType} 
+            currentItem={type} setCurrentItem={setType}
+          />
+          <ExpandingList listItem={['All', 'Monthly', 'Yearly', 'Quaterly']} showList={showFrequency} setShowList={setShowFrequency} 
+            currentItem={frequency} setCurrentItem={setFrequency}
+          />
+          <AscDescButton sort={sort} setSort={setSort} />
         </View>
 
         {/* transactions list and add bar */}
@@ -94,10 +102,10 @@ export default function RecurringList({ navigation }) {
               />
             )}
             ListHeaderComponent={<AddBar onPressFunction={handleAddFunction} />}
+            ListFooterComponent={<View style={{ height: 50 }} />}
           />
         </View>
-      </SafeAreaView>
-    </Pressable>
+    </View>
   )
 }
 
@@ -105,29 +113,31 @@ const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
     backgroundColor: appColors.white,
-
-    // 120 = 60 + 60  (60 top bar and 60 bottom bar)
-    height: Dimensions.get('window').height - 120 - StatusBar.currentHeight,
+    flex: 1
   },
   filterContainer: {
-    flex: 6,
+    height: 30,
     alignItems: 'baseline',
     justifyContent: 'space-evenly',
     flexDirection: 'row',
+    flexShrink: 0,
+    margin: 10
 
   },
   transactionsContainer: {
-    flex: 80,
+    flex: 1
   },
   titleContainer: {
-    flex: 5,
     justifyContent: 'flex-end',
+    height: 35,
+    flexShrink: 0
   },
   searchContainer: {
-    flex: 9,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    height: 60,
+    flexShrink: 0
   },
 })

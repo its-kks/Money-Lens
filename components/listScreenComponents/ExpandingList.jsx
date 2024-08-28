@@ -1,14 +1,14 @@
-import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View, Modal, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import appColors from '../../constants/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function ExpandingList({listItem,showList,setShowList}) {
-  const [currentItem, setCurrentItem] = useState(listItem[0]);
+export default function ExpandingList({ listItem, showList, setShowList, currentItem, setCurrentItem }) {
+
   return (
 
     <View>
-      <TouchableOpacity onPress={()=>{
+      <TouchableOpacity onPress={() => {
         setShowList(!showList);
       }}>
         <View style={styles.current}>
@@ -20,16 +20,26 @@ export default function ExpandingList({listItem,showList,setShowList}) {
           </Text>
         </View>
       </TouchableOpacity>
-      {
-        showList ?
-          (<View style={styles.listView}>
+
+      <Modal
+        visible={showList}
+        transparent={true}
+        animationType='fade'
+      >
+        <Pressable style={{ backgroundColor: appColors.black + '90', flex: 1, alignItems:'center', justifyContent:'center'}}
+          onPress={() => {
+            setShowList(false);
+          }
+          }
+        >
+          <View style={styles.listView}>
             <ScrollView>
               {listItem.map((item, index) => {
                 return (
                   <TouchableOpacity key={index} onPress={() => {
                     setCurrentItem(item)
                     setShowList(false)
-                    }}>
+                  }}>
                     <Text style={[styles.listItem, { borderBottomWidth: index === listItem.length - 1 ? 0 : 1 }]}>
                       {item}
                     </Text>
@@ -37,8 +47,9 @@ export default function ExpandingList({listItem,showList,setShowList}) {
                 )
               })}
             </ScrollView>
-          </View>) : (null)
-      }
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   )
 }
@@ -50,29 +61,25 @@ const styles = StyleSheet.create({
     width: 110,
     justifyContent: 'space-between',
     flexDirection: 'row',
-    backgroundColor: appColors.blue+'20',
+    backgroundColor: appColors.blue + '20',
     padding: 5,
   },
-  listView:{
-    position: 'absolute',
-    zIndex: 1,
-    top: 25,
+  listView: {
     borderRadius: 5,
     borderColor: appColors.blue,
     backgroundColor: appColors.white,
-    width: 122,
-    elevation: 5,
+    width: 200,
   },
   listItem: {
-    fontSize: 15,
+    fontSize: 20,
     color: appColors.blue,
     fontFamily: 'FiraMono-Regular',
     paddingLeft: 5,
     paddingRight: 5,
-    borderColor: appColors.blue+'30',
+    borderColor: appColors.blue + '30',
     padding: 5,
   },
-  currentItem:{
+  currentItem: {
     fontSize: 13,
     color: appColors.blue,
     fontFamily: 'FiraMono-Regular',

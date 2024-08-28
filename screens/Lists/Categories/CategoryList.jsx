@@ -15,7 +15,7 @@ export default function CategoryList({ navigation }) {
   const error = useSelector(state => state.categories.error);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
 
       <SafeAreaView style={styles.container}>
         <View style={styles.titleContainer}>
@@ -26,72 +26,76 @@ export default function CategoryList({ navigation }) {
           <SearchBar />
         </View>
 
-        <View style={{ flex: 56, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={{ flex: 1, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
+          <View style={{ flexDirection: 'row', height: 50, flexShrink: 0 }}>
             <Text style={styles.subHeadingExp}>Expenditure</Text>
           </View>
-          <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-            <AddCategoryRecipient
-              navigateAdd={() => navigation.navigate('CategoryForm', {
-                id: 0,
-                name: '',
-                icon: '😊',
-                backgroundColor: 'red',
-                type: 'Expense',
-                addition: true
-              })}
-            />
-            {fetchedCategories.map((item) => (
-              item.type === 'Expense' ? (
-                <RecipientAndCategory key={item.id.toString()}
-                  name={item.name} icon={item.icon}
-                  backgroundColorIcon={appColors[item.background_color] + '50'}
-                  onPressFunc={() => navigation.navigate('CategoryForm', {
-                    id: item.id,
-                    name: item.name,
-                    icon: item.icon,
-                    backgroundColor: item.background_color,
-                    type: item.type,
-                    addition: false
-                  })}
-                />
-              ) : null
-            ))}
-          </ScrollView>
+          <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+              <AddCategoryRecipient
+                navigateAdd={() => navigation.navigate('CategoryForm', {
+                  id: 0,
+                  name: '',
+                  icon: '😊',
+                  backgroundColor: 'red',
+                  type: 'Expense',
+                  addition: true
+                })}
+              />
+              {fetchedCategories.map((item) => (
+                item.type === 'Expense' ? (
+                  <RecipientAndCategory key={item.id.toString()}
+                    name={item.name} icon={item.icon}
+                    backgroundColorIcon={appColors[item.background_color] + '50'}
+                    onPressFunc={() => navigation.navigate('CategoryForm', {
+                      id: item.id,
+                      name: item.name,
+                      icon: item.icon,
+                      backgroundColor: item.background_color,
+                      type: item.type,
+                      addition: false
+                    })}
+                  />
+                ) : null
+              ))}
+            </ScrollView>
+          </View>
         </View>
 
-        <View style={{ flex: 30, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={{ flex: 1, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
+          <View style={{ flexDirection: 'row', height: 50, flexShrink: 0 }}>
             <Text style={styles.subHeadingEarn}>Income</Text>
           </View>
-          <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-            <AddCategoryRecipient
-              navigateAdd={() => navigation.navigate('CategoryForm', {
-                id: 0,
-                name: '',
-                icon: '😊',
-                backgroundColor: 'red',
-                type: 'Income',
-                addition: true
-              })}
-            />
-            {fetchedCategories.map((item) => (
-              item.type === 'Income' ? (
-                <RecipientAndCategory key={item.id.toString()}
-                  name={item.name} icon={item.icon}
-                  backgroundColorIcon={appColors[item.background_color] + '50'}
-                  onPressFunc={() => navigation.navigate('CategoryForm', {
-                    id: item.id,
-                    name: item.name,
-                    icon: item.icon,
-                    backgroundColor: item.background_color,
-                    type: item.type,
-                    addition: false
-                  })}
-                />
-              ) : null
-            ))}
-          </ScrollView>
+          <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+              <AddCategoryRecipient
+                navigateAdd={() => navigation.navigate('CategoryForm', {
+                  id: 0,
+                  name: '',
+                  icon: '😊',
+                  backgroundColor: 'red',
+                  type: 'Income',
+                  addition: true
+                })}
+              />
+              {fetchedCategories.map((item) => (
+                item.type === 'Income' ? (
+                  <RecipientAndCategory key={item.id.toString()}
+                    name={item.name} icon={item.icon}
+                    backgroundColorIcon={appColors[item.background_color] + '50'}
+                    onPressFunc={() => navigation.navigate('CategoryForm', {
+                      id: item.id,
+                      name: item.name,
+                      icon: item.icon,
+                      backgroundColor: item.background_color,
+                      type: item.type,
+                      addition: false
+                    })}
+                  />
+                ) : null
+              ))}
+            </ScrollView>
+          </View>
         </View>
 
 
@@ -106,18 +110,20 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.white,
 
     // 120 = 60 + 60  (60 top bar and 60 bottom bar)
-    height: Dimensions.get('window').height - 120 - StatusBar.currentHeight,
+    flex: 1
   },
   titleContainer: {
-    flex: 5,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    height: 35,
+    flexShrink: 0
   },
   searchContainer: {
-    flex: 9,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    height: 60,
+    flexShrink: 0
   },
   subHeadingExp: {
     fontSize: 15,

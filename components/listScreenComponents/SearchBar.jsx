@@ -9,7 +9,7 @@ export default function SearchBar() {
       <View style={styles.icon}>
         <MaterialIcons name="search" size={40} color={appColors.lightBlack} />
       </View>
-      <TextInput style={styles.textBox} placeholder='Type name of category, recipient or product'>
+      <TextInput style={styles.textBox} placeholder='Type name of category, recipient or product' placeholderTextColor={appColors.grey}>
       </TextInput>
     </>
 

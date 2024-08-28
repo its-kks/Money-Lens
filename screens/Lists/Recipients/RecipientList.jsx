@@ -9,7 +9,7 @@ import AddCategoryRecipient from '../../../components/listScreenComponents/AddCa
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRecipientsRequest } from '../../../Redux/actions/recipients'
 
-export default function RecipientList({navigation}) {
+export default function RecipientList({ navigation }) {
 
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
@@ -17,130 +17,135 @@ export default function RecipientList({navigation}) {
   const fetchedRecipients = useSelector(state => state.recipients.recipients);
 
   return (
-    <View>
-      
-    <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
-        <TopTitle title="Recipients / Payers:" />
-      </View>
+    <View style={{ flex: 1 }}>
 
-      <View style={styles.searchContainer}>
-        <SearchBar />
-      </View>
-
-      <View style={{ flex: 56, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.subHeadingExp}>Recipient</Text>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.titleContainer}>
+          <TopTitle title="Recipients / Payers:" />
         </View>
-        <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-          <AddCategoryRecipient
-            navigateAdd={() => navigation.navigate('RecipientForm', {
-              id: 0,
-              name: '',
-              icon: '😊',
-              backgroundColor: 'red',
-              type: 'Recipient',
-              url:'',
-              addition: true
-            })}
-          />
-          {fetchedRecipients.map((item) => (
-            item.type === 'Recipient' ? (
-              <RecipientAndCategory key={item.id.toString()}
-                name={item.name} icon={item.icon}
-                backgroundColorIcon={appColors[item.background_color] + '50'}
-                onPressFunc={() => navigation.navigate('RecipientForm', {
-                  id: item.id,
-                  name: item.name,
-                  icon: item.icon,
-                  backgroundColor: item.background_color,
-                  type: item.type,
-                  url: item.upiUrl,
-                  addition: false
+
+        <View style={styles.searchContainer}>
+          <SearchBar />
+        </View>
+
+        <View style={{ flex: 1, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
+          <View style={{ flexDirection: 'row', height: 50 }}>
+            <Text style={styles.subHeadingExp}>Recipient</Text>
+          </View>
+          {/* Its crucial to keep scrollview confined within a view to allow scrolling */}
+          <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+              <AddCategoryRecipient
+                navigateAdd={() => navigation.navigate('RecipientForm', {
+                  id: 0,
+                  name: '',
+                  icon: '😊',
+                  backgroundColor: 'red',
+                  type: 'Recipient',
+                  url: '',
+                  addition: true
                 })}
               />
-            ) : null
-          ))}
-        </ScrollView>
-      </View>
-
-      <View style={{ flex: 30, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.subHeadingEarn}>Payer</Text>
+              {fetchedRecipients.map((item) => (
+                item.type === 'Recipient' ? (
+                  <RecipientAndCategory key={item.id.toString()}
+                    name={item.name} icon={item.icon}
+                    backgroundColorIcon={appColors[item.background_color] + '50'}
+                    onPressFunc={() => navigation.navigate('RecipientForm', {
+                      id: item.id,
+                      name: item.name,
+                      icon: item.icon,
+                      backgroundColor: item.background_color,
+                      type: item.type,
+                      url: item.upiUrl,
+                      addition: false
+                    })}
+                  />
+                ) : null
+              ))}
+            </ScrollView>
+          </View>
         </View>
-        <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-          <AddCategoryRecipient
-            navigateAdd={() => navigation.navigate('RecipientForm', {
-              id: 0,
-              name: '',
-              icon: '😊',
-              backgroundColor: 'red',
-              type: 'Payer',
-              url: '',
-              addition: true
-            })}
-          />
-          {fetchedRecipients.map((item) => (
-            item.type === 'Payer' ? (
-              <RecipientAndCategory key={item.id.toString()}
-                name={item.name} icon={item.icon}
-                backgroundColorIcon={appColors[item.background_color] + '50'}
-                onPressFunc={() => navigation.navigate('RecipientForm', {
-                  id: item.id,
-                  name: item.name,
-                  icon: item.icon,
-                  backgroundColor: item.background_color,
-                  type: item.type,
-                  url: item.upiUrl,
-                  addition: false
+
+        <View style={{ flex: 1, borderBottomWidth: 1, borderColor: appColors.lightGrey + '60' }}>
+          <View style={{ flexDirection: 'row', height: 50 }}>
+            <Text style={styles.subHeadingEarn}>Payer</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+              <AddCategoryRecipient
+                navigateAdd={() => navigation.navigate('RecipientForm', {
+                  id: 0,
+                  name: '',
+                  icon: '😊',
+                  backgroundColor: 'red',
+                  type: 'Payer',
+                  url: '',
+                  addition: true
                 })}
               />
-            ) : null
-          ))}
-        </ScrollView>
-      </View>
+              {fetchedRecipients.map((item) => (
+                item.type === 'Payer' ? (
+                  <RecipientAndCategory key={item.id.toString()}
+                    name={item.name} icon={item.icon}
+                    backgroundColorIcon={appColors[item.background_color] + '50'}
+                    onPressFunc={() => navigation.navigate('RecipientForm', {
+                      id: item.id,
+                      name: item.name,
+                      icon: item.icon,
+                      backgroundColor: item.background_color,
+                      type: item.type,
+                      url: item.upiUrl,
+                      addition: false
+                    })}
+                  />
+                ) : null
+              ))}
+            </ScrollView>
+          </View>
+        </View>
 
 
-    </SafeAreaView>
-  </View>
-)
+      </SafeAreaView>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-container: {
-  width: Dimensions.get('window').width,
-  backgroundColor: appColors.white,
-
-  // 120 = 60 + 60  (60 top bar and 60 bottom bar)
-  height: Dimensions.get('window').height - 120 - StatusBar.currentHeight,
-},
-titleContainer: {
-  flex: 5,
-  justifyContent: 'flex-end'
-},
-searchContainer: {
-  flex: 9,
-  margin: 10,
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'row',
-},
-subHeadingExp: {
-  fontSize: 15,
-  margin: 10,
-  fontFamily: 'Roboto-Bold',
-  padding: 5,
-  backgroundColor: appColors.red + '30',
-  borderRadius: 10,
-  color: appColors.red
-},
-subHeadingEarn: {
-  fontSize: 15,
-  margin: 10,
-  fontFamily: 'Roboto-Bold',
-  padding: 5,
-  backgroundColor: appColors.green + '30',
-  borderRadius: 10,
-  color: appColors.green
-}
+  container: {
+    width: Dimensions.get('window').width,
+    backgroundColor: appColors.white,
+    flex: 1
+  },
+  titleContainer: {
+    height: 35,
+    justifyContent: 'flex-end',
+    flexShrink: 0
+  },
+  searchContainer: {
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexShrink: 0,
+    height: 60
+  },
+  subHeadingExp: {
+    fontSize: 15,
+    margin: 10,
+    fontFamily: 'Roboto-Bold',
+    padding: 5,
+    backgroundColor: appColors.red + '30',
+    borderRadius: 10,
+    color: appColors.red
+  },
+  subHeadingEarn: {
+    fontSize: 15,
+    margin: 10,
+    fontFamily: 'Roboto-Bold',
+    padding: 5,
+    backgroundColor: appColors.green + '30',
+    borderRadius: 10,
+    color: appColors.green
+  }
 })
