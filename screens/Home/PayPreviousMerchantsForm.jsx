@@ -64,24 +64,24 @@ const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
     backgroundColor: appColors.white,
-    // 60 bottom bar
-    height: Dimensions.get('window').height - 60 - StatusBar.currentHeight,
+    flex: 1
   },
   titleContainer: {
-    flex: 4,
+    height: 35,
     justifyContent: 'flex-end',
     marginTop: 10,
-    marginBottom: 10,
+    flexShrink: 0
   },
   searchContainer: {
-    flex: 9,
+    height: 60,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    flexShrink: 0
   },
   recipientContainer: {
-    flex: 86,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
