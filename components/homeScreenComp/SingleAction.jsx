@@ -47,12 +47,12 @@ export default function SingleAction({ name, act_id, amount, type, rp_id }) {
       <View style={{ flex: 40, alignItems: 'flex-start', flexDirection: "row", justifyContent: 'space-around' }}>
         <Pressable>
           <View style={{ padding: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: appColors.orange + '50', borderRadius: 10 }}>
-            <Text style={{ fontWeight: 'bold', color: appColors.orange, fontSize: 16 }}>{type}</Text>
+            <Text style={{ color: appColors.orange, fontSize: 16, fontFamily:'Roboto-Bold' }}>{type}</Text>
           </View>
         </Pressable>
         <Pressable>
           <View style={{ padding: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: appColors.lightGrey, borderRadius: 10 }}>
-            <Text style={{ fontWeight: 'bold', color: appColors.grey, fontSize: 16 }}>Dismiss</Text>
+            <Text style={{ color: appColors.grey, fontSize: 16, fontFamily:'Roboto-Bold' }}>Dismiss</Text>
           </View>
         </Pressable>
       </View>
