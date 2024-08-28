@@ -10,7 +10,7 @@ const returnIcon = (type) => {
     case 'Pay':
       return 'cash-check';
     default:
-      return 'cash';
+      return 'wallet-plus';
   }
 }
 
@@ -42,7 +42,7 @@ export default function SingleAction({ name, act_id, amount, type, rp_id }) {
       </View>
       <View style={{ flex: 40, justifyContent: 'center', alignItems: 'flex-start' }}>
         <Text style={{ fontSize: 18, fontFamily: 'Roboto-Bold', color: appColors.black }}>{name}</Text>
-        <Text style={{ fontSize: 20, fontFamily: 'Roboto-Bold', color: type === 'Save' || 'Pay' ? appColors.red : appColors.green }}>{'$' + amount}</Text>
+        <Text style={{ fontSize: 20, fontFamily: 'Roboto-Bold', color: type === 'Save' || type === 'Pay' ? appColors.red : appColors.green }}>{'$' + amount}</Text>
       </View>
       <View style={{ flex: 40, alignItems: 'flex-start', flexDirection: "row", justifyContent: 'space-around' }}>
         <Pressable>

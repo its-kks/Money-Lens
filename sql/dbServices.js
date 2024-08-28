@@ -103,7 +103,7 @@ export const createTableActions = async (db) => {
   CREATE TABLE IF NOT EXISTS actions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   amount REAL NOT NULL,
-  type TEXT NOT NULL CHECK (type IN ('Save', 'Pay')),
+  type TEXT NOT NULL CHECK (type IN ('Save', 'Pay', 'Add')),
   recurring_payment_id INTEGER,
   FOREIGN KEY (recurring_payment_id) REFERENCES recurring_payments(id) ON DELETE SET NULL ON UPDATE CASCADE
   )
