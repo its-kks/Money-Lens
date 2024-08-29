@@ -50,14 +50,14 @@ export default function RecipientForm({ route, navigation }) {
       recipientIcon,
       recipientBackgroundColor
     }))
-    dispatch(fetchTransactionRequest);
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('RecipientList');
   }
 
   const handleDeleteRecipient = () => {
     setShowModal(false);
     dispatch(deleteRecipientRequest(id));
-    dispatch(fetchTransactionRequest);
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('RecipientList');
 
   }
@@ -77,7 +77,7 @@ export default function RecipientForm({ route, navigation }) {
       }
 
     ));
-    dispatch(fetchTransactionRequest);
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('RecipientList');
 
   }

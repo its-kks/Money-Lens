@@ -2,16 +2,20 @@ import { to24Hour } from "../utilities/dateTime";
 import { getDBConnection } from "./dbServices";
 
 
-export const fetchTransactions = async () => {
+export const fetchTransactions = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear, sort}) => {
   const db = await getDBConnection();
   const query = `SELECT t.id, t.name, t.amount, c.name as category, r.name as recipient, t.tran_date_time , c.icon as icon, c.background_color as backgroundColor,
   c.id as category_id, r.id as recipient_id
   FROM transactions t
   JOIN categories c ON t.category_id = c.id
   JOIN recipients r ON t.recipient_id = r.id
-  ORDER BY t.tran_date_time DESC`;
+  WHERE (t.amount > ? AND t.amount < ?)
+  AND (strftime('%m', tran_date_time) > ? AND ? > strftime('%m', tran_date_time))
+  AND (strftime('%Y', tran_date_time) > ? AND ? > strftime('%Y', tran_date_time))
+  ORDER BY t.amount ${sort};`;
+  const data = [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
   try {
-    const [result] = await db.executeSql(query);
+    const [result] = await db.executeSql(query, data);
     return result.rows.raw();
   } catch (error) {
     console.error(error);

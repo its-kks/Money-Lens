@@ -20,11 +20,97 @@ import {
 
 import { addTransaction, fetchTransactions, updateTransaction, deleteTransaction } from '../../sql/dbTransactions';
 
+const returnLowerAmount = (type) => {
+  switch (type) {
+    case 'Any':
+      return -999999999999999;
+    case 'Income':
+      return 0;
+    case 'Expenditure':
+      return -999999999999999;
+    default:
+      return 0;
+  }
+}
+const returnUpperAmount = (type) => {
+  switch (type) {
+    case 'Any':
+      return 999999999999999;
+    case 'Income':
+      return 999999999999999;
+    case 'Expenditure':
+      return 0;
+    default:
+      return 0;
+  }
+}
+
+const returnLowerMonth = (month) => {
+  const date = new Date();
+  switch (month) {
+    case 'This Month':
+      return date.getMonth();
+    case 'Prev Month':
+      if (date.getMonth() == 0) {
+        return 11;
+      }
+      else{
+        return date.getMonth() - 1;
+      }
+    case 'Janurary':
+      return 0;
+    case 'Feburary':
+      return 1;
+    case 'March':
+      return 2;
+    case 'April':
+      return 3;
+    case 'May':
+      return 4;
+    case 'June':
+      return 5;
+    case 'July':
+      return 6;
+    case 'August':
+      return 7;
+    case 'September':
+      return 8;
+    case 'October':
+      return 9;
+    case 'November':
+      return 10;
+    case 'December':
+      return 11;
+    default:
+      return 0;
+  }
+}
+
+const returnLowerYear = (year) => {
+  const date = new Date();
+  switch (year) {
+    case 'This Year':
+      return date.getFullYear() - 1;
+    case 'Prev Year':
+      return date.getFullYear() - 2;
+    default:
+      return 0;
+  }
+}
+
+
 function* addTransactionSaga(action) {
   try {
     const transactionData = action.payload;
     yield call(addTransaction, transactionData);
-    const transactions = yield call(fetchTransactions);
+    const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month);
+    const upperBoundMonth = returnLowerMonth(month) + 2;
+    const lowerBoundYear = returnLowerYear(year);
+    const upperBoundYear = returnLowerYear(year) + 2;
+    const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(addTransactionSuccess(transactions));
   }
   catch (error) {
@@ -38,66 +124,17 @@ export function* watchAddTransaction() {
 }
 
 function* fetchTransactionsSaga(action) {
-  {/* Filter logic */ }
-  const applyFilter = (transactions, type, month, year) => {
-    return transactions.filter(transaction => {
-      if (type != 'Any') {
-        if (transaction.amount > 0 && type == 'Expenditure') {
-          return false;
-        }
-        if (transaction.amount < 0 && type == 'Income') {
-          return false;
-        }
-      }
-      const today = new Date();
-      const transactionDate = new Date(transaction.tran_date_time);
-      if (month == 'This Month') {
-        if (transactionDate.getMonth() != today.getMonth()) {
-          return false;
-        }
-      }
-      if (month == 'Prev Month') {
-        if (transactionDate.getMonth() != (today.getMonth() === 0 ? 11 : today.getMonth() - 1)) {
-          return false;
-        }
-      }
-      const monthArr = {
-        'January': 0,
-        'February': 1,
-        'March': 2,
-        'April': 3,
-        'May': 4,
-        'June': 5,
-        'July': 6,
-        'August': 7,
-        'September': 8,
-        'October': 9,
-        'November': 10,
-        'December': 11
-      };
-      if (month != 'This Month' && month != 'Prev Month') {
-        if (transactionDate.getMonth() != monthArr[month]) {
-          return false;
-        }
-      }
-      if (year == 'This Year') {
-        if (transactionDate.getFullYear() != today.getFullYear()) {
-          return false;
-        }
-      }
-      if (year == 'Prev Year') {
-        if (transactionDate.getFullYear() != today.getFullYear() - 1) {
-          return false;
-        }
-      }
-      return true;
-    });
-  };
   try {
-    const { type, month, year } = action.payload;
-    const transactions = yield call(fetchTransactions);
-    const filteredTransactions = applyFilter(transactions, type, month, year);
-    yield put(fetchTransactionSuccess(filteredTransactions));
+    const { type, month, year, sort } = action.payload;
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
+    // console.warn({ lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
+    const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
+    yield put(fetchTransactionSuccess(transactions));
   }
   catch (error) {
     yield put(fetchTransactionFailure(error));
@@ -115,7 +152,14 @@ function* updateTransactionSaga(action) {
   try {
     const transactionData = action.payload;
     yield call(updateTransaction, transactionData);
-    const transactions = yield call(fetchTransactions);
+    const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month);
+    const upperBoundMonth = returnLowerMonth(month) + 2;
+    const lowerBoundYear = returnLowerYear(year);
+    const upperBoundYear = returnLowerYear(year) + 2;
+    const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(updateTransactionSuccess(transactions));
   }
   catch (error) {
@@ -131,7 +175,14 @@ function* deleteTransactionSaga(action) {
   try {
     const id = action.payload;
     yield call(deleteTransaction, id);
-    const transactions = yield call(fetchTransactions);
+    const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month);
+    const upperBoundMonth = returnLowerMonth(month) + 2;
+    const lowerBoundYear = returnLowerYear(year);
+    const upperBoundYear = returnLowerYear(year) + 2;
+    const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(deleteTransactionSuccess(transactions));
   }
   catch (error) {

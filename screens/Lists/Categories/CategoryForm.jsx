@@ -50,14 +50,14 @@ export default function CategoryForm({ route, navigation }) {
       categoryIcon,
       categoryBackgroundColor
     }));
-    dispatch(fetchTransactionRequest());
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('CategoryList');
   }
 
   const handleDeleteCategory = () => {
     setShowModal(false);
     dispatch(deleteCategoryRequest(id));
-    dispatch(fetchTransactionRequest());
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('CategoryList');
 
   }
@@ -76,7 +76,7 @@ export default function CategoryForm({ route, navigation }) {
       }
 
     ))
-    dispatch(fetchTransactionRequest());
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     navigation.navigate('CategoryList');
 
   }
