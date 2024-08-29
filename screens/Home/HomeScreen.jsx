@@ -26,9 +26,9 @@ export default function HomeScreen({navigation}) {
     }
     dispatch(fetchCategoriesRequest());
     dispatch(fetchRecipientsRequest());
-    dispatch(fetchTransactionRequest());
+    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchCurrentMonthMoneyRequest());
-    dispatch(fetchRecurringPaymentsRequest());
+    dispatch(fetchRecurringPaymentsRequest({ type: 'Any', frequency: 'All', sort: 'desc' }));
     dispatch(fetchActionsRequest());
     updateData();
   },[])

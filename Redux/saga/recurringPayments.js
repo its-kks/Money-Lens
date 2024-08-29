@@ -27,14 +27,71 @@ import {
 }
   from '../constants';
 
+const returnFrequencyUpperLimit = (frequency) => {
+  if (frequency == 'All') {
+    return 999999999999999;
+  }
+  else if (frequency == 'Monthly') {
+    return 2;
+  }
+  else if (frequency == 'Quaterly') {
+    return 5;
+  }
+  else if (frequency == 'Yearly') {
+    return 13;
+  }
+}
+
+const returnFrequencyLowerLimit = (frequency) => {
+  if (frequency == 'All') {
+    return 0;
+  }
+  else if (frequency == 'Monthly') {
+    return 0;
+  }
+  else if (frequency == 'Quaterly') {
+    return 3;
+  }
+  else if (frequency == 'Yearly') {
+    return 11;
+  }
+}
+
+const amountUpperLimit = (type) => {
+  if (type == 'Any') {
+    return 999999999999999;
+  }
+  else if (type == 'Income') {
+    return 999999999999999;
+  }
+  else if (type == 'Expenditure') {
+    return 0;
+  }
+}
+
+const amountLowerLimit = (type) => {
+  if (type == 'Any') {
+    return -999999999999999;
+  }
+  else if (type == 'Income') {
+    return 0;
+  }
+  else if (type == 'Expenditure') {
+    return -999999999999999;
+  }
+}
 
 // fetch
-function* fetchRecurringPaymentsSaga() {
+function* fetchRecurringPaymentsSaga(action) {
   try {
-    const recurringPayments = yield call(fetchRecurringPayments);
+    const { type, frequency, sort } = action.payload;
+    const amountLower = amountLowerLimit(type);
+    const amountUpper = amountUpperLimit(type);
+    const frequencyUpper = returnFrequencyUpperLimit(frequency);
+    const frequencyLower = returnFrequencyLowerLimit(frequency);
+    const recurringPayments = yield call(fetchRecurringPayments, { amountLower, amountUpper, frequencyUpper, frequencyLower, sort });
     yield put(fetchRecurringPaymentsSuccess(recurringPayments));
-  }
-  catch (error) {
+  } catch (error) {
     yield put(fetchRecurringPaymentsFailure(error));
   }
 }
@@ -44,11 +101,16 @@ export function* watchFetchRecurringPayments() {
 }
 
 // add
-function* addRecurringPaymentSaga(action) { 
+function* addRecurringPaymentSaga(action) {
   try {
     const recPaymentData = action.payload;
     yield call(addRecurringPayments, recPaymentData);
-    const recurringPayments = yield call(fetchRecurringPayments);
+    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const amountLower = amountLowerLimit(type);
+    const amountUpper = amountUpperLimit(type);
+    const frequencyUpper = returnFrequencyUpperLimit(frequency);
+    const frequencyLower = returnFrequencyLowerLimit(frequency);
+    const recurringPayments = yield call(fetchRecurringPayments, { amountLower, amountUpper, frequencyUpper, frequencyLower , sort});
     yield put(addRecurringPaymentSuccess(recurringPayments));
   }
   catch (error) {
@@ -61,36 +123,46 @@ export function* watchAddRecurringPayment() {
 }
 
 // update
-function* updateRecurringPaymentSaga(action){
-  try{
+function* updateRecurringPaymentSaga(action) {
+  try {
     // ID Receiving checked
     const recPaymentData = action.payload;
-    yield call(updateRecurringPayments,recPaymentData);
-    const recurringPayments = yield call(fetchRecurringPayments);
+    yield call(updateRecurringPayments, recPaymentData);
+    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const amountLower = amountLowerLimit(type);
+    const amountUpper = amountUpperLimit(type);
+    const frequencyUpper = returnFrequencyUpperLimit(frequency);
+    const frequencyLower = returnFrequencyLowerLimit(frequency);
+    const recurringPayments = yield call(fetchRecurringPayments, { amountLower, amountUpper, frequencyUpper, frequencyLower , sort});
     yield put(updateRecurringPaymentSuccess(recurringPayments));
   }
-  catch(error){
+  catch (error) {
     yield put(updateRecurringPaymentFailure(error));
   }
 }
 
 export function* watchUpdateRecurringPayment() {
-  yield takeLatest(UPDATE_RECURRING_PAYMENT_REQUEST,updateRecurringPaymentSaga);
+  yield takeLatest(UPDATE_RECURRING_PAYMENT_REQUEST, updateRecurringPaymentSaga);
 }
 
 /// delete
-export function* deleteRecurringPaymentSaga(action){
-  try{
+export function* deleteRecurringPaymentSaga(action) {
+  try {
     const recPaymentID = action.payload;
-    yield call(deleteRecurringPayments,recPaymentID);
-    const recurringPayments = yield call(fetchRecurringPayments);
+    yield call(deleteRecurringPayments, recPaymentID);
+    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const amountLower = amountLowerLimit(type);
+    const amountUpper = amountUpperLimit(type);
+    const frequencyUpper = returnFrequencyUpperLimit(frequency);
+    const frequencyLower = returnFrequencyLowerLimit(frequency);
+    const recurringPayments = yield call(fetchRecurringPayments, { amountLower, amountUpper, frequencyUpper, frequencyLower , sort});
     yield put(deleteRecurringPaymentSuccess(recurringPayments));
   }
-  catch(error){
+  catch (error) {
     yield put(deleteRecurringPaymentFailure(error));
   }
 }
 
-export function* watchDeleteRecurringPayment(){
-  yield takeLatest(DELETE_RECURRING_PAYMENT_REQUEST,deleteRecurringPaymentSaga);
+export function* watchDeleteRecurringPayment() {
+  yield takeLatest(DELETE_RECURRING_PAYMENT_REQUEST, deleteRecurringPaymentSaga);
 }

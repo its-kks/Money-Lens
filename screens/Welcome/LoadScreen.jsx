@@ -24,7 +24,7 @@ export default function LoadScreen({ navigation }) {
           navigation.replace('Welcome');
         }
         else {
-          dispatch(fetchRecurringPaymentsRequest());
+          dispatch(fetchRecurringPaymentsRequest({ type: 'Any', frequency: 'All', sort: 'desc' }));
           const count = await AsyncStorage.getItem('recurrCount');
           setRecurrCount(count);
         }

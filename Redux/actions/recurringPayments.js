@@ -13,9 +13,10 @@ import {
   FETCH_RECURRING_PAYMENTS_SUCCESS
 } from '../constants'
 
-export function fetchRecurringPaymentsRequest(){
+export function fetchRecurringPaymentsRequest(filter){
   return {
     type: FETCH_RECURRING_PAYMENTS_REQUEST,
+    payload: filter
   }
 }
 

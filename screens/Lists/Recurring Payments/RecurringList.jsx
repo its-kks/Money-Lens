@@ -1,16 +1,19 @@
 import { Dimensions, StatusBar, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View, FlatList, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import appColors from '../../../constants/colors'
 import TopTitle from '../../../components/listScreenComponents/TopTitle'
 import SearchBar from '../../../components/listScreenComponents/SearchBar'
 import ExpandingList from '../../../components/listScreenComponents/ExpandingList'
 import AscDescButton from '../../../components/listScreenComponents/AscDescButton'
 import SingleRecurringExpense from '../../../components/listScreenComponents/SingleRecurringExpense'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AddBar from '../../../components/listScreenComponents/AddBar'
 import { formattedDate } from '../../../utilities/dateTime'
+import { fetchRecurringPaymentsRequest } from '../../../Redux/actions/recurringPayments'
 
 export default function RecurringList({ navigation }) {
+
+  const dispatch = useDispatch();
 
   const fetchedRecurssivePayments = useSelector(state => state.recurringPayments.recurringPayments);
   const loading = useSelector(state => state.recurringPayments.loading);
@@ -21,7 +24,11 @@ export default function RecurringList({ navigation }) {
 
   const [type, setType] = useState('Any')
   const [frequency, setFrequency] = useState('All')
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState('desc');
+
+  useEffect(() => {
+    dispatch(fetchRecurringPaymentsRequest({type,frequency, sort}));
+  }, [type, frequency, sort]);
 
   const handleAddFunction = () => {
     navigation.navigate('RecurringForm',
@@ -36,9 +43,12 @@ export default function RecurringList({ navigation }) {
         addition: true,
         type: 'Expense'
       }
-
+      
     );
+    setType('Any');
+    setFrequency('All');
   }
+
 
   return (
     <View
@@ -47,64 +57,66 @@ export default function RecurringList({ navigation }) {
         setShowFrequency(false);
       }
       }
-      style={{flex:1, backgroundColor:appColors.white}}
+      style={{ flex: 1, backgroundColor: appColors.white }}
     >
-        {/* title */}
-        <View style={styles.titleContainer}>
-          <TopTitle title="Recurring Payments:" />
-        </View>
+      {/* title */}
+      <View style={styles.titleContainer}>
+        <TopTitle title="Recurring Payments:" />
+      </View>
 
-        {/* search */}
-        <View View style={styles.searchContainer}>
-          <SearchBar />
-        </View>
+      {/* search */}
+      <View View style={styles.searchContainer}>
+        <SearchBar />
+      </View>
 
-        {/* filters  */}
-        <View style={styles.filterContainer}>
-          <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType} 
-            currentItem={type} setCurrentItem={setType}
-          />
-          <ExpandingList listItem={['All', 'Monthly', 'Yearly', 'Quaterly']} showList={showFrequency} setShowList={setShowFrequency} 
-            currentItem={frequency} setCurrentItem={setFrequency}
-          />
-          <AscDescButton sort={sort} setSort={setSort} />
-        </View>
+      {/* filters  */}
+      <View style={styles.filterContainer}>
+        <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType}
+          currentItem={type} setCurrentItem={setType}
+        />
+        <ExpandingList listItem={['All', 'Monthly', 'Yearly', 'Quaterly']} showList={showFrequency} setShowList={setShowFrequency}
+          currentItem={frequency} setCurrentItem={setFrequency}
+        />
+        <AscDescButton sort={sort} setSort={setSort} />
+      </View>
 
-        {/* transactions list and add bar */}
-        <View style={styles.transactionsContainer}>
-          <FlatList
-            data={fetchedRecurssivePayments}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <SingleRecurringExpense
-                itemName={item.name}
-                itemIcon={item.categoryIcon}
-                repeat={item.frequency}
-                time={undefined}
-                price={item.amount}
-                itemBackgroundColor={appColors[item.categoryColor] + '50'}
-                handleUpdate={() => {
-                  navigation.navigate('RecurringForm',
-                    {
-                      id: item.id,
-                      name: item.name,
-                      amount: item.amount,
-                      category: item.categoryID,
-                      nextPayment: item.pay_date,
-                      frequency: item.frequency,
-                      recipient: item.recipientID,
-                      addition: false,
-                      type: item.amount<0 ? 'Expense' : 'Income',
-                      action_added: item.action_added
-                    }
-                  );
-                }}
-              />
-            )}
-            ListHeaderComponent={<AddBar onPressFunction={handleAddFunction} />}
-            ListFooterComponent={<View style={{ height: 50 }} />}
-          />
-        </View>
+      {/* transactions list and add bar */}
+      <View style={styles.transactionsContainer}>
+        <FlatList
+          data={fetchedRecurssivePayments}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <SingleRecurringExpense
+              itemName={item.name}
+              itemIcon={item.categoryIcon}
+              repeat={item.frequency}
+              time={undefined}
+              price={item.amount}
+              itemBackgroundColor={appColors[item.categoryColor] + '50'}
+              handleUpdate={() => {
+                navigation.navigate('RecurringForm',
+                  {
+                    id: item.id,
+                    name: item.name,
+                    amount: item.amount,
+                    category: item.categoryID,
+                    nextPayment: item.pay_date,
+                    frequency: item.frequency,
+                    recipient: item.recipientID,
+                    addition: false,
+                    type: item.amount < 0 ? 'Expense' : 'Income',
+                    action_added: item.action_added
+                  }
+                );
+                setType('Any');
+                setFrequency('All');
+              }}
+            />
+          )}
+          ListHeaderComponent={<AddBar onPressFunction={handleAddFunction} />}
+          ListFooterComponent={<View style={{ height: 50 }} />}
+        />
+      </View>
     </View>
   )
 }

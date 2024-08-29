@@ -19,8 +19,8 @@ export default function TransactionList({ navigation }) {
   const [showType, setShowType] = useState(false);
   const [showMonth, setShowMonth] = useState(false);
   const [showYear, setShowYear] = useState(false);
-  
-  const [sort, setSort] = useState('');
+
+  const [sort, setSort] = useState('desc');
   const [month, setMonth] = useState('This Month');
   const [type, setType] = useState('Any');
   const [year, setYear] = useState('This Year');
@@ -30,12 +30,9 @@ export default function TransactionList({ navigation }) {
   const loading = useSelector(state => state.transactions.loading);
   const error = useSelector(state => state.transactions.error);
 
-  if (sort === 'asc') {
-    fetchedTransactions.sort((a, b) => a.amount - b.amount);
-  }
-  else if (sort === 'desc') {
-    fetchedTransactions.sort((a, b) => b.amount - a.amount);
-  }
+  useEffect(() => {
+    dispatch(fetchTransactionRequest({ type, month, year, sort }));
+  }, [type, month, year, sort]);
 
 
   const handleAddNavigation = () => {
@@ -103,18 +100,18 @@ export default function TransactionList({ navigation }) {
           data={fetchedTransactions}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-              <SingleTransaction
-                itemId={item.id}
-                itemName={item.name}
-                itemIcon={item.icon}
-                date={item.tran_date_time.split(' ')[0].split('-').reverse().join('/')}
-                time={item.tran_date_time.split(' ')[1]}
-                price={item.amount}
-                itemBackgroundColor={appColors[item.backgroundColor] + '50'}
-                itemRecipient={item.recipient}
-                categoryID={item.category_id}
-                recipientId={item.recipient_id}
-                navigation={navigation}/>
+            <SingleTransaction
+              itemId={item.id}
+              itemName={item.name}
+              itemIcon={item.icon}
+              date={item.tran_date_time.split(' ')[0].split('-').reverse().join('/')}
+              time={item.tran_date_time.split(' ')[1]}
+              price={item.amount}
+              itemBackgroundColor={appColors[item.backgroundColor] + '50'}
+              itemRecipient={item.recipient}
+              categoryID={item.category_id}
+              recipientId={item.recipient_id}
+              navigation={navigation} />
           )}
           ListHeaderComponent={<AddBar onPressFunction={handleAddNavigation} />}
           ListFooterComponent={<View style={{ height: 50 }} />}

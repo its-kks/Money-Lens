@@ -35,9 +35,10 @@ export function addTransactionSuccess(transactionData) {
   }
 }
 
-export function fetchTransactionRequest(){
+export function fetchTransactionRequest(filters){
   return {
-    type: FETCH_TRANSACTIONS_REQUEST
+    type: FETCH_TRANSACTIONS_REQUEST,
+    payload: filters
   }
 
 }

@@ -1,8 +1,9 @@
 import { addMonths } from "../utilities/dateTime";
 import { getDBConnection } from "./dbServices";
 
-export const fetchRecurringPayments = async () => {
+export const fetchRecurringPayments = async ({ amountLower, amountUpper, frequencyUpper, frequencyLower, sort }) => {
   const db = await getDBConnection();
+  const data = [amountLower, amountUpper, frequencyLower, frequencyUpper];
   const query = `
   SELECT rp.id AS id, rp.name AS name, rp.amount AS amount, rp.start_date AS pay_date, rp.frequency AS frequency,
   rp.next_date AS next_date, rp.action_added AS action_added, rp.money_saved as saved, c.icon as categoryIcon , 
@@ -10,9 +11,12 @@ export const fetchRecurringPayments = async () => {
   FROM recurring_payments rp,
   categories c
   WHERE rp.category_id = c.id
+  AND (rp.amount > ? AND rp.amount < ?)
+  AND (rp.frequency > ? and rp.frequency < ?)
+  ORDER BY rp.amount ${sort}
   `;
   try {
-    const [result] = await db.executeSql(query);
+    const [result] = await db.executeSql(query, data);
     return result.rows.raw();
   } catch (error) {
     console.error(error);
