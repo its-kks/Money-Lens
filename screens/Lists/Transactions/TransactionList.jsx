@@ -47,6 +47,9 @@ export default function TransactionList({ navigation }) {
       type: 'Expense',
       addition: true
     });
+    setType('Any');
+    setMonth('This Month');
+    setYear('This Year');
   }
 
 
@@ -111,7 +114,11 @@ export default function TransactionList({ navigation }) {
               itemRecipient={item.recipient}
               categoryID={item.category_id}
               recipientId={item.recipient_id}
-              navigation={navigation} />
+              navigation={navigation} 
+              setType={setType}
+              setYear={setYear}
+              setMonth={setMonth}
+              />
           )}
           ListHeaderComponent={<AddBar onPressFunction={handleAddNavigation} />}
           ListFooterComponent={<View style={{ height: 50 }} />}

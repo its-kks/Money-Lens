@@ -3,7 +3,8 @@ import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function SingleTransaction({ navigation, itemId, itemName, itemIcon, date, time, price, itemBackgroundColor, itemRecipient, categoryID, recipientId }) {
+export default function SingleTransaction({ navigation, itemId, itemName, itemIcon, date, time, 
+  price, itemBackgroundColor, itemRecipient, categoryID, recipientId , setType, setMonth, setYear }) {
   return (
     <View style={styles.container}>
 
@@ -40,6 +41,9 @@ export default function SingleTransaction({ navigation, itemId, itemName, itemIc
             type: price < 0 ? 'Expense' : 'Income',
             addition: false
           });
+          setType('Any');
+          setMonth('This Month');
+          setYear('This Year');
         }}>
           <MaterialCommunityIcons name="dots-vertical" size={30} color={appColors.lightGrey} />
         </TouchableOpacity>
