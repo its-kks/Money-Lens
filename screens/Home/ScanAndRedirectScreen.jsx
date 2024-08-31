@@ -21,8 +21,7 @@ export default function ScanAndRedirectScreen({ navigation }) {
       upiUrlKeyId[recipient.upiUrl] = recipient.id;
     }
   }
-  console.log(recipients);
-  console.log(upiUrlKeyId);
+
   // shaking animation
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -70,7 +69,6 @@ export default function ScanAndRedirectScreen({ navigation }) {
             merchantName = item.split('=')[1];
           }
         }
-        console.log('Correct UPI URL');
         handleAddNavigation(redirectUrl,merchantName);
       }
       else if (prevQRCode.current !== upiId) {

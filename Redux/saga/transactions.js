@@ -111,7 +111,6 @@ function* addTransactionSaga(action) {
     const lowerBoundYear = returnLowerYear(year).toString();
     const upperBoundYear = (returnLowerYear(year) + 2).toString();
     const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
-    console.log(transactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(addTransactionSuccess(transactions));
   }
   catch (error) {

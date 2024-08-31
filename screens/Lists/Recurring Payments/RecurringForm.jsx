@@ -68,7 +68,6 @@ export default function Recur({ route, navigation }) {
       }
     }
     increaseCount();
-
     dispatch(addRecurringPaymentRequest({
       recPaymentName,
       recPaymentAmount,

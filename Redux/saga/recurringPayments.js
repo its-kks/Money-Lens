@@ -105,7 +105,7 @@ function* addRecurringPaymentSaga(action) {
   try {
     const recPaymentData = action.payload;
     yield call(addRecurringPayments, recPaymentData);
-    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const { type, frequency, sort } = { type: 'Any', frequency: 'All', sort: 'desc' };
     const amountLower = amountLowerLimit(type);
     const amountUpper = amountUpperLimit(type);
     const frequencyUpper = returnFrequencyUpperLimit(frequency);
@@ -128,7 +128,7 @@ function* updateRecurringPaymentSaga(action) {
     // ID Receiving checked
     const recPaymentData = action.payload;
     yield call(updateRecurringPayments, recPaymentData);
-    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const { type, frequency, sort } = { type: 'Any', frequency: 'All', sort: 'desc' };
     const amountLower = amountLowerLimit(type);
     const amountUpper = amountUpperLimit(type);
     const frequencyUpper = returnFrequencyUpperLimit(frequency);
@@ -150,7 +150,7 @@ export function* deleteRecurringPaymentSaga(action) {
   try {
     const recPaymentID = action.payload;
     yield call(deleteRecurringPayments, recPaymentID);
-    const { type, frequency } = { type: 'Any', frequency: 'All', sort: 'desc' };
+    const { type, frequency, sort } = { type: 'Any', frequency: 'All', sort: 'desc' };
     const amountLower = amountLowerLimit(type);
     const amountUpper = amountUpperLimit(type);
     const frequencyUpper = returnFrequencyUpperLimit(frequency);

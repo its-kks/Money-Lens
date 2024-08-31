@@ -29,7 +29,6 @@ export default function PayPreviousMerchantsForm({navigation}) {
     });
   }
 
-  console.log(fetchedRecipients);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>

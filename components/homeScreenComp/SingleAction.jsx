@@ -8,7 +8,7 @@ import { deleteActionRequest } from '../../Redux/actions/actions';
 
 
 
-export default function SingleAction({ name, act_id, amount, type, rp_id, saveFunction, addFunction, payFunction }) {
+export default function SingleAction({ name, act_id, amount, type, rp_id, handleAction }) {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
@@ -31,23 +31,6 @@ export default function SingleAction({ name, act_id, amount, type, rp_id, saveFu
         return appColors.green;
       default:
         return appColors.purple;
-    }
-  }
-
-  const getNonDismissFunction = (type) => {
-    switch (type) {
-      case 'Save':
-        return () => {
-          saveFunction(rp_id, amount, act_id);
-        }
-      case 'Pay':
-        return () => {
-          payFunction(rp_id, amount, act_id);
-        }
-      default:
-        return () => {
-          addFunction(rp_id, amount, act_id);
-        }
     }
   }
 
@@ -82,7 +65,7 @@ export default function SingleAction({ name, act_id, amount, type, rp_id, saveFu
       </View>
       <View style={{ flex: 40, alignItems: 'flex-start', flexDirection: "row", justifyContent: 'space-around' }}>
         {/* not dismiss */}
-        <Pressable onPress={getNonDismissFunction(type)}>
+        <Pressable onPress={()=>{handleAction(type,rp_id, amount, act_id)}}>
           <View style={{ padding: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: appColors.orange + '50', borderRadius: 10 }}>
             <Text style={{ color: appColors.orange, fontSize: 16, fontFamily: 'Roboto-Bold' }}>{type}</Text>
           </View>

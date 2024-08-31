@@ -9,6 +9,8 @@ import { updateRecurringPaymentRequest } from '../../Redux/actions/recurringPaym
 import { addActionRequest, deleteActionRequest } from '../../Redux/actions/actions';
 import { addActionsLogic } from '../../utilities/actions';
 import { addTransactionRequest } from '../../Redux/actions/transactions';
+import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
+import ConfirmationModal from '../listScreenComponents/Forms/ConfirmationModal';
 
 export default function Actions() {
   const [sort, setSort] = useState('');
@@ -16,102 +18,92 @@ export default function Actions() {
   const loading = useSelector(state => state.actions.loading);
   const error = useSelector(state => state.actions.error);
 
+  const [showModal, setShowModal] = useState(false);
+
   const dispatch = useDispatch();
 
 
   const fetchedRecurringPayments = useSelector(state => state.recurringPayments.recurringPayments);
+  const currentMonthMoney = useSelector(state => state.users.currentMonthMoney[0]);
 
-  // function to call when save button is pressed
-  function handleSaveAction(recurring_payment_id, money_saved, action_id) {
+
+  function handleAction(type, recurring_payment_id, amount, action_id) {
     const {
-      id, name, amount, categoryID, pay_date, frequency, recipientID, action_added, saved
+      id, name, amount: recAmount, categoryID, pay_date, frequency, recipientID, action_added, saved, next_date
     } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
+
+    if ((type === 'Save' || type === 'Pay') && Math.abs(amount) >
+      Math.abs(currentMonthMoney.positive + currentMonthMoney.negative)) {
+      setShowModal(true);
+      return;
+    }
+
+    let recPaymentNextPayment = pay_date;
+    let recPaymentMoneySaved = saved;
+    let transactionName = '';
+    let transactionType = '';
+
+    switch (type) {
+      case 'Save':
+        recPaymentMoneySaved += amount;
+        transactionName = `Saved: ${name}`;
+        transactionType = '1';
+        break;
+      case 'Add':
+        recPaymentNextPayment = next_date;
+        recPaymentMoneySaved = 0;
+        transactionName = `Added: ${name}`;
+        transactionType = '2';
+        break;
+      case 'Pay':
+        recPaymentNextPayment = next_date;
+        recPaymentMoneySaved = 0;
+        transactionName = `Paid: ${name}`;
+        transactionType = '1';
+        break;
+      default:
+        console.error('Invalid action type');
+        return;
+    }
+
     dispatch(updateRecurringPaymentRequest({
       recPaymentID: id,
       recPaymentName: name,
-      recPaymentAmount: amount,
+      recPaymentAmount: recAmount,
       recPaymentCategory: categoryID,
       recPaymentRecipient: recipientID,
-      recPaymentNextPayment: pay_date,
+      recPaymentNextPayment: recPaymentNextPayment,
       recPaymentFrequency: frequency,
-      recPaymentType: amount < 0 ? 'Expense' : 'Income',
+      recPaymentType: recAmount < 0 ? '1' : '2',
       recPaymentActionAdded: action_added,
-      recPaymentMoneySaved: (saved+money_saved)
-    }))
+      recPaymentMoneySaved: recPaymentMoneySaved
+    }));
+
     dispatch(addTransactionRequest({
-      transactionName: ("Saved: " + name),
-      transactionAmount: money_saved,
+      transactionName: transactionName,
+      transactionAmount: amount,
       transactionCategory: categoryID,
       transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
       transactionTime: new Date().toLocaleTimeString(),
       transactionRecipient: recipientID,
-      transactionType: '1'
+      transactionType: transactionType
     }));
+    dispatch(fetchCurrentMonthMoneyRequest());
     dispatch(deleteActionRequest(action_id));
   }
-
-  function handleActionAdd (recurring_payment_id, amount_added, action_id) {
-    const {
-      id, name, amount, categoryID, frequency, recipientID, action_added, saved, next_date
-    } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
-    dispatch(updateRecurringPaymentRequest({
-      recPaymentID: id,
-      recPaymentName: name,
-      recPaymentAmount: amount,
-      recPaymentCategory: categoryID,
-      recPaymentRecipient: recipientID,
-      recPaymentNextPayment: next_date,
-      recPaymentFrequency: frequency,
-      recPaymentType: amount < 0 ? '1' : '2',
-      recPaymentActionAdded: action_added,
-      recPaymentMoneySaved: 0
-    }))
-    dispatch(addTransactionRequest({
-      transactionName: ("Added: " + name),
-      transactionAmount: amount_added,
-      transactionCategory: categoryID,
-      transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
-      transactionTime: new Date().toLocaleTimeString(),
-      transactionRecipient: recipientID,
-      transactionType: '2'
-    }));
-    dispatch(deleteActionRequest(action_id));
-
-  }
-
-  function handleActionPay(recurring_payment_id, amount_payed, action_id) {
-    const {
-      id, name, amount, categoryID, frequency, recipientID, action_added, saved, next_date
-    } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
-    dispatch(updateRecurringPaymentRequest({
-      recPaymentID: id,
-      recPaymentName: name,
-      recPaymentAmount: amount,
-      recPaymentCategory: categoryID,
-      recPaymentRecipient: recipientID,
-      recPaymentNextPayment: next_date,
-      recPaymentFrequency: frequency,
-      recPaymentType: amount < 0 ? '1' : '2',
-      recPaymentActionAdded: action_added,
-      recPaymentMoneySaved: 0
-    }))
-    dispatch(addTransactionRequest({
-      transactionName: ("Paid: " + name),
-      transactionAmount: amount_payed,
-      transactionCategory: categoryID,
-      transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
-      transactionTime: new Date().toLocaleTimeString(),
-      transactionRecipient: recipientID,
-      transactionType: '1'
-    }));
-    dispatch(deleteActionRequest(action_id));
-
-  }
-
 
 
   return (
     <View style={styles.container}>
+      <ConfirmationModal
+        enableOk={true}
+        text={"Not enough money for this operation!"}
+        onCancel={() => { setShowModal(false) }}
+        visible={showModal}
+        setVisible={setShowModal}
+        onConfirm={() => (setShowModal(false))}
+      />
+
       <View style={styles.header}>
         <Text style={styles.headerText}>Pending Actions:</Text>
         <View style={{ flexDirection: 'row' }}>
@@ -151,8 +143,7 @@ export default function Actions() {
                     data={fetchedActions}
                     keyExtractor={item => item.act_id}
                     renderItem={({ item }) => (
-                      <SingleAction name={item.name} act_id={item.act_id} amount={item.amount} type={item.type} rp_id={item.rp_id} saveFunction={handleSaveAction}
-                        addFunction={handleActionAdd} payFunction={handleActionPay}
+                      <SingleAction name={item.name} act_id={item.act_id} amount={item.amount} type={item.type} rp_id={item.rp_id} handleAction={handleAction}
                       />
                     )}
                     ListFooterComponent={<View style={{ height: 50 }}></View>}

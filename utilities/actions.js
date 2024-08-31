@@ -23,7 +23,7 @@ export const addActionsLogic = (recurringPayments, dispatch, addActionRequest, u
               recPaymentRecipient: recipientID,
               recPaymentNextPayment: pay_date.reverse().join('/'),
               recPaymentFrequency: frequency,
-              recPaymentType: '0',
+              recPaymentType: '2',
               recPaymentMoneySaved: 0,
               recPaymentActionAdded: new Intl.DateTimeFormat('en-GB').format(todays_date)
             }))
