@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { positiveInf } from '../../constants/numeric'
 
 export default function RecipientAndCategory({ name, icon, backgroundColorIcon, onPressFunc, categoryBudget=0}) {
   return (
@@ -18,7 +19,7 @@ export default function RecipientAndCategory({ name, icon, backgroundColorIcon, 
             <Text style={{ fontSize: 14, fontFamily: 'FiraMono-Regular', color:appColors.black }}>{ name.length >13 ? name.substring(0,10)+'...': name}</Text>
             {
               categoryBudget > 0 ?
-              <Text style={{fontSize:15, fontFamily: 'Roboto-Bold'}}>{"$" + categoryBudget}</Text>
+              <Text style={{fontSize:15, fontFamily: 'Roboto-Bold'}}>{categoryBudget == positiveInf ? '∞' : "$" + categoryBudget}</Text>
               : null
             }
             <Text>

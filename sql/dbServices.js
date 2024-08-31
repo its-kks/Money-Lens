@@ -25,6 +25,7 @@ export const createTableCategories = async (db) => {
     CREATE TABLE IF NOT EXISTS categories (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
+      budget_amount REAL NOT NULL DEFAULT 0,
       type TEXT NOT NULL CHECK (type IN ('Expense', 'Income')),
       icon TEXT NOT NULL DEFAULT '❓',
       background_color TEXT DEFAULT 'blue' NOT NULL

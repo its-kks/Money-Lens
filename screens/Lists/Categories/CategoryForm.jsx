@@ -11,6 +11,7 @@ import emojiRegex from 'emoji-regex';
 import { addCategoryRequest, deleteCategoryRequest, updateCategoryRequest } from '../../../Redux/actions/categories'
 import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
 import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
+import { positiveInf } from '../../../constants/numeric';
 
 export default function CategoryForm({ route, navigation }) {
   const { id, name, icon, backgroundColor, type, addition, budget } = route.params;
@@ -42,13 +43,14 @@ export default function CategoryForm({ route, navigation }) {
   const dispatch = useDispatch();
 
   const handleAddCategory = () => {
-    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon) 
+    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)
       || categoryBudget.length === 0 || isNaN(categoryBudget) || parseFloat(categoryBudget) <= 0
     ) {
       return;
     }
     dispatch(addCategoryRequest({
       categoryName,
+      categoryBudget,
       categoryType,
       categoryIcon,
       categoryBackgroundColor
@@ -74,6 +76,7 @@ export default function CategoryForm({ route, navigation }) {
     dispatch(updateCategoryRequest(
       {
         categoryId: id,
+        categoryBudget,
         categoryName,
         categoryType,
         categoryIcon,
@@ -134,16 +137,16 @@ export default function CategoryForm({ route, navigation }) {
               budget !== undefined ?
                 <TextField
                   placeholder={'Budget'}
-                  text={categoryBudget}
+                  text={categoryBudget == positiveInf ? '∞' : categoryBudget}
                   setText={setCategoryBudget}
                   errorMessage={'Budget amount should be valid and greater than 0'}
                   isRequired={true}
                   showErrorNow={categoryBudget.length === 0 || isNaN(categoryBudget) || parseFloat(categoryBudget) <= 0 ? true : false}
                   submitPressed={submitPressed}
-                  disabled={!addition && !udpdateState}
+                  disabled={(!addition && !udpdateState) || (id == 1 || id == 2)}
                   keyboardType='decimal-pad'
                 />
-              : null
+                : null
             }
 
 

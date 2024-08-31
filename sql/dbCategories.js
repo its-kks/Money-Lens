@@ -3,24 +3,24 @@ import { getDBConnection } from "./dbServices";
 
 export const addDefaultCategories = async () => {
   const query = `
-  INSERT INTO categories (name,type, icon, background_color)
+  INSERT INTO categories (name, budget_amount, type, icon, background_color)
   VALUES
-  ('Miscellaneous', 'Expense', '❓', 'purple'),
-  ('Miscellaneous', 'Income', '❓', 'blue'),
-  ('Groceries', 'Expense', '🍞', 'red'),
-  ('Transport', 'Expense', '🚗', 'orange'),
-  ('Entertainment', 'Expense', '🎥', 'green'),
-  ('Clothing', 'Expense', '👕', 'purple'),
-  ('Utilities', 'Expense', '💡', 'red'),
-  ('Salary', 'Income', '💵', 'grey'),
-  ('Health', 'Expense', '🏥', 'blue'),
-  ('Electoronics', 'Expense', '📱', 'orange'),
-  ('Education', 'Expense', '📚', 'pink'),
-  ('Rent', 'Expense', '🏠', 'purple'),
-  ('Insurance', 'Expense', '🛡️', 'green'),
-  ('Vaccation', 'Expense', '🏖️', 'orange'),
-  ('Gifts', 'Expense', '🎁', 'purple'),
-  ('EMI', 'Expense', '💳', 'red');
+  ('Miscellaneous', 999999999999999, 'Expense', '❓', 'purple'),
+  ('Miscellaneous', 0, 'Income', '❓', 'blue'),
+  ('Groceries', 500, 'Expense', '🍞', 'red'),
+  ('Transport', 500, 'Expense', '🚗', 'orange'),
+  ('Entertainment', 500, 'Expense', '🎥', 'green'),
+  ('Clothing', 500, 'Expense', '👕', 'purple'),
+  ('Utilities', 500, 'Expense', '💡', 'red'),
+  ('Salary', 0, 'Income', '💵', 'grey'),
+  ('Health', 500, 'Expense', '🏥', 'blue'),
+  ('Electoronics', 500, 'Expense', '📱', 'orange'),
+  ('Education', 500, 'Expense', '📚', 'pink'),
+  ('Rent', 500, 'Expense', '🏠', 'purple'),
+  ('Insurance', 500, 'Expense', '🛡️', 'green'),
+  ('Vaccation', 500, 'Expense', '🏖️', 'orange'),
+  ('Gifts', 500, 'Expense', '🎁', 'purple'),
+  ('EMI', 500, 'Expense', '💳', 'red');
 
   `;
   try {
@@ -48,14 +48,18 @@ export const fetchCategories = async () => {
 
 }
 
-export const addCategories = async ({ categoryName, categoryType, categoryIcon, categoryBackgroundColor }) => {
+export const addCategories = async ({ categoryName, categoryBudget, categoryType, categoryIcon, categoryBackgroundColor }) => {
   const query = `
-  INSERT INTO categories (name,type, icon, background_color)
+  INSERT INTO categories (name, budeget_amount, type, icon, background_color)
   VALUES
-  (?,?,?,?);
+  (?,?,?,?,?);
   `;
+  if (categoryBudget === undefined) {
+    categoryBudget = 0;
+  }
   const data = [
     categoryName.trim(),
+    Math.abs(categoryBudget),
     categoryType.trim(),
     categoryIcon,
     categoryBackgroundColor
@@ -96,17 +100,22 @@ export const deleteCategory = async (id) => {
 
 }
 
-export const updateCategory = async ({ categoryId, categoryName, categoryType, categoryIcon, categoryBackgroundColor }) => {
+export const updateCategory = async ({ categoryId, categoryBudget, categoryName, categoryType, categoryIcon, categoryBackgroundColor }) => {
   const query = `
   UPDATE categories
   SET name = ?,
+  budget_amount = ?,
   type = ?,
   icon = ?,
   background_color = ?
   WHERE id = ?;
   `;
+  if (categoryBudget == undefined) {
+    categoryBudget = 0;
+  }
   const data = [
     categoryName.trim(),
+    Math.abs(categoryBudget),
     categoryType.trim(),
     categoryIcon,
     categoryBackgroundColor,

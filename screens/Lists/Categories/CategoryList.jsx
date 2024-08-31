@@ -48,7 +48,7 @@ export default function CategoryList({ navigation }) {
                   <RecipientAndCategory key={item.id.toString()}
                     name={item.name} icon={item.icon}
                     backgroundColorIcon={appColors[item.background_color] + '50'}
-                    categoryBudget={10}
+                    categoryBudget={item.budget_amount}
                     onPressFunc={() => navigation.navigate('CategoryForm', {
                       id: item.id,
                       name: item.name,
@@ -56,7 +56,7 @@ export default function CategoryList({ navigation }) {
                       backgroundColor: item.background_color,
                       type: item.type,
                       addition: false,
-                      budget: 10
+                      budget: item.budget_amount
                     })}
                   />
                 ) : null
