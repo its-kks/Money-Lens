@@ -19,15 +19,16 @@ import {
 
 
 import { addTransaction, fetchTransactions, updateTransaction, deleteTransaction } from '../../sql/dbTransactions';
+import { negativeInf, positiveInf } from '../../constants/numeric';
 
 const returnLowerAmount = (type) => {
   switch (type) {
     case 'Any':
-      return -999999999999999;
+      return negativeInf;
     case 'Income':
       return 0;
     case 'Expenditure':
-      return -999999999999999;
+      return negativeInf;
     default:
       return 0;
   }
@@ -35,9 +36,9 @@ const returnLowerAmount = (type) => {
 const returnUpperAmount = (type) => {
   switch (type) {
     case 'Any':
-      return 999999999999999;
+      return positiveInf;
     case 'Income':
-      return 999999999999999;
+      return positiveInf;
     case 'Expenditure':
       return 0;
     default:

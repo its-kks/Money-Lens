@@ -26,10 +26,11 @@ import {
   DELETE_RECURRING_PAYMENT_REQUEST
 }
   from '../constants';
+import { negativeInf, positiveInf } from '../../constants/numeric';
 
 const returnFrequencyUpperLimit = (frequency) => {
   if (frequency == 'All') {
-    return 999999999999999;
+    return positiveInf;
   }
   else if (frequency == 'Monthly') {
     return 2;
@@ -59,10 +60,10 @@ const returnFrequencyLowerLimit = (frequency) => {
 
 const amountUpperLimit = (type) => {
   if (type == 'Any') {
-    return 999999999999999;
+    return positiveInf;
   }
   else if (type == 'Income') {
-    return 999999999999999;
+    return positiveInf;
   }
   else if (type == 'Expenditure') {
     return 0;
@@ -71,13 +72,13 @@ const amountUpperLimit = (type) => {
 
 const amountLowerLimit = (type) => {
   if (type == 'Any') {
-    return -999999999999999;
+    return negativeInf;
   }
   else if (type == 'Income') {
     return 0;
   }
   else if (type == 'Expenditure') {
-    return -999999999999999;
+    return negativeInf;
   }
 }
 
