@@ -27,6 +27,7 @@ export default function TransactionList({ navigation }) {
 
 
   const fetchedTransactions = useSelector(state => state.transactions.transactions);
+  console.log(fetchedTransactions);
   const loading = useSelector(state => state.transactions.loading);
   const error = useSelector(state => state.transactions.error);
 

@@ -6,9 +6,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { FlatList } from 'react-native-gesture-handler';
 import SingleAction from './SingleAction';
 import { updateRecurringPaymentRequest } from '../../Redux/actions/recurringPayments';
-import { addActionRequest } from '../../Redux/actions/actions';
+import { addActionRequest, deleteActionRequest } from '../../Redux/actions/actions';
 import { addActionsLogic } from '../../utilities/actions';
-
+import { addTransactionRequest } from '../../Redux/actions/transactions';
 
 export default function Actions() {
   const [sort, setSort] = useState('');
@@ -16,20 +16,99 @@ export default function Actions() {
   const loading = useSelector(state => state.actions.loading);
   const error = useSelector(state => state.actions.error);
 
+  const dispatch = useDispatch();
+
+
   const fetchedRecurringPayments = useSelector(state => state.recurringPayments.recurringPayments);
 
-  if( sort === 'asc' ){
-    fetchedActions.sort((a, b) => {
-      return a.amount - b.amount;
-    })
-  }
-  else if (sort === 'desc') {
-    fetchedActions.sort((a, b) => {
-      return b.amount - a.amount;
-    })
+  // function to call when save button is pressed
+  function handleSaveAction(recurring_payment_id, money_saved, action_id) {
+    const {
+      id, name, amount, categoryID, pay_date, frequency, recipientID, action_added, saved
+    } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
+    dispatch(updateRecurringPaymentRequest({
+      recPaymentID: id,
+      recPaymentName: name,
+      recPaymentAmount: amount,
+      recPaymentCategory: categoryID,
+      recPaymentRecipient: recipientID,
+      recPaymentNextPayment: pay_date,
+      recPaymentFrequency: frequency,
+      recPaymentType: amount < 0 ? 'Expense' : 'Income',
+      recPaymentActionAdded: action_added,
+      recPaymentMoneySaved: (saved+money_saved)
+    }))
+    dispatch(addTransactionRequest({
+      transactionName: ("Saved: " + name),
+      transactionAmount: money_saved,
+      transactionCategory: categoryID,
+      transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
+      transactionTime: new Date().toLocaleTimeString(),
+      transactionRecipient: recipientID,
+      transactionType: '1'
+    }));
+    dispatch(deleteActionRequest(action_id));
   }
 
-  const dispatch = useDispatch();
+  function handleActionAdd (recurring_payment_id, amount_added, action_id) {
+    const {
+      id, name, amount, categoryID, frequency, recipientID, action_added, saved, next_date
+    } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
+    dispatch(updateRecurringPaymentRequest({
+      recPaymentID: id,
+      recPaymentName: name,
+      recPaymentAmount: amount,
+      recPaymentCategory: categoryID,
+      recPaymentRecipient: recipientID,
+      recPaymentNextPayment: next_date,
+      recPaymentFrequency: frequency,
+      recPaymentType: amount < 0 ? '1' : '2',
+      recPaymentActionAdded: action_added,
+      recPaymentMoneySaved: 0
+    }))
+    dispatch(addTransactionRequest({
+      transactionName: ("Added: " + name),
+      transactionAmount: amount_added,
+      transactionCategory: categoryID,
+      transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
+      transactionTime: new Date().toLocaleTimeString(),
+      transactionRecipient: recipientID,
+      transactionType: '2'
+    }));
+    dispatch(deleteActionRequest(action_id));
+
+  }
+
+  function handleActionPay(recurring_payment_id, amount_payed, action_id) {
+    const {
+      id, name, amount, categoryID, frequency, recipientID, action_added, saved, next_date
+    } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
+    dispatch(updateRecurringPaymentRequest({
+      recPaymentID: id,
+      recPaymentName: name,
+      recPaymentAmount: amount,
+      recPaymentCategory: categoryID,
+      recPaymentRecipient: recipientID,
+      recPaymentNextPayment: next_date,
+      recPaymentFrequency: frequency,
+      recPaymentType: amount < 0 ? '1' : '2',
+      recPaymentActionAdded: action_added,
+      recPaymentMoneySaved: 0
+    }))
+    dispatch(addTransactionRequest({
+      transactionName: ("Paid: " + name),
+      transactionAmount: amount_payed,
+      transactionCategory: categoryID,
+      transactionDate: new Intl.DateTimeFormat('en-GB').format(new Date()),
+      transactionTime: new Date().toLocaleTimeString(),
+      transactionRecipient: recipientID,
+      transactionType: '1'
+    }));
+    dispatch(deleteActionRequest(action_id));
+
+  }
+
+
 
   return (
     <View style={styles.container}>
@@ -72,7 +151,9 @@ export default function Actions() {
                     data={fetchedActions}
                     keyExtractor={item => item.act_id}
                     renderItem={({ item }) => (
-                      <SingleAction name={item.name} act_id={item.act_id} amount={item.amount} type={item.type} rp_id={item.rp_id} />
+                      <SingleAction name={item.name} act_id={item.act_id} amount={item.amount} type={item.type} rp_id={item.rp_id} saveFunction={handleSaveAction}
+                        addFunction={handleActionAdd} payFunction={handleActionPay}
+                      />
                     )}
                     ListFooterComponent={<View style={{ height: 50 }}></View>}
                   />

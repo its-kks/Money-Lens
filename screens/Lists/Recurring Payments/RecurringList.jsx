@@ -105,7 +105,8 @@ export default function RecurringList({ navigation }) {
                     recipient: item.recipientID,
                     addition: false,
                     type: item.amount < 0 ? 'Expense' : 'Income',
-                    action_added: item.action_added
+                    action_added: item.action_added,
+                    money_saved: item.saved
                   }
                 );
                 setType('Any');

@@ -10,52 +10,56 @@ import {
   DELETE_RECURRING_PAYMENT_SUCCESS,
   FETCH_RECURRING_PAYMENTS_REQUEST,
   FETCH_RECURRING_PAYMENTS_FAILURE,
-  FETCH_RECURRING_PAYMENTS_SUCCESS
+  FETCH_RECURRING_PAYMENTS_SUCCESS,
+  UPDATE_SAVED_FAILURE,
+  UPDATE_SAVED_REQUEST,
+  UPDATE_SAVED_SUCCESS
+
 } from '../constants'
 
-export function fetchRecurringPaymentsRequest(filter){
+export function fetchRecurringPaymentsRequest(filter) {
   return {
     type: FETCH_RECURRING_PAYMENTS_REQUEST,
     payload: filter
   }
 }
 
-export function fetchRecurringPaymentsFailure(error){
+export function fetchRecurringPaymentsFailure(error) {
   return {
     type: FETCH_RECURRING_PAYMENTS_FAILURE,
     payload: error.message
   }
 }
 
-export function fetchRecurringPaymentsSuccess(recurringPayments){
+export function fetchRecurringPaymentsSuccess(recurringPayments) {
   return {
     type: FETCH_RECURRING_PAYMENTS_SUCCESS,
     payload: recurringPayments
   }
 }
 
-export function addRecurringPaymentRequest(recurringPayment){
+export function addRecurringPaymentRequest(recurringPayment) {
   return {
     type: ADD_RECURRING_PAYMENT_REQUEST,
     payload: recurringPayment
   }
 }
 
-export function addRecurringPaymentFailure(error){
+export function addRecurringPaymentFailure(error) {
   return {
     type: ADD_RECURRING_PAYMENT_FAILURE,
     payload: error.message
   }
 }
 
-export function addRecurringPaymentSuccess(recurringPayment){
+export function addRecurringPaymentSuccess(recurringPayment) {
   return {
     type: ADD_RECURRING_PAYMENT_SUCCESS,
     payload: recurringPayment
   }
 }
 
-export function updateRecurringPaymentRequest(recurringPayment){
+export function updateRecurringPaymentRequest(recurringPayment) {
   // ID Receiving checked 
   return {
     type: UPDATE_RECURRING_PAYMENT_REQUEST,
@@ -63,38 +67,59 @@ export function updateRecurringPaymentRequest(recurringPayment){
   }
 }
 
-export function updateRecurringPaymentFailure(error){
+export function updateRecurringPaymentFailure(error) {
   return {
     type: UPDATE_RECURRING_PAYMENT_FAILURE,
     payload: error.message
   }
 }
 
-export function updateRecurringPaymentSuccess(recurringPayment){
+export function updateRecurringPaymentSuccess(recurringPayment) {
   return {
     type: UPDATE_RECURRING_PAYMENT_SUCCESS,
     payload: recurringPayment
   }
 }
 
-export function deleteRecurringPaymentRequest(recurringPayment){
+export function deleteRecurringPaymentRequest(recurringPayment) {
   return {
     type: DELETE_RECURRING_PAYMENT_REQUEST,
     payload: recurringPayment
   }
 }
 
-export function deleteRecurringPaymentFailure(error){
+export function deleteRecurringPaymentFailure(error) {
   return {
     type: DELETE_RECURRING_PAYMENT_FAILURE,
     payload: error.message
   }
 }
 
-export function deleteRecurringPaymentSuccess(recurringPayment){
+export function deleteRecurringPaymentSuccess(recurringPayment) {
   return {
     type: DELETE_RECURRING_PAYMENT_SUCCESS,
     payload: recurringPayment
   }
 }
 
+
+export function updateSavedRequest(data) {
+  return {
+    type: UPDATE_SAVED_REQUEST,
+    payload: data
+  }
+}
+
+export function updateSavedFailure(error) {
+  return {
+    type: UPDATE_SAVED_FAILURE,
+    payload: error.message
+  }
+}
+
+export function updateSavedSuccess(recurringPayment) {
+  return {
+    type: UPDATE_SAVED_SUCCESS,
+    payload: recurringPayment
+  }
+}

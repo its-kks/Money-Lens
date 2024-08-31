@@ -106,11 +106,12 @@ function* addTransactionSaga(action) {
     const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
     const lowerBoundAmount = returnLowerAmount(type);
     const upperBoundAmount = returnUpperAmount(type);
-    const lowerBoundMonth = returnLowerMonth(month);
-    const upperBoundMonth = returnLowerMonth(month) + 2;
-    const lowerBoundYear = returnLowerYear(year);
-    const upperBoundYear = returnLowerYear(year) + 2;
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
     const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
+    console.log(transactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(addTransactionSuccess(transactions));
   }
   catch (error) {
@@ -132,7 +133,6 @@ function* fetchTransactionsSaga(action) {
     const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
     const lowerBoundYear = returnLowerYear(year).toString();
     const upperBoundYear = (returnLowerYear(year) + 2).toString();
-    // console.warn({ lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(fetchTransactionSuccess(transactions));
   }
@@ -155,10 +155,10 @@ function* updateTransactionSaga(action) {
     const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
     const lowerBoundAmount = returnLowerAmount(type);
     const upperBoundAmount = returnUpperAmount(type);
-    const lowerBoundMonth = returnLowerMonth(month);
-    const upperBoundMonth = returnLowerMonth(month) + 2;
-    const lowerBoundYear = returnLowerYear(year);
-    const upperBoundYear = returnLowerYear(year) + 2;
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
     const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(updateTransactionSuccess(transactions));
   }
@@ -178,10 +178,10 @@ function* deleteTransactionSaga(action) {
     const { type, month, year, sort } = { type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' };
     const lowerBoundAmount = returnLowerAmount(type);
     const upperBoundAmount = returnUpperAmount(type);
-    const lowerBoundMonth = returnLowerMonth(month);
-    const upperBoundMonth = returnLowerMonth(month) + 2;
-    const lowerBoundYear = returnLowerYear(year);
-    const upperBoundYear = returnLowerYear(year) + 2;
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
     const transactions = yield call(fetchTransactions, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear, sort });
     yield put(deleteTransactionSuccess(transactions));
   }

@@ -12,7 +12,7 @@ export const fetchTransactions = async ({lowerBoundAmount, upperBoundAmount, low
   WHERE (t.amount > ? AND t.amount < ?)
   AND (strftime('%m', tran_date_time) > ? AND ? > strftime('%m', tran_date_time))
   AND (strftime('%Y', tran_date_time) > ? AND ? > strftime('%Y', tran_date_time))
-  ORDER BY t.amount ${sort};`;
+  ORDER BY t.tran_date_time ${sort};`;
   const data = [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
   try {
     const [result] = await db.executeSql(query, data);

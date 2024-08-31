@@ -24,6 +24,7 @@ export const addActionsLogic = (recurringPayments, dispatch, addActionRequest, u
               recPaymentNextPayment: pay_date.reverse().join('/'),
               recPaymentFrequency: frequency,
               recPaymentType: '0',
+              recPaymentMoneySaved: 0,
               recPaymentActionAdded: new Intl.DateTimeFormat('en-GB').format(todays_date)
             }))
           }
@@ -63,6 +64,7 @@ export const addActionsLogic = (recurringPayments, dispatch, addActionRequest, u
                 recPaymentNextPayment: pay_date.reverse().join('/'),
                 recPaymentFrequency: frequency,
                 recPaymentType: '1',
+                recPaymentMoneySaved: saved,
                 recPaymentActionAdded: new Intl.DateTimeFormat('en-GB').format(todays_date)
               }))
             }
