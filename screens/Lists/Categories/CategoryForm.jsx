@@ -13,7 +13,7 @@ import { fetchTransactionRequest } from '../../../Redux/actions/transactions';
 import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
 
 export default function CategoryForm({ route, navigation }) {
-  const { id, name, icon, backgroundColor, type, addition } = route.params;
+  const { id, name, icon, backgroundColor, type, addition, budget } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -35,13 +35,16 @@ export default function CategoryForm({ route, navigation }) {
   const [categoryIcon, setCategoryIcon] = React.useState(icon);
   const [categoryBackgroundColor, setCategoryBackgroundColor] = React.useState(backgroundColor);
   const [categoryType, setCategoryType] = React.useState(type);
+  const [categoryBudget, setCategoryBudget] = useState(Math.abs(budget) + '');
 
   const [udpdateState, setupdateState] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleAddCategory = () => {
-    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)) {
+    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon) 
+      || categoryBudget.length === 0 || isNaN(categoryBudget) || parseFloat(categoryBudget) <= 0
+    ) {
       return;
     }
     dispatch(addCategoryRequest({
@@ -50,20 +53,22 @@ export default function CategoryForm({ route, navigation }) {
       categoryIcon,
       categoryBackgroundColor
     }));
-    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
+    dispatch(fetchTransactionRequest({ type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' }));
     navigation.navigate('CategoryList');
   }
 
   const handleDeleteCategory = () => {
     setShowModal(false);
     dispatch(deleteCategoryRequest(id));
-    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
+    dispatch(fetchTransactionRequest({ type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' }));
     navigation.navigate('CategoryList');
 
   }
 
   const handleUpdateCategory = () => {
-    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)) {
+    if (categoryName.length === 0 || categoryName.length > 30 || isNotSingleEmoji(categoryIcon)
+      || categoryBudget.length === 0 || isNaN(categoryBudget) || parseFloat(categoryBudget) <= 0
+    ) {
       return;
     }
     dispatch(updateCategoryRequest(
@@ -76,7 +81,7 @@ export default function CategoryForm({ route, navigation }) {
       }
 
     ))
-    dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
+    dispatch(fetchTransactionRequest({ type: 'Any', month: 'This Month', year: 'This Year', sort: 'desc' }));
     navigation.navigate('CategoryList');
 
   }
@@ -124,6 +129,23 @@ export default function CategoryForm({ route, navigation }) {
               submitPressed={submitPressed}
               disabled={!addition && !udpdateState}
             />
+
+            {
+              budget !== undefined ?
+                <TextField
+                  placeholder={'Budget'}
+                  text={categoryBudget}
+                  setText={setCategoryBudget}
+                  errorMessage={'Budget amount should be valid and greater than 0'}
+                  isRequired={true}
+                  showErrorNow={categoryBudget.length === 0 || isNaN(categoryBudget) || parseFloat(categoryBudget) <= 0 ? true : false}
+                  submitPressed={submitPressed}
+                  disabled={!addition && !udpdateState}
+                  keyboardType='decimal-pad'
+                />
+              : null
+            }
+
 
             <ColorSelector
               initialColor={categoryBackgroundColor}

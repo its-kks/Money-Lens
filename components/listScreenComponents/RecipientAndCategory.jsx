@@ -3,7 +3,7 @@ import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function RecipientAndCategory({ name, icon, backgroundColorIcon, onPressFunc}) {
+export default function RecipientAndCategory({ name, icon, backgroundColorIcon, onPressFunc, categoryBudget=0}) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -16,6 +16,11 @@ export default function RecipientAndCategory({ name, icon, backgroundColorIcon, 
         <TouchableOpacity onPress={()=>{onPressFunc()}}>
           <View style={{justifyContent:'space-evenly', alignItems:'center'}}>
             <Text style={{ fontSize: 14, fontFamily: 'FiraMono-Regular', color:appColors.black }}>{ name.length >13 ? name.substring(0,10)+'...': name}</Text>
+            {
+              categoryBudget > 0 ?
+              <Text style={{fontSize:15, fontFamily: 'Roboto-Bold'}}>{"$" + categoryBudget}</Text>
+              : null
+            }
             <Text>
               <MaterialCommunityIcons name="dots-horizontal" size={30} color={appColors.lightGrey} />
             </Text>
@@ -30,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 120,
+    height: 130,
     width: 120
   },
   iconContainer: {

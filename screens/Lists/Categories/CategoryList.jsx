@@ -39,7 +39,8 @@ export default function CategoryList({ navigation }) {
                   icon: '😊',
                   backgroundColor: 'red',
                   type: 'Expense',
-                  addition: true
+                  addition: true,
+                  budget: 0
                 })}
               />
               {fetchedCategories.map((item) => (
@@ -47,13 +48,15 @@ export default function CategoryList({ navigation }) {
                   <RecipientAndCategory key={item.id.toString()}
                     name={item.name} icon={item.icon}
                     backgroundColorIcon={appColors[item.background_color] + '50'}
+                    categoryBudget={10}
                     onPressFunc={() => navigation.navigate('CategoryForm', {
                       id: item.id,
                       name: item.name,
                       icon: item.icon,
                       backgroundColor: item.background_color,
                       type: item.type,
-                      addition: false
+                      addition: false,
+                      budget: 10
                     })}
                   />
                 ) : null
