@@ -1,156 +1,109 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import appColors from '../../constants/colors'
+import { ScrollView } from 'react-native-gesture-handler'
+import TopTitle from '../../components/Insights/TopTitle'
+import PieChart from '../../components/Insights/PieChart'
+import ExpandingList from '../../components/Insights/ExpandingList'
 
-const InsightsScreen = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+export default function InsightsScreen() {
+  const data = [
+    { id: 1, name: 'Health', amount: 3500 },
+    { id: 2, name: 'Grocerry', amount: 5000 },
+    { id: 3, name: 'Transport', amount: 2000 },
+    { id: 4, name: 'EMI', amount: 10000 },
+    { id: 6, name: 'Academics', amount: 9000 },
+    { id: 7, name: 'Miscellaneous', amount: 3000 },
+    { id: 8, name: 'Vegetables', amount: 3000 },
+  ];
 
-  const handlePhoneNumberChange = (text) => {
-    setPhoneNumber(text);
-  };
+  const [showType, setShowType] = useState(false);
+  const [showMonth, setShowMonth] = useState(false);
+  const [showYear, setShowYear] = useState(false);
+
+  const [sort, setSort] = useState('desc');
+  const [month, setMonth] = useState('This Month');
+  const [type, setType] = useState('Any');
+  const [year, setYear] = useState('This Year');
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-      keyboardVerticalOffset={100} // Adjust based on your header height or other components
-    >
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.formContainer}>
-          <Text style={styles.headerText}>Enter your phone number</Text>
-          <Text style={styles.subHeaderText}>You can log in or make an account if you're new to Gojek.</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.countryCode}>🇮🇳 +91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Phone number"
-              value={phoneNumber}
-              onChangeText={handlePhoneNumberChange}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-          </View>
-          <TouchableOpacity
-            style={[styles.continueButton, { backgroundColor: phoneNumber.length === 10 ? 'green' : 'gray' }]}
-            disabled={phoneNumber.length !== 10}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.formContainer}>
-          <Text style={styles.headerText}>Enter your phone number</Text>
-          <Text style={styles.subHeaderText}>You can log in or make an account if you're new to Gojek.</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.countryCode}>🇮🇳 +91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Phone number"
-              value={phoneNumber}
-              onChangeText={handlePhoneNumberChange}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-          </View>
-          <TouchableOpacity
-            style={[styles.continueButton, { backgroundColor: phoneNumber.length === 10 ? 'green' : 'gray' }]}
-            disabled={phoneNumber.length !== 10}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.formContainer}>
-          <Text style={styles.headerText}>Enter your phone number</Text>
-          <Text style={styles.subHeaderText}>You can log in or make an account if you're new to Gojek.</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.countryCode}>🇮🇳 +91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Phone number"
-              value={phoneNumber}
-              onChangeText={handlePhoneNumberChange}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-          </View>
-          <TouchableOpacity
-            style={[styles.continueButton, { backgroundColor: phoneNumber.length === 10 ? 'green' : 'gray' }]}
-            disabled={phoneNumber.length !== 10}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.formContainer}>
-          <Text style={styles.headerText}>Enter your phone number</Text>
-          <Text style={styles.subHeaderText}>You can log in or make an account if you're new to Gojek.</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.countryCode}>🇮🇳 +91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Phone number"
-              value={phoneNumber}
-              onChangeText={handlePhoneNumberChange}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-          </View>
-          <TouchableOpacity
-            style={[styles.continueButton, { backgroundColor: phoneNumber.length === 10 ? 'green' : 'gray' }]}
-            disabled={phoneNumber.length !== 10}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
-};
+    <View style={{ flex: 1, backgroundColor: appColors.white }}>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  formContainer: {
-    padding: 20,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subHeaderText: {
-    fontSize: 14,
-    color: 'gray',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    marginBottom: 20,
-  },
-  countryCode: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    fontSize: 18,
-  },
-  continueButton: {
-    height: 50,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  continueButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
+      {/* Income/Expenditure Pie Chart */}
+      <View style={{ flex: 1, borderBottomWidth: 0.5, borderBottomColor: appColors.lightGrey }}>
+        <View style={{ height: 35, flexShrink: 0, marginTop: 5 }}>
+          <TopTitle title={'Income/Expense Insights:'} />
+        </View>
 
-export default InsightsScreen;
+        <View style={{
+          height: 30,
+          margin: 10,
+          justifyContent: 'space-evenly',
+          flexDirection: 'row',
+          flexShrink: 0,
+        }}>
+          <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType}
+            currentItem={type} setCurrentItem={setType}
+          />
+          <ExpandingList listItem={['This Month', 'Prev Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
+            showList={showMonth}
+            setShowList={setShowMonth}
+            currentItem={month} setCurrentItem={setMonth}
+          />
+          <ExpandingList listItem={['This Year', 'Prev Year']}
+            showList={showYear}
+            setShowList={setShowYear}
+            currentItem={year} setCurrentItem={setYear}
+          />
+
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <PieChart data={data} />
+        </View>
+
+
+
+
+      </View>
+
+      {/* Bar graph categories */}
+      <View style={{ flex: 1 }}>
+        <View style={{ height: 35, flexShrink: 0, }}>
+          <TopTitle title={'Categories Insights:'} />
+        </View>
+
+        <View style={{
+          height: 30,
+          margin: 10,
+          justifyContent: 'space-evenly',
+          flexDirection: 'row',
+          flexShrink: 0,
+        }}>
+          <ExpandingList listItem={['Health', 'Grocerry']} showList={showType} setShowList={setShowType}
+            currentItem={type} setCurrentItem={setType}
+          />
+          <ExpandingList listItem={['This Month', 'Prev Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
+            showList={showMonth}
+            setShowList={setShowMonth}
+            currentItem={month} setCurrentItem={setMonth}
+          />
+          <ExpandingList listItem={['This Year', 'Prev Year']}
+            showList={showYear}
+            setShowList={setShowYear}
+            currentItem={year} setCurrentItem={setYear}
+          />
+
+        </View>
+
+        <View style={{}}>
+
+        </View>
+
+      </View>
+
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({})
