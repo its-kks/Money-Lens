@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import TopTitle from '../../components/Insights/TopTitle'
 import PieChart from '../../components/Insights/PieChart'
 import ExpandingList from '../../components/Insights/ExpandingList'
+import BarGraph from '../../components/Insights/BarGraph'
 
 export default function InsightsScreen() {
   const data = [
@@ -17,14 +18,23 @@ export default function InsightsScreen() {
     { id: 8, name: 'Vegetables', amount: 3000 },
   ];
 
-  const [showType, setShowType] = useState(false);
-  const [showMonth, setShowMonth] = useState(false);
-  const [showYear, setShowYear] = useState(false);
+  const data2 = [{ this_month: 1500,budget: 1700, prev_month: 1600,  median_others: 2000 }];
 
-  const [sort, setSort] = useState('desc');
-  const [month, setMonth] = useState('This Month');
-  const [type, setType] = useState('Any');
-  const [year, setYear] = useState('This Year');
+  const [showTypeTransaction, setShowTypeTransaction] = useState(false);
+  const [showMonthTransaction, setShowMonthTransaction] = useState(false);
+  const [showYearTransaction, setShowYearTransaction] = useState(false);
+
+  const [monthTransaction, setMonthTransaction] = useState('This Month');
+  const [transactionType, setTransactionType] = useState('Any');
+  const [yearTransaction, setYearTransaction] = useState('This Year');
+
+  const [showTypeCategory, setShowTypeCategory] = useState(false);
+  const [showMonthCategory, setShowMonthCategory] = useState(false);
+  const [showYearCategory, setShowYearCategory] = useState(false);
+
+  const [monthCategory, setMonthCategory] = useState('This Month');
+  const [typeCategory, setTypeCategory] = useState('Any');
+  const [yearCategory, setYearCategory] = useState('This Year');
 
   return (
     <View style={{ flex: 1, backgroundColor: appColors.white }}>
@@ -42,18 +52,18 @@ export default function InsightsScreen() {
           flexDirection: 'row',
           flexShrink: 0,
         }}>
-          <ExpandingList listItem={['Any', 'Income', 'Expenditure']} showList={showType} setShowList={setShowType}
-            currentItem={type} setCurrentItem={setType}
+          <ExpandingList listItem={['Income', 'Expenditure']} showList={showTypeTransaction} setShowList={setShowTypeTransaction}
+            currentItem={transactionType} setCurrentItem={setTransactionType}
           />
           <ExpandingList listItem={['This Month', 'Prev Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
-            showList={showMonth}
-            setShowList={setShowMonth}
-            currentItem={month} setCurrentItem={setMonth}
+            showList={showMonthTransaction}
+            setShowList={setShowMonthTransaction}
+            currentItem={monthTransaction} setCurrentItem={setMonthTransaction}
           />
           <ExpandingList listItem={['This Year', 'Prev Year']}
-            showList={showYear}
-            setShowList={setShowYear}
-            currentItem={year} setCurrentItem={setYear}
+            showList={showYearTransaction}
+            setShowList={setShowYearTransaction}
+            currentItem={yearTransaction} setCurrentItem={setYearTransaction}
           />
 
         </View>
@@ -80,23 +90,24 @@ export default function InsightsScreen() {
           flexDirection: 'row',
           flexShrink: 0,
         }}>
-          <ExpandingList listItem={['Health', 'Grocerry']} showList={showType} setShowList={setShowType}
-            currentItem={type} setCurrentItem={setType}
+          <ExpandingList listItem={['Health', 'Grocerry']} showList={showTypeCategory} setShowList={setShowTypeCategory}
+            currentItem={typeCategory} setCurrentItem={setTypeCategory}
           />
           <ExpandingList listItem={['This Month', 'Prev Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
-            showList={showMonth}
-            setShowList={setShowMonth}
-            currentItem={month} setCurrentItem={setMonth}
+            showList={showMonthCategory}
+            setShowList={setShowMonthCategory}
+            currentItem={monthCategory} setCurrentItem={setMonthCategory}
           />
           <ExpandingList listItem={['This Year', 'Prev Year']}
-            showList={showYear}
-            setShowList={setShowYear}
-            currentItem={year} setCurrentItem={setYear}
+            showList={showYearCategory}
+            setShowList={setShowYearCategory}
+            currentItem={yearCategory} setCurrentItem={setYearCategory}
           />
 
         </View>
 
-        <View style={{}}>
+        <View style={{flex: 1}}>
+          <BarGraph data={data2} />
 
         </View>
 
