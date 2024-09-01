@@ -110,7 +110,7 @@ const PieChart = ({ data }) => {
                   {`${item.name}`}
                 </Text>
                 <Text style={item.id === highlight ? styles.highlightTextStyle : styles.baseTextStyle}>
-                  {`${item.amount.toFixed(2)} (${item.percentage.toFixed(2)}%)`}
+                  {`${item.amount} (${item.percentage.toFixed(0)}%)`}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   legendColor: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     marginRight: 5,
     borderRadius: 15
 
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: appColors.black,
     fontFamily: 'Roboto-Bold',
-    fontWeight:'bold'
   }
 });
 

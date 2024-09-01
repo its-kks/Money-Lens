@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View, Modal, Pressable } from 'react-native'
+import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View, Modal, Pressable, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import appColors from '../../constants/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
   current: {
     borderRadius: 5,
     borderColor: appColors.blue,
-    width: 130,
-    justifyContent: 'space-between',
+    width: Dimensions.get('screen').width/3.4,
+    justifyContent:'space-between',
     flexDirection: 'row',
     backgroundColor: appColors.blue + '20',
     padding: 5,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   currentItem: {
-    fontSize: 16,
+    fontSize: 15,
     color: appColors.blue,
     fontFamily: 'FiraMono-Regular',
   }

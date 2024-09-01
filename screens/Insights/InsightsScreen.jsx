@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import appColors from '../../constants/colors'
-import { ScrollView } from 'react-native-gesture-handler'
 import TopTitle from '../../components/Insights/TopTitle'
 import PieChart from '../../components/Insights/PieChart'
 import ExpandingList from '../../components/Insights/ExpandingList'
@@ -11,14 +10,9 @@ export default function InsightsScreen() {
   const data = [
     { id: 1, name: 'Health', amount: 3500 },
     { id: 2, name: 'Grocerry', amount: 5000 },
-    { id: 3, name: 'Transport', amount: 2000 },
-    { id: 4, name: 'EMI', amount: 10000 },
-    { id: 6, name: 'Academics', amount: 9000 },
-    { id: 7, name: 'Miscellaneous', amount: 3000 },
-    { id: 8, name: 'Vegetables', amount: 3000 },
   ];
 
-  const data2 = [{ this_month: 1500,budget: 1700, prev_month: 1600,  median_others: 2000 }];
+  const data2 = [{ this_month: 15000,budget: 27000, prev_month: 19600,  median_others: 20000 }];
 
   const [showTypeTransaction, setShowTypeTransaction] = useState(false);
   const [showMonthTransaction, setShowMonthTransaction] = useState(false);
