@@ -33,7 +33,6 @@ const verifyOTP = (otp) => {
   return otpRegex.test(otp);
 };
 
-
 export default function WelcomeScreen({ navigation }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('man');
@@ -75,6 +74,32 @@ export default function WelcomeScreen({ navigation }) {
   useEffect(() => {
     setEnableNext(name.length > 0);
   }, [name]);
+
+  const handleSignUp = async () => {
+    setSignupPressed(true);
+    if (!(verifyEmail(email) && verifyUsername(name) && verifyPassword(password) && confirmPass === password)) {
+      return;
+    }
+    const url = '***REMOVED***';
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        username: name,
+        password: password,
+        password2: confirmPass,
+        avatar: avatar
+      })
+    };
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      setEnableOTP(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
   return (
@@ -163,10 +188,7 @@ export default function WelcomeScreen({ navigation }) {
                   }} value={"Verify OTP"} color={appColors.purple} percentWidth={0.95} />
                   :
                   <Buttons onPress={() => {
-                    setSignupPressed(true);
-                    if (verifyEmail(email) && verifyUsername(name) && verifyPassword(password) && confirmPass === password) {
-                      setEnableOTP(true);
-                    }
+                    handleSignUp();
                   }} value={"Sign up"} color={appColors.purple} percentWidth={0.95} />
               }
 
