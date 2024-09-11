@@ -36,7 +36,6 @@ const verifyOTP = (otp) => {
 export default function WelcomeScreen({ navigation }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('man');
-  const [enableNext, setEnableNext] = useState(false);
 
   const [loginForm, setLoginForm] = useState(false);
   const [enableOTP, setEnableOTP] = useState(false);
@@ -71,36 +70,6 @@ export default function WelcomeScreen({ navigation }) {
 
   }, []);
 
-  useEffect(() => {
-    setEnableNext(name.length > 0);
-  }, [name]);
-
-  const handleSignUp = async () => {
-    setSignupPressed(true);
-    if (!(verifyEmail(email) && verifyUsername(name) && verifyPassword(password) && confirmPass === password)) {
-      return;
-    }
-    const url = '***REMOVED***';
-    const options = {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        username: name,
-        password: password,
-        password2: confirmPass,
-        avatar: avatar
-      })
-    };
-    try {
-      const response = await fetch(url, options);
-      const data = await response.json();
-      setEnableOTP(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -108,95 +77,23 @@ export default function WelcomeScreen({ navigation }) {
         <Text style={styles.titleText}>Manage Money Better</Text>
         <Text style={styles.heading2}>{loginForm ? "Login to continue:" : "Sign up to continue:"}</Text>
       </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView style={{ margin: 10 }}>
-
-          {loginForm ?
-
-            <Login
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-            />
-            :
-            <Signup
-              avatar={avatar}
-              setAvatar={setAvatar}
-              email={email}
-              setEmail={setEmail}
-              name={name}
-              setName={setName}
-              password={password}
-              setPassword={setPassword}
-              confirmPass={confirmPass}
-              setConfirmPass={setConfirmPass}
-              OTP={OTP}
-              setOTP={setOTP}
-              verifyEmail={verifyEmail}
-              verifyUsername={verifyUsername}
-              verifyPassword={verifyPassword}
-              verifyOTP={verifyOTP}
-              submitPressed={signupPressed}
-              enableOTP={enableOTP}
-              otpPressed={otpPressed}
-            />
-
-          }
-
-        </ScrollView>
-
-      </View>
-      <View style={{ flexShrink: 0, height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-        {
-          loginForm ?
-            <>
-              <Text style={styles.changeText}>{"Don't have an account "}</Text>
-              <Pressable onPress={() => {
-                setLoginForm(false)
-              }}>
-                <Text style={styles.heading2}>SignUp</Text>
-              </Pressable>
-            </>
-
-            :
-
-            <>
-              <Text style={styles.changeText}>{"Already have an account "}</Text>
-              <Pressable onPress={() => {
-                setLoginForm(true)
-              }}>
-                <Text style={styles.heading2}>Login</Text>
-              </Pressable>
-            </>
-        }
-      </View>
-
-      <View style={{ alignItems: 'center', height: 70, flexShrink: 0 }}>
-        {
-          loginForm ?
-            <Buttons onPress={() => { console.log('Login') }} value={"Login"} color={appColors.purple} percentWidth={0.95} />
-            :
-            <>
-              {
-                enableOTP ?
-                  <Buttons onPress={() => {
-                    setOtpPressed(true);
-                    // if (verifyOTP(OTP)) {
-                    //   navigation.navigate('Home');
-                    // }
-                  }} value={"Verify OTP"} color={appColors.purple} percentWidth={0.95} />
-                  :
-                  <Buttons onPress={() => {
-                    handleSignUp();
-                  }} value={"Sign up"} color={appColors.purple} percentWidth={0.95} />
-              }
-
-            </>
-        }
-
-
-      </View>
+      {
+        loginForm ?
+          <Login
+            verifyEmail={verifyEmail}
+            verifyPassword={verifyPassword}
+            loginForm={loginForm}
+            setLoginForm={setLoginForm}
+          />
+          :
+          <Signup
+            verifyEmail={verifyEmail}
+            verifyPassword={verifyPassword}
+            verifyUsername={verifyUsername}
+            loginForm={loginForm}
+            setLoginForm={setLoginForm}
+          />
+      }
     </SafeAreaView>
   );
 }
