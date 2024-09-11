@@ -122,7 +122,7 @@ export default function Actions() {
           <TouchableOpacity
             style={{ marginRight: 10, backgroundColor: appColors.blue + '50', padding: 5, borderRadius: 50 }}
             onPress={() => { addActionsLogic(fetchedRecurringPayments, dispatch, addActionRequest, updateRecurringPaymentRequest) }}
-            disabled={fetchedActions.length === 0}
+            disabled={fetchedRecurringPayments.length === 0}
           >
             <MaterialCommunityIcons name="reload" size={25} color={appColors.blue} />
           </TouchableOpacity>
