@@ -4,8 +4,9 @@ import AvatarChooser from '../../components/welcomeStackComp/AvatarChooser'
 import TextField from '../../components/welcomeStackComp/TextField'
 import appColors from '../../constants/colors'
 import Buttons from '../../components/welcomeStackComp/Buttons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function Signup({ verifyEmail, verifyUsername, verifyPassword, loginForm, setLoginForm }) {
+export default function Signup({ verifyEmail, verifyUsername, verifyPassword, loginForm, setLoginForm, navigation }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('man');
   const [enableOTP, setEnableOTP] = useState(false);
@@ -41,7 +42,38 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      setEnableOTP(true);
+      if ('errors' in data) {
+
+      }
+      else {
+        setEnableOTP(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleOTP = async () => {
+    const url = '***REMOVED***';
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({"email":email,"otp":OTP})
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      if ( 'errors' in data ) {
+
+      }
+      else {
+        const saveToken = async () => {
+          await AsyncStorage.setItem('access', data.token.access);
+          await AsyncStorage.setItem('refresh', data.token.refresh);
+          navigation
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -111,6 +143,11 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                   <Text style={{ fontSize: 15, color: appColors.grey, fontFamily: 'Roboto-Bold' }}>{`Check `}</Text>
                   <Text style={{ fontSize: 15, color: appColors.purple, fontFamily: 'Roboto-Bold' }}>{`${email}`}</Text>
                   <Text style={{ fontSize: 15, color: appColors.grey, fontFamily: 'Roboto-Bold' }}>{` for OTP`}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                  <Pressable onPress={() => { setEnableOTP(false); setOTP('') }}>
+                    <Text style={{ fontSize: 16, color: appColors.grey, fontFamily: 'Roboto-Bold', textDecorationLine: 'underline' }}>{`Back`}</Text>
+                  </Pressable>
                 </View>
               </>
               : null

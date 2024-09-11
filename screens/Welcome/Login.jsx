@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator } from 'react-native'
 import { useState } from 'react'
 import TextField from '../../components/welcomeStackComp/TextField'
 import appColors from '../../constants/colors';
