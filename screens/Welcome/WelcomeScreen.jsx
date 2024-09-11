@@ -28,11 +28,6 @@ const verifyPassword = (password) => {
   return passwordRegex.test(password);
 };
 
-const verifyOTP = (otp) => {
-  const otpRegex = /^\d{6}$/;
-  return otpRegex.test(otp);
-};
-
 export default function WelcomeScreen({ navigation }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('man');
@@ -84,6 +79,7 @@ export default function WelcomeScreen({ navigation }) {
             verifyPassword={verifyPassword}
             loginForm={loginForm}
             setLoginForm={setLoginForm}
+            navigation={navigation}
           />
           :
           <Signup
@@ -92,6 +88,7 @@ export default function WelcomeScreen({ navigation }) {
             verifyUsername={verifyUsername}
             loginForm={loginForm}
             setLoginForm={setLoginForm}
+            navigation={navigation}
           />
       }
     </SafeAreaView>

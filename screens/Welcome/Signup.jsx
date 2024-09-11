@@ -18,15 +18,20 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
   const [confirmPass, setConfirmPass] = useState('');
   const [OTP, setOTP] = useState('');
 
-  const verifyOTP = async () => {
+  const [signupLoader, setSignupLoader] = useState(false);
+  const [otpLoader, setOTPLoader] = useState(false);
 
-  }
+  const verifyOTP = (otp) => {
+    const otpRegex = /^\d{6}$/;
+    return otpRegex.test(otp);
+  };
 
   const handleSignUp = async () => {
     setSignupPressed(true);
     if (!(verifyEmail(email) && verifyUsername(name) && verifyPassword(password) && confirmPass === password)) {
       return;
     }
+    setSignupLoader(true);
     const url = '***REMOVED***';
     const options = {
       method: 'POST',
@@ -42,6 +47,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
     try {
       const response = await fetch(url, options);
       const data = await response.json();
+      setSignupLoader(false);
       if ('errors' in data) {
 
       }
@@ -49,32 +55,39 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
         setEnableOTP(true);
       }
     } catch (error) {
+      setSignupLoader(false);
       console.error(error);
     }
   }
 
   const handleOTP = async () => {
     const url = '***REMOVED***';
+    setOTPLoader(true);
     const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({"email":email,"otp":OTP})
+      body: JSON.stringify({ "email": email, "otp": OTP })
     };
 
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      if ( 'errors' in data ) {
-
+      setOTPLoader(false);
+      if ('errors' in data) {
+        console.log(data)
       }
       else {
         const saveToken = async () => {
           await AsyncStorage.setItem('access', data.token.access);
           await AsyncStorage.setItem('refresh', data.token.refresh);
-          navigation
+          await AsyncStorage.setItem('name',name);
+          await AsyncStorage.setItem('avatar', avatar)
+          navigation.replace('BottomTabsHome');
         }
+        saveToken();
       }
     } catch (error) {
+      setOTPLoader(false);
       console.error(error);
     }
   }
@@ -94,7 +107,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                 errorMessage={'Email should be valid \nAllowed domains: @gmail, @outlook, @yahoo, @protonmail'}
                 showErrorNow={!verifyEmail(email)}
                 isRequired={true}
-                signupPressed={signupPressed}
+                submitPressed={signupPressed}
               />
               <TextField
                 text={name}
@@ -103,7 +116,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                 errorMessage={'5-10 characters\nOnly small alphabets and numbers are allowed'}
                 showErrorNow={!verifyUsername(name)}
                 isRequired={true}
-                signupPressed={signupPressed}
+                submitPressed={signupPressed}
               />
               <TextField
                 text={password}
@@ -112,7 +125,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                 errorMessage={'8-15 characters \nMust have at least one: \nSmall alphabet, Capital alphabet and Digit'}
                 showErrorNow={!verifyPassword(password)}
                 isRequired={true}
-                signupPressed={signupPressed}
+                submitPressed={signupPressed}
                 isPassword={true}
               />
               <TextField
@@ -122,7 +135,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                 errorMessage={'Passwords not matching'}
                 showErrorNow={confirmPass !== password}
                 isRequired={true}
-                signupPressed={signupPressed}
+                submitPressed={signupPressed}
                 isPassword={true}
               />
             </>
@@ -134,10 +147,10 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
                   text={OTP}
                   setText={setOTP}
                   placeholder={'OTP'}
-                  errorMessage={'Incorrect OTP'}
+                  errorMessage={'Invalid OTP'}
                   showErrorNow={!verifyOTP(OTP)}
                   isRequired={true}
-                  signupPressed={otpPressed}
+                  submitPressed={otpPressed}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
                   <Text style={{ fontSize: 15, color: appColors.grey, fontFamily: 'Roboto-Bold' }}>{`Check `}</Text>
@@ -172,14 +185,14 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
           enableOTP ?
             <Buttons onPress={() => {
               setOtpPressed(true);
-              // if (verifyOTP(OTP)) {
-              //   navigation.navigate('Home');
-              // }
-            }} value={"Verify OTP"} color={appColors.purple} percentWidth={0.95} />
+              if (verifyOTP(OTP)) {
+                handleOTP();
+              }
+            }} value={"Verify OTP"} color={appColors.purple} percentWidth={0.95} showLoader={otpLoader} />
             :
             <Buttons onPress={() => {
               handleSignUp();
-            }} value={"Sign up"} color={appColors.purple} percentWidth={0.95} />
+            }} value={"Sign up"} color={appColors.purple} percentWidth={0.95} showLoader={signupLoader} />
 
         }
       </View>
