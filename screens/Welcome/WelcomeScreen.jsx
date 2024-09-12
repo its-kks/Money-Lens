@@ -29,19 +29,8 @@ const verifyPassword = (password) => {
 };
 
 export default function WelcomeScreen({ navigation }) {
-  const [name, setName] = useState('');
-  const [avatar, setAvatar] = useState('man');
 
-  const [loginForm, setLoginForm] = useState(false);
-  const [enableOTP, setEnableOTP] = useState(false);
-  const [signupPressed, setSignupPressed] = useState(false);
-  const [loginPressed, setLoginPressed] = useState(false);
-  const [otpPressed, setOtpPressed] = useState(false);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
-  const [OTP, setOTP] = useState('');
+  const [loginForm, setLoginForm] = useState(true);
 
   useEffect(() => {
     async function manageTables() {
