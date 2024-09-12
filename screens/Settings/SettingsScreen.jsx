@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Linking, View } from 'react-native';
+import { Button, Linking, ScrollView, View, Text, Appearance } from 'react-native';
+import appColors from '../../constants/colors';
+import TopTitle from '../../components/Settings/TopTitle';
+import SingleSetting from './SingleSetting';
+import DatabaseSettings from './DatabaseSettings';
+import UserSettings from './UserSettings';
+import AppAppearance from './AppAppearance';
 
 const handlePress = async (url) => {
   try {
@@ -11,11 +17,18 @@ const handlePress = async (url) => {
 };
 const SettingsScreen = () => {
   return (
-    <View style={{backgroundColor:'yellow', flex:1, justifyContent:'center', alignItems:'center'}}>
-      <Button
-        title="Open Link"
-        onPress={() => handlePress('upi://pay?pa=paytmqr2810050501011uzby2a107or@paytm&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=000000&paytmqr=2810050501011UZBY2A107OR&sign=MEYCIQCSoy9fIGUOPGguWmY7fx6v21KjMCYUyTmzcmV9gCmmlAIhAKOZxsWL9+CKsMhhvNP/NIq3Y5ETf8HCupK5ljapxpYL&am=1')}
-      />
+    <View style={{backgroundColor: appColors.white, flex: 1}}>
+      <View style={{margin: 10, height:35}}>
+        <TopTitle title={"Settings:"} />
+      </View>
+      <View style={{flex: 1, margin: 20}}>
+        <ScrollView>
+          <DatabaseSettings />
+          <UserSettings />
+          <AppAppearance />
+          
+        </ScrollView>
+      </View>
     </View>
   );
 };

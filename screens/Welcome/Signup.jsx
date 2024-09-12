@@ -5,6 +5,7 @@ import TextField from '../../components/welcomeStackComp/TextField'
 import appColors from '../../constants/colors'
 import Buttons from '../../components/welcomeStackComp/Buttons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {API_URL_OTP, API_URL_REGISTER} from '@env';
 
 export default function Signup({ verifyEmail, verifyUsername, verifyPassword, loginForm, setLoginForm, navigation }) {
   const [name, setName] = useState('');
@@ -32,7 +33,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
       return;
     }
     setSignupLoader(true);
-    const url = '***REMOVED***';
+    const url = API_URL_REGISTER;
     const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json', Accept: 'application/json' },
@@ -61,7 +62,7 @@ export default function Signup({ verifyEmail, verifyUsername, verifyPassword, lo
   }
 
   const handleOTP = async () => {
-    const url = '***REMOVED***';
+    const url = API_URL_OTP;
     setOTPLoader(true);
     const options = {
       method: 'POST',
