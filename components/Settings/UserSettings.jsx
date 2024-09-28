@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function UserSettings({navigation}) {
   const handleChangePassword = () => {
-    console.log('Change Password')
+    navigation.navigate('ChangePassword');
   }
   const handleDependentsCount = () => {
     console.log('Change Dependents Count')

@@ -24,6 +24,7 @@ import CategoryForm from './screens/Lists/Categories/CategoryForm';
 import RecipientForm from './screens/Lists/Recipients/RecipientForm';
 import HomeStack from './NavigationGroups/HomeStack';
 import RecurringForm from './screens/Lists/Recurring Payments/RecurringForm';
+import ChangePassword from './screens/Settings/ChangePassword';
 
 
 const TopTab = createMaterialTopTabNavigator();
@@ -196,8 +197,8 @@ const BottomTabsHome = () => {
       />
 
       <BottomTab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="SettingsStack"
+        component={SettingsStack}
         options={{
           headerShown: false,
           tabBarLabel: ({ focused }) => (
@@ -210,5 +211,20 @@ const BottomTabsHome = () => {
       />
 
     </BottomTab.Navigator>
+  )
+}
+
+const SettingsStack = () => {
+  return (
+    <StackNavigator.Navigator
+      screenOptions={
+        {
+          headerShown: false,
+        }
+      }
+    >
+      <StackNavigator.Screen name="Settings" component={SettingsScreen} />
+      <StackNavigator.Screen name="ChangePassword" component={ChangePassword} />
+    </StackNavigator.Navigator>
   )
 }

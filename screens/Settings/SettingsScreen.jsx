@@ -2,10 +2,10 @@ import React from 'react';
 import { Button, Linking, ScrollView, View, Text, Appearance } from 'react-native';
 import appColors from '../../constants/colors';
 import TopTitle from '../../components/Settings/TopTitle';
-import SingleSetting from './SingleSetting';
-import DatabaseSettings from './DatabaseSettings';
-import UserSettings from './UserSettings';
-import AppAppearance from './AppAppearance';
+import SingleSetting from '../../components/Settings/SingleSetting';
+import DatabaseSettings from '../../components/Settings/DatabaseSettings';
+import UserSettings from '../../components/Settings/UserSettings';
+import AppAppearance from '../../components/Settings/AppAppearance';
 
 const handlePress = async (url) => {
   try {
