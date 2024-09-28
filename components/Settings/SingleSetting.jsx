@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,13 +21,13 @@ export default function SingleSetting({ heading, settingObject }) {
         showItems &&
         Object.keys(settingObject).map((key, index) => {
           return (
-            <Pressable key={index} style={{padding: 10, backgroundColor: appColors.lightGrey + '50', marginTop: 5, borderRadius: 5}}
+            <TouchableOpacity key={index} style={{padding: 10, backgroundColor: appColors.lightGrey + '50', marginTop: 5, borderRadius: 5}}
               onPress={settingObject[key]}
             >
               <Text style={{ fontFamily: 'FiraMono-Regular', fontSize: 16, color: appColors.lightBlack }}>
                 {key}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           )
         })
       }

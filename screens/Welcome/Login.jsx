@@ -32,6 +32,7 @@ export default function Login({ verifyEmail,
       } else {
         await AsyncStorage.setItem('name', data.username);
         await AsyncStorage.setItem('avatar', data.avatar);
+        navigation.replace('BottomTabsHome');
       }
     } catch (error) {
       console.error(error);
@@ -59,7 +60,6 @@ export default function Login({ verifyEmail,
         await AsyncStorage.setItem('access', data.token.access);
         await AsyncStorage.setItem('refresh', data.token.refresh);
         getProfile(data.token.access);
-        navigation.replace('BottomTabsHome');
       }
       setLoginLoader(false);
     } catch (error) {
