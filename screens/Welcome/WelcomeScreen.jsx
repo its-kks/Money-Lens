@@ -23,7 +23,7 @@ const verifyUsername = (username) => {
 
 
 const verifyPassword = (password) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$/;
 
   return passwordRegex.test(password);
 };
