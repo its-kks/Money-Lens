@@ -2,18 +2,20 @@ import { Button, StyleSheet, Text, TextInput, TextInputBase, View } from 'react-
 import React from 'react'
 import { API_URL_CHANGE_PASSWORD } from '@env';
 import appColors from '../../constants/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ChangePassword() {
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
 
   const handleChangePass = async () => {
+    const token = AsyncStorage.getItem('token');
     const url = API_URL_CHANGE_PASSWORD;
     const options = {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI2MTMwNjY2LCJpYXQiOjE3MjYxMzAzNjYsImp0aSI6ImE2ZTc3MjQ1MTIxNzRlNmQ4Zjg5ZGIzYTE5ZWJhMTI5IiwidXNlcl9pZCI6MX0.cAs-fLuJ5Bv2xoTEHKynXPzgn3OBmqwUN-oW0xByOaA'
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({password,password2})
     };
