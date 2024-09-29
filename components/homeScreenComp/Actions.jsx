@@ -11,12 +11,23 @@ import { addActionsLogic } from '../../utilities/actions';
 import { addTransactionRequest } from '../../Redux/actions/transactions';
 import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
 import ConfirmationModal from '../listScreenComponents/Forms/ConfirmationModal';
+import { fetchCategoriesRequest } from '../../Redux/actions/categories';
+import ModalBudgetExceed from '../CommonComponents/ModalBudgetExceed';
 
 export default function Actions() {
   const [sort, setSort] = useState('');
   const fetchedActions = useSelector(state => state.actions.actions);
   const loading = useSelector(state => state.actions.loading);
   const error = useSelector(state => state.actions.error);
+
+  const [transactionCategory, setTransactionCategory] = useState("Miscellaneous");
+  const [transactionAmount, setTransactionAmount] = useState(0);
+  const [transactionCategoryBudget, setTransactionCategoryBudget] = useState(0);
+  const [transactionCategorySpend, setTransactionCategorySpend] = useState(0);
+
+  const [previousCallData, setPreviousCallData] = useState({});
+
+  const [showBudgetExceed, setShowBudgetExceed] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -25,18 +36,35 @@ export default function Actions() {
 
   const fetchedRecurringPayments = useSelector(state => state.recurringPayments.recurringPayments);
   const currentMonthMoney = useSelector(state => state.users.currentMonthMoney[0]);
+  const fetchedCategories = useSelector(state => state.categories.categories);
 
 
-  function handleAction(type, recurring_payment_id, amount, action_id) {
+  function handleAction(type, recurring_payment_id, amount, action_id, allowOverBudget = false) {
+
+    setPreviousCallData({ type, recurring_payment_id, amount, action_id });
+
     const {
       id, name, amount: recAmount, categoryID, pay_date, frequency, recipientID, action_added, saved, next_date
     } = fetchedRecurringPayments.filter(item => item.id === recurring_payment_id)[0];
+
+    const{ name: cat_name, budget_amount, total_amount_spent } = fetchedCategories.filter(item => item.id === categoryID)[0];
+
+    setTransactionCategory(cat_name);
+    setTransactionCategoryBudget(budget_amount);
+    setTransactionCategorySpend(total_amount_spent);
+    setTransactionAmount(amount);
 
     if ((type === 'Save' || type === 'Pay') && Math.abs(amount) >
       Math.abs(currentMonthMoney.positive + currentMonthMoney.negative)) {
       setShowModal(true);
       return;
     }
+
+    if ( !allowOverBudget && (type=== 'Save' || type === 'Pay') && budget_amount < (parseFloat(amount) + Math.abs(total_amount_spent))) {
+      setShowBudgetExceed(true);
+      return;
+    }
+
 
     let recPaymentNextPayment = pay_date;
     let recPaymentMoneySaved = saved;
@@ -88,6 +116,7 @@ export default function Actions() {
       transactionRecipient: recipientID,
       transactionType: transactionType
     }));
+    dispatch(fetchCategoriesRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
     dispatch(deleteActionRequest(action_id));
   }
@@ -102,6 +131,19 @@ export default function Actions() {
         visible={showModal}
         setVisible={setShowModal}
         onConfirm={() => (setShowModal(false))}
+      />
+      <ModalBudgetExceed
+        categoryName={transactionCategory}
+        onCancel={() => { setShowBudgetExceed(false) }}
+        visible={showBudgetExceed}
+        setVisible={setShowBudgetExceed}
+        totalSpend={transactionCategorySpend}
+        budget={transactionCategoryBudget}
+        amount={transactionAmount}
+        onConfirm={() => {
+          setShowBudgetExceed(false);
+          handleAction(previousCallData.type, previousCallData.recurring_payment_id, previousCallData.amount, previousCallData.action_id, true);
+        }}
       />
 
       <View style={styles.header}>

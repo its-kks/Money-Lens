@@ -60,9 +60,11 @@ export default function CategorySelector({ initialCategory, setCategory, type, s
                 }}
                 onPress={() => {
                   setCategory(item.id);
-                  setCategoryBudget(item.budget_amount);
-                  setTotalSpend(item.total_amount_spent);
-                  setCategoryName(item.name);
+                  if ( setCategoryBudget && setTotalSpend && setCategoryName) {
+                    setCategoryBudget(item.budget_amount);
+                    setTotalSpend(item.total_amount_spent);
+                    setCategoryName(item.name);
+                  }
                 }
                 }
                 disabled={disabled}
