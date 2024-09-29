@@ -39,7 +39,7 @@ export default function SingleTransaction({ navigation, itemId, itemName, itemIc
             time: time,
             recipient: recipientId,
             type: price < 0 ? 'Expense' : 'Income',
-            addition: false
+            addition: false,
           });
           setType('Any');
           setMonth('This Month');

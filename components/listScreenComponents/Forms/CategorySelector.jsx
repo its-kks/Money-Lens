@@ -5,12 +5,13 @@ import appColors from '../../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import TextField from './TextField';
 
-export default function CategorySelector({ initialCategory, setCategory, type, disabled = false}) {
+export default function CategorySelector({ initialCategory, setCategory, type, setCategoryBudget, setTotalSpend, setCategoryName, disabled = false}) {
   const fetchedCategories = useSelector(state => state.categories.categories);
   const convertedObject = fetchedCategories.reduce((acc, item) => {
     acc[item.id] = { ...item };
     return acc;
   }, {});
+
 
   return (
     <>
@@ -58,7 +59,10 @@ export default function CategorySelector({ initialCategory, setCategory, type, d
                   margin: 5
                 }}
                 onPress={() => {
-                  setCategory(item.id)
+                  setCategory(item.id);
+                  setCategoryBudget(item.budget_amount);
+                  setTotalSpend(item.total_amount_spent);
+                  setCategoryName(item.name);
                 }
                 }
                 disabled={disabled}

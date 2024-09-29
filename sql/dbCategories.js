@@ -35,7 +35,16 @@ export const addDefaultCategories = async () => {
 
 
 export const fetchCategories = async () => {
-  const query = `SELECT * FROM categories`;
+  const query = `WITH T1 as (
+    SELECT category_id, SUM(amount) as total_amount_spent
+    FROM transactions
+    GROUP BY category_id
+  )
+  SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(t.total_amount_spent, 0) as total_amount_spent
+  FROM categories c
+  LEFT JOIN T1 t
+  ON c.id = t.category_id
+  ORDER BY c.id;`;
   try {
     const db = await getDBConnection();
     const [results] = await db.executeSql(query);

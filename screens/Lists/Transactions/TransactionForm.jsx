@@ -19,13 +19,17 @@ import { useFocusEffect } from '@react-navigation/native';
 import { fetchCurrentMonthMoneyRequest } from '../../../Redux/actions/users';
 import { useSelector } from 'react-redux';
 import Buttons from '../../../components/listScreenComponents/Forms/Buttons';
+import { positiveInf } from '../../../constants/numeric';
+import ModalBudgetExceed from '../../../components/CommonComponents/ModalBudgetExceed';
+import { fetchCategoriesRequest } from '../../../Redux/actions/categories';
 
 export default function TransactionForm({ route, navigation }) {
 
-  const { id, name, amount, category, date, time, recipient, type, addition } = route.params;
+  const { id, name, amount, category, date, time, recipient, type, addition, budget,total_spent  } = route.params;
   const [submitPressed, setSubmitPressed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showAddMoney, setShowAddMoney] = useState(false);
+  const [showBudgetExceed, setShowBudgetExceed] = useState(false);
 
   const [transactionName, setTransactionName] = React.useState(name);
   const [transactionAmount, setTransactionAmount] = React.useState(Math.abs(amount) + '');
@@ -34,6 +38,10 @@ export default function TransactionForm({ route, navigation }) {
   const [transactionTime, setTransactionTime] = React.useState(time);
   const [transactionRecipient, setTransactionRecipient] = React.useState(recipient);
   const [transactionType, setTransactionType] = React.useState(type === 'Expense' ? '1' : '2');
+
+  const [transactionCategoryBudget, setCategoryBudget ] = React.useState(positiveInf);
+  const [transactionCategorySpend, setCategorySpend ] = React.useState(0);
+  const [transactionCategoryName, setCategoryName ] = React.useState(category);
 
 
   useFocusEffect(
@@ -69,6 +77,21 @@ export default function TransactionForm({ route, navigation }) {
 
   const dispatch = useDispatch();
 
+  const transactionAdditionHelper = () => {
+    setShowBudgetExceed(false);
+    dispatch(addTransactionRequest({
+      transactionName,
+      transactionAmount,
+      transactionCategory,
+      transactionDate,
+      transactionTime,
+      transactionRecipient,
+      transactionType
+    }));
+    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCurrentMonthMoneyRequest());
+    navigation.navigate('TransactionList');
+  }
   const handleTransactionAddition = () => {
     if (transactionName.length === 0 ||
       transactionAmount.length === 0 ||
@@ -83,18 +106,13 @@ export default function TransactionForm({ route, navigation }) {
       setShowAddMoney(true);
       return;
     }
+    if (transactionCategoryBudget < (parseFloat(transactionAmount) + Math.abs(transactionCategorySpend)) && transactionType == '1') {
+      setShowBudgetExceed(true);
+      return
+    }
 
-    dispatch(addTransactionRequest({
-      transactionName,
-      transactionAmount,
-      transactionCategory,
-      transactionDate,
-      transactionTime,
-      transactionRecipient,
-      transactionType
-    }));
-    dispatch(fetchCurrentMonthMoneyRequest());
-    navigation.navigate('TransactionList');
+    transactionAdditionHelper();
+
   }
 
   const handleTransactionUpdate = () => {
@@ -116,6 +134,7 @@ export default function TransactionForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
+    dispatch(fetchCategoriesRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
@@ -123,14 +142,26 @@ export default function TransactionForm({ route, navigation }) {
   const handleTransactionDelete = () => {
 
     dispatch(deleteTransactionRequest(id));
+    dispatch(fetchCategoriesRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
     setShowModal(false);
     navigation.navigate('TransactionList');
   }
 
-
   return (
     <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: appColors.white }}>
+      <ModalBudgetExceed
+        categoryName={transactionCategoryName}
+        onCancel={() => { setShowBudgetExceed(false) }}
+        visible={showBudgetExceed}
+        setVisible={setShowBudgetExceed}
+        totalSpend={transactionCategorySpend}
+        budget={transactionCategoryBudget}
+        amount={transactionAmount}
+        onConfirm={() => {
+          transactionAdditionHelper();
+        }}
+      />
       <ConfirmationModal
         text={"Are you sure you want to delete?"}
         onCancel={() => { setShowModal(false) }}
@@ -187,6 +218,9 @@ export default function TransactionForm({ route, navigation }) {
             setCategory={setTransactionCategory}
             type={transactionType === '1' ? 'Expense' : 'Income'}
             disabled={!addition && !udpdateState}
+            setCategoryBudget={setCategoryBudget}
+            setTotalSpend = {setCategorySpend}
+            setCategoryName = {setCategoryName}
           />
 
           <RecipientSelector
