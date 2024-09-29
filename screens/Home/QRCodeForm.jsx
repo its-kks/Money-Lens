@@ -16,6 +16,9 @@ import TextField from '../../components/listScreenComponents/Forms/TextField';
 import CategorySelector from '../../components/listScreenComponents/Forms/CategorySelector';
 import RecipientSelector from '../../components/listScreenComponents/Forms/RecipientSelector';
 import Buttons from '../../components/listScreenComponents/Forms/Buttons';
+import ModalBudgetExceed from '../../components/CommonComponents/ModalBudgetExceed';
+import { positiveInf } from '../../constants/numeric';
+import { fetchCategoriesRequest } from '../../Redux/actions/categories';
 
 
 
@@ -33,6 +36,12 @@ export default function QRCodeForm({ route, navigation }) {
   const [transactionTime, setTransactionTime] = React.useState(time);
   const [transactionRecipient, setTransactionRecipient] = React.useState(recipient);
   const [transactionType, setTransactionType] = React.useState(type === 'Expense' ? '1' : '2');
+
+  const [transactionCategoryBudget, setCategoryBudget] = React.useState(positiveInf);
+  const [transactionCategorySpend, setCategorySpend] = React.useState(0);
+  const [transactionCategoryName, setCategoryName] = React.useState('Miscellaneous');
+
+  const [showBudgetExceed, setShowBudgetExceed] = useState(false);
 
   const recipients = useSelector(state => state.recipients.recipients);
 
@@ -72,26 +81,12 @@ export default function QRCodeForm({ route, navigation }) {
 
   const dispatch = useDispatch();
 
-  const handleProcessPayment = () => {
-
-    if (transactionName.length === 0 ||
-      transactionAmount.length === 0 ||
-      isNaN(transactionAmount) ||
-      parseFloat(transactionAmount) <= 0 ||
-      transactionCategory.length > 30
-    ) {
-      return;
-    }
-    if (positive < (parseFloat(transactionAmount) + Math.abs(negative)) && transactionType == '1') {
-      setShowAddMoney(true);
-      return;
-    }
-
+  const helperProcessPayment = () => {
+    setShowBudgetExceed(false);
     Linking.openURL(upiUrl + '&am=' + transactionAmount);
-
     if (transactionRecipient === '1') {
       dispatch(addRecipientRequest({
-        recipientName: merchantName,
+        recipientName: transactionName+" Seller",
         recipientType: 'Recipient',
         recipientUrl: upiUrl,
         recipientIcon: '👾',
@@ -110,9 +105,32 @@ export default function QRCodeForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
+    dispatch(fetchCategoriesRequest());
     dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('HomeScreen');
   }
+
+  const handleProcessPayment = () => {
+
+    if (transactionName.length === 0 ||
+      transactionAmount.length === 0 ||
+      isNaN(transactionAmount) ||
+      parseFloat(transactionAmount) <= 0 ||
+      transactionCategory.length > 30
+    ) {
+      return;
+    }
+    if (positive < (parseFloat(transactionAmount) + Math.abs(negative)) && transactionType == '1') {
+      setShowAddMoney(true);
+      return;
+    }
+    if (transactionCategoryBudget < (parseFloat(transactionAmount) + Math.abs(transactionCategorySpend)) && transactionType == '1') {
+      setShowBudgetExceed(true);
+      return;
+    }
+    helperProcessPayment();
+  }
+
 
 
   return (
@@ -128,6 +146,19 @@ export default function QRCodeForm({ route, navigation }) {
         setVisible={setShowAddMoney}
         visible={showAddMoney}
         enableOk={true}
+      />
+      <ModalBudgetExceed
+        categoryName={transactionCategoryName}
+        onCancel={() => { setShowBudgetExceed(false) }}
+        visible={showBudgetExceed}
+        setVisible={setShowBudgetExceed}
+        totalSpend={transactionCategorySpend}
+        budget={transactionCategoryBudget}
+        amount={transactionAmount}
+        onConfirm={() => {
+          
+          helperProcessPayment();
+        }}
       />
       <View>
         <View
@@ -165,6 +196,9 @@ export default function QRCodeForm({ route, navigation }) {
               setCategory={setTransactionCategory}
               type={transactionType === '1' ? 'Expense' : 'Income'}
               disabled={!addition && !udpdateState}
+              setCategoryBudget={setCategoryBudget}
+              setTotalSpend={setCategorySpend}
+              setCategoryName={setCategoryName}
             />
 
 
@@ -192,7 +226,7 @@ export default function QRCodeForm({ route, navigation }) {
                 <>
                   <>
                     <Buttons onPress={() => navigation.goBack()} value={'Cancel'} color={appColors.red} />
-                    <Buttons 
+                    <Buttons
                       onPress={() => {
                         setSubmitPressed(true);
                         handleProcessPayment();

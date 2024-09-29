@@ -41,7 +41,7 @@ export default function TransactionForm({ route, navigation }) {
 
   const [transactionCategoryBudget, setCategoryBudget ] = React.useState(positiveInf);
   const [transactionCategorySpend, setCategorySpend ] = React.useState(0);
-  const [transactionCategoryName, setCategoryName ] = React.useState(category);
+  const [transactionCategoryName, setCategoryName ] = React.useState('Miscellaneous');
 
 
   useFocusEffect(
