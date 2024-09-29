@@ -8,7 +8,10 @@ import {Camera} from 'react-native-vision-camera';
 
 export default function PayButtons({ navigation }) {
   const handleScanAndRedirect = async () => {
-      const status = await Camera.requestCameraPermission();
+      let status = Camera.getCameraPermissionStatus();
+      if ( status !== 'granted' ) {
+        status = await Camera.requestCameraPermission();
+      }
       if(status === 'granted'){
         navigation.navigate('ScanAndRedirectScreen');
       }
