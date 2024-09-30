@@ -8,6 +8,8 @@ import BarGraph from '../../components/Insights/BarGraph'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCategoriesRequest } from '../../Redux/actions/categories'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { fetchPieDataRequest } from '../../Redux/actions/insightPie'
+import { fetchBarDataRequest } from '../../Redux/actions/insightBar'
 
 
 
@@ -41,18 +43,17 @@ export default function InsightsScreen() {
     { id: 2, name: 'Grocerry', amount: 5000 },
   ];
 
-  const fetchedCategories = useSelector(state => state.categories.categories);
-  const pieData = fetchedCategories
-    .filter((item) => item.total_amount_spent !== 0)
-    .map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) })); fetchedCategories.map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) }));
-  console.log(pieData);
-  console.log(fetchedCategories);
+  const fetchedCategoriesPie = useSelector(state => state.insightPie.pieData);
+  console.log(fetchedCategoriesPie);
+  const pieData = fetchedCategoriesPie.map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) })); 
+  
   const dispatch = useDispatch();
 
   const data2 = [{ this_month: 15000, budget: 27000, prev_month: 19600, median_others: 20000 }];
 
   useEffect(() => {
-    dispatch(fetchCategoriesRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
+    dispatch(fetchPieDataRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
+    // dispatch(fetchBarDataRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
   }, [transactionType, monthTransaction, yearTransaction]);
 
 

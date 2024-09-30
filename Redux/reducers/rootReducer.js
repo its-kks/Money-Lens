@@ -6,6 +6,8 @@ import userReducer from "./users";
 import recurringPaymentsReducer from './recurringPayments';
 import savingsReducer from "./savings";
 import actionReducer from "./actions";
+import insightBarReducer from "./insightBar";
+import insightPieReducer from "./insightPie";
 
 const rootReducer = combineReducers(
   {
@@ -15,7 +17,9 @@ const rootReducer = combineReducers(
     users: userReducer,
     recurringPayments: recurringPaymentsReducer,
     savings: savingsReducer,
-    actions: actionReducer
+    actions: actionReducer,
+    insightBar: insightBarReducer,
+    insightPie: insightPieReducer,
   }
 
 )

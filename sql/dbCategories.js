@@ -146,3 +146,62 @@ export const updateCategory = async ({ categoryId, categoryBudget, categoryName,
     console.error(error);
   }
 }
+
+export const fetchCategoriesBar = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+  const query = `
+    WITH trans as (
+    SELECT t.category_id, t.amount
+    FROM transactions t
+    WHERE (t.amount > ? AND t.amount < ?)
+    AND (strftime('%m', t.tran_date_time) > ? AND ? > strftime('%m', t.tran_date_time))
+    AND (strftime('%Y', t.tran_date_time) > ? AND ? > strftime('%Y', t.tran_date_time))
+    )
+    SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(SUM(t.amount), 0) as total_amount_spent
+  FROM categories c
+  LEFT OUTER JOIN trans t
+  ON c.id = t.category_id
+  GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
+  ORDER BY c.id;
+  `;
+  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+
+  try {
+    const db = await getDBConnection();
+    const [results] = await db.executeSql(query,data);
+    const categories = results.rows.raw();
+    return categories;
+  }
+  catch (error) {
+    console.error(error);
+  }
+
+}
+
+export const fetchCategoriesPie = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+  const query = `
+    WITH trans as (
+    SELECT t.category_id, t.amount
+    FROM transactions t
+    WHERE (t.amount > ? AND t.amount < ?)
+    AND (strftime('%m', t.tran_date_time) > ? AND ? > strftime('%m', t.tran_date_time))
+    AND (strftime('%Y', t.tran_date_time) > ? AND ? > strftime('%Y', t.tran_date_time))
+    )
+    SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(SUM(t.amount), 0) as total_amount_spent
+  FROM categories c, trans t
+  WHERE c.id = t.category_id
+  GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
+  ORDER BY c.id;
+  `;
+  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+
+  try {
+    const db = await getDBConnection();
+    const [results] = await db.executeSql(query,data);
+    const categories = results.rows.raw();
+    return categories;
+  }
+  catch (error) {
+    console.error(error);
+  }
+
+}

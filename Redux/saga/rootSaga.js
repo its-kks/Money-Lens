@@ -39,6 +39,10 @@ import {
   watchFetchActions
 } from './actions'
 
+import watchInsightBarSaga from './insightBar'
+
+import watchInsightPieSaga from './insightPie'
+
 import { watchFetchCurrentMonthMoney } from './users';
 
 export default function* rootSaga() {
@@ -74,6 +78,10 @@ export default function* rootSaga() {
       watchAddActions(),
       watchDeleteActions(),
       watchFetchActions(),
+
+      watchInsightBarSaga(),
+
+      watchInsightPieSaga(),
 
 
     ]

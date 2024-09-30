@@ -11,6 +11,8 @@ import { fetchCurrentMonthMoneyRequest } from '../../Redux/actions/users';
 import { fetchRecurringPaymentsRequest } from '../../Redux/actions/recurringPayments';
 import Actions from '../../components/homeScreenComp/Actions';
 import { fetchActionsRequest } from '../../Redux/actions/actions';
+import { fetchBarDataRequest } from '../../Redux/actions/insightBar';
+import { fetchPieDataRequest } from '../../Redux/actions/insightPie';
 
 export default function HomeScreen({navigation}) {
   const [userName, setUserName] = useState('');
@@ -30,6 +32,8 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchCurrentMonthMoneyRequest());
     dispatch(fetchRecurringPaymentsRequest({ type: 'Any', frequency: 'All', sort: 'desc' }));
     dispatch(fetchActionsRequest());
+    dispatch(fetchBarDataRequest({type:'Expenditure', month: 'This Month', year: 'This Year' }));
+    dispatch(fetchPieDataRequest({type:'Expenditure', month: 'This Month', year: 'This Year' }));
     updateData();
   },[])
 
