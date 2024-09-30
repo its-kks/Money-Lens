@@ -1,25 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import appColors from '../../constants/colors'
 import TopTitle from '../../components/Insights/TopTitle'
 import PieChart from '../../components/Insights/PieChart'
 import ExpandingList from '../../components/Insights/ExpandingList'
 import BarGraph from '../../components/Insights/BarGraph'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchCategoriesRequest } from '../../Redux/actions/categories'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
+
+function insufficientData() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <MaterialCommunityIcons name="progress-question" size={100} color={appColors.lightGrey} />
+      <Text style={{ color: appColors.lightGrey, fontFamily: 'Roboto-Bold', fontSize: 15, marginTop: 10 }}>Insufficient Data</Text>
+    </View>)
+}
 export default function InsightsScreen() {
-  const data = [
-    { id: 1, name: 'Health', amount: 3500 },
-    { id: 2, name: 'Grocerry', amount: 5000 },
-  ];
-
-  const data2 = [{ this_month: 15000,budget: 27000, prev_month: 19600,  median_others: 20000 }];
 
   const [showTypeTransaction, setShowTypeTransaction] = useState(false);
   const [showMonthTransaction, setShowMonthTransaction] = useState(false);
   const [showYearTransaction, setShowYearTransaction] = useState(false);
 
   const [monthTransaction, setMonthTransaction] = useState('This Month');
-  const [transactionType, setTransactionType] = useState('Any');
+  const [transactionType, setTransactionType] = useState('Expenditure');
   const [yearTransaction, setYearTransaction] = useState('This Year');
 
   const [showTypeCategory, setShowTypeCategory] = useState(false);
@@ -27,8 +33,29 @@ export default function InsightsScreen() {
   const [showYearCategory, setShowYearCategory] = useState(false);
 
   const [monthCategory, setMonthCategory] = useState('This Month');
-  const [typeCategory, setTypeCategory] = useState('Any');
+  const [typeCategory, setTypeCategory] = useState('Expenditure');
   const [yearCategory, setYearCategory] = useState('This Year');
+
+  const data = [
+    { id: 1, name: 'Health', amount: 3500 },
+    { id: 2, name: 'Grocerry', amount: 5000 },
+  ];
+
+  const fetchedCategories = useSelector(state => state.categories.categories);
+  const pieData = fetchedCategories
+    .filter((item) => item.total_amount_spent !== 0)
+    .map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) })); fetchedCategories.map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) }));
+  console.log(pieData);
+  console.log(fetchedCategories);
+  const dispatch = useDispatch();
+
+  const data2 = [{ this_month: 15000, budget: 27000, prev_month: 19600, median_others: 20000 }];
+
+  useEffect(() => {
+    dispatch(fetchCategoriesRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
+  }, [transactionType, monthTransaction, yearTransaction]);
+
+
 
   return (
     <View style={{ flex: 1, backgroundColor: appColors.white }}>
@@ -63,10 +90,12 @@ export default function InsightsScreen() {
         </View>
 
         <View style={{ flex: 1 }}>
-          <PieChart data={data} />
+          {
+            pieData.length > 0 ? <PieChart data={pieData} />
+              : insufficientData()
+          }
+
         </View>
-
-
 
 
       </View>
@@ -100,7 +129,7 @@ export default function InsightsScreen() {
 
         </View>
 
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <BarGraph data={data2} />
 
         </View>

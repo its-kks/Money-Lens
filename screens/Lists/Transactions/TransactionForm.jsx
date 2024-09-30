@@ -88,7 +88,7 @@ export default function TransactionForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategoriesRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
@@ -134,7 +134,7 @@ export default function TransactionForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategoriesRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('TransactionList');
   }
@@ -142,7 +142,7 @@ export default function TransactionForm({ route, navigation }) {
   const handleTransactionDelete = () => {
 
     dispatch(deleteTransactionRequest(id));
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategoriesRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchCurrentMonthMoneyRequest());
     setShowModal(false);
     navigation.navigate('TransactionList');

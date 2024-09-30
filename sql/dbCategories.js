@@ -34,20 +34,27 @@ export const addDefaultCategories = async () => {
 }
 
 
-export const fetchCategories = async () => {
-  const query = `WITH T1 as (
-    SELECT category_id, SUM(amount) as total_amount_spent
-    FROM transactions
-    GROUP BY category_id
-  )
-  SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(t.total_amount_spent, 0) as total_amount_spent
+export const fetchCategories = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+  const query = `
+    WITH trans as (
+    SELECT t.category_id, t.amount
+    FROM transactions t
+    WHERE (t.amount > ? AND t.amount < ?)
+    AND (strftime('%m', t.tran_date_time) > ? AND ? > strftime('%m', t.tran_date_time))
+    AND (strftime('%Y', t.tran_date_time) > ? AND ? > strftime('%Y', t.tran_date_time))
+    )
+    SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(SUM(t.amount), 0) as total_amount_spent
   FROM categories c
-  LEFT JOIN T1 t
+  LEFT OUTER JOIN trans t
   ON c.id = t.category_id
-  ORDER BY c.id;`;
+  GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
+  ORDER BY c.id;
+  `;
+  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+
   try {
     const db = await getDBConnection();
-    const [results] = await db.executeSql(query);
+    const [results] = await db.executeSql(query,data);
     const categories = results.rows.raw();
     return categories;
   }

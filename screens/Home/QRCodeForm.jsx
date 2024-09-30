@@ -105,7 +105,7 @@ export default function QRCodeForm({ route, navigation }) {
       transactionRecipient,
       transactionType
     }));
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategoriesRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchCurrentMonthMoneyRequest());
     navigation.navigate('HomeScreen');
   }

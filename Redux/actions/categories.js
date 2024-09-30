@@ -13,9 +13,10 @@ import { FETCH_CATEGORIES_REQUEST,
  } from '../constants'
 
 // FETCH
-export function fetchCategoriesRequest() {
+export function fetchCategoriesRequest(filters) {
     return {
-        type: FETCH_CATEGORIES_REQUEST
+        type: FETCH_CATEGORIES_REQUEST,
+        payload: filters
     }
 }
 

@@ -19,6 +19,18 @@ const PieChart = ({ data }) => {
   let startAngle = 0;
 
   const createPieSlice = (item, index) => {
+    if (data.length === 1) {
+      // Special case for a single item: draw a full circle
+      return (
+        <Path
+          key={item.id}
+          d={`M ${center} ${center} m -${radius}, 0 a ${radius},${radius} 0 1,0 ${radius * 2},0 a ${radius},${radius} 0 1,0 -${radius * 2},0`}
+          fill={getColor(index)}
+          onPress={() => { setHighlight(item.id) }}
+        />
+      );
+    }
+
     const sliceAngle = (item.percentage / 100) * 2 * Math.PI;
     const endAngle = startAngle + sliceAngle;
 
@@ -49,6 +61,18 @@ const PieChart = ({ data }) => {
   };
 
   const createLargePatch = (item, index) => {
+    if (data.length === 1) {
+      // Special case for a single item: draw a full circle
+      return (
+        <Path
+          key={item.id}
+          d={`M ${center} ${center} m -${radius + 8}, 0 a ${radius + 8},${radius + 8} 0 1,0 ${(radius + 8) * 2},0 a ${radius + 8},${radius + 8} 0 1,0 -${(radius + 8) * 2},0`}
+          fill={item.id === highlight ? getColor(index) : 'none'}
+          onPress={() => { setHighlight(item.id) }}
+        />
+      );
+    }
+
     const sliceAngle = (item.percentage / 100) * 2 * Math.PI;
     const endAngle = startAngle + sliceAngle;
 
@@ -79,7 +103,6 @@ const PieChart = ({ data }) => {
       />
     );
   };
-
 
   const pieSlices = fractions.map((item, index) => createPieSlice(item, index));
   const largePatches = fractions.map((item, index) => createLargePatch(item, index));
@@ -128,7 +151,6 @@ const getColor = (index) => {
   return colors[index % colors.length];
 };
 
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -152,7 +174,6 @@ const styles = StyleSheet.create({
     height: 25,
     marginRight: 5,
     borderRadius: 15
-
   },
   baseTextStyle: {
     fontSize: 14,

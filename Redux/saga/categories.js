@@ -24,9 +24,19 @@ import { fetchCategories,
   deleteCategory
  } from '../../sql/dbCategories';
 
-function* fetchCategoriesSaga() {
+import { returnLowerAmount, returnUpperAmount, returnLowerMonth, returnLowerYear } from '../../utilities/filters';
+
+
+function* fetchCategoriesSaga(action) {
   try {
-    const categories = yield call(fetchCategories);
+    const { type, month, year } = action.payload;
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
+    const categories = yield call(fetchCategories, { lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear });
     yield put(fetchCategoriesSuccess(categories))
   }
   catch (error) {
@@ -43,7 +53,14 @@ function* addCategorySaga(action){
   try{
     const categoryData = action.payload;
     yield call(addCategories, categoryData);
-    const categories = yield call(fetchCategories);
+    const {type, month, year} = {type: 'Any', month: 'This Month', year: 'This Year'};
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
+    const categories = yield call(fetchCategories, {lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear});
     yield put(addCategorySuccess(categories));
   }
   catch(error){
@@ -62,7 +79,14 @@ function* updateCategorySaga(action){
   try{
     const categoryData = action.payload;
     yield call(updateCategory, categoryData);
-    const categories = yield call(fetchCategories);
+    const {type, month, year} = {type: 'Any', month: 'This Month', year: 'This Year'};
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
+    const categories = yield call(fetchCategories, {lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear});
     yield put(updateCategorySuccess(categories));
   }
   catch(error){
@@ -77,10 +101,17 @@ export function* watcUpdateCategories(){
 
 function* deleteCategorySaga(action){
   try{
-    const transactionData = action.payload;
-    yield call(deleteCategory, transactionData);
-    const transactions = yield call(fetchCategories);
-    yield put(deleteCategorySuccess(transactions));
+    const categoryData = action.payload;
+    yield call(deleteCategory, categoryData);
+    const {type, month, year} = {type: 'Any', month: 'This Month', year: 'This Year'};
+    const lowerBoundAmount = returnLowerAmount(type);
+    const upperBoundAmount = returnUpperAmount(type);
+    const lowerBoundMonth = returnLowerMonth(month).toString().padStart(2, '0');
+    const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
+    const lowerBoundYear = returnLowerYear(year).toString();
+    const upperBoundYear = (returnLowerYear(year) + 2).toString();
+    const categories = yield call(fetchCategories, {lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear});
+    yield put(deleteCategorySuccess(categories));
   }
   catch(error){
     yield put(deleteCategoryFailure(error));

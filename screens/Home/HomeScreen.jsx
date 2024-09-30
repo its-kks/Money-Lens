@@ -24,7 +24,7 @@ export default function HomeScreen({navigation}) {
       setAvatar(avatar==='man' ? require('../../assets/images/man.png') : require('../../assets/images/woman.png'));
 
     }
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategoriesRequest({type:'Any', month: 'This Month', year: 'This Year'}));
     dispatch(fetchRecipientsRequest());
     dispatch(fetchTransactionRequest({type:'Any', month: 'This Month', year: 'This Year', sort: 'desc'}));
     dispatch(fetchCurrentMonthMoneyRequest());
