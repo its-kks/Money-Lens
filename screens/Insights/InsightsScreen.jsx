@@ -6,10 +6,10 @@ import PieChart from '../../components/Insights/PieChart'
 import ExpandingList from '../../components/Insights/ExpandingList'
 import BarGraph from '../../components/Insights/BarGraph'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCategoriesRequest } from '../../Redux/actions/categories'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchPieDataRequest } from '../../Redux/actions/insightPie'
 import { fetchBarDataRequest } from '../../Redux/actions/insightBar'
+import { positiveInf } from '../../constants/numeric'
 
 
 
@@ -35,26 +35,50 @@ export default function InsightsScreen() {
   const [showYearCategory, setShowYearCategory] = useState(false);
 
   const [monthCategory, setMonthCategory] = useState('This Month');
-  const [typeCategory, setTypeCategory] = useState('Expenditure');
+  const [typeCategory, setTypeCategory] = useState('Miscellaneous');
   const [yearCategory, setYearCategory] = useState('This Year');
+  const [categoryID, setCategoryID] = useState(1);
 
-  const data = [
-    { id: 1, name: 'Health', amount: 3500 },
-    { id: 2, name: 'Grocerry', amount: 5000 },
-  ];
+  const otherUserData = [
+    { name: 'Miscellaneous', spending: 5562 },
+    { name: 'Food', spending: 4562 },
+    { name: 'Transport', spending: 3562 },
+    { name: 'Entertainment', spending: 2562 },
+  ]
 
   const fetchedCategoriesPie = useSelector(state => state.insightPie.pieData);
-  console.log(fetchedCategoriesPie);
-  const pieData = fetchedCategoriesPie.map(item => ({ id: item.id, name: item.name, amount: Math.abs(item.total_amount_spent) })); 
-  
-  const dispatch = useDispatch();
+  const pieData = fetchedCategoriesPie;
+  const fetchCategoriesRequest = useSelector(state => state.categories.categories);
+  let categoryList = fetchCategoriesRequest
+    .filter(item => item.type === "Expense")
+    .map(item => ({ id: item.id, name: item.name }));
 
-  const data2 = [{ this_month: 15000, budget: 27000, prev_month: 19600, median_others: 20000 }];
+
+  const dispatch = useDispatch();
+  let isInfinity = false;
+  
+  const fetchedCategoryBar = useSelector(state => state.insightBar.barData);
+  
+  const barData = fetchedCategoryBar.map(item => {
+    let budget = item.budget;
+    if (budget >= positiveInf) {
+      budget = item.this_month + item.prev_month + 1000;
+      isInfinity = true;
+    }
+    return {
+      this_month: item.this_month,
+      budget: budget,
+      prev_month: item.prev_month,
+      median_others: item.median_others
+    };
+  });
+
+  console.log(fetchedCategoryBar);
 
   useEffect(() => {
     dispatch(fetchPieDataRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
-    // dispatch(fetchBarDataRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
-  }, [transactionType, monthTransaction, yearTransaction]);
+    dispatch(fetchBarDataRequest({ categoryID, month: monthTransaction, year: yearTransaction }));
+  }, [transactionType, monthTransaction, yearTransaction, categoryID]);
 
 
 
@@ -114,7 +138,7 @@ export default function InsightsScreen() {
           flexDirection: 'row',
           flexShrink: 0,
         }}>
-          <ExpandingList listItem={['Health', 'Grocerry']} showList={showTypeCategory} setShowList={setShowTypeCategory}
+          <ExpandingList listItem={categoryList} showList={showTypeCategory} setShowList={setShowTypeCategory} setCurrentItemID={setCategoryID}
             currentItem={typeCategory} setCurrentItem={setTypeCategory}
           />
           <ExpandingList listItem={['This Month', 'Prev Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
@@ -131,7 +155,7 @@ export default function InsightsScreen() {
         </View>
 
         <View style={{ flex: 1 }}>
-          <BarGraph data={data2} />
+          <BarGraph data={barData} isInfinity={isInfinity} />
 
         </View>
 

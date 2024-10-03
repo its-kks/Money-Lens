@@ -34,7 +34,7 @@ export const addDefaultCategories = async () => {
 }
 
 
-export const fetchCategories = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+export const fetchCategories = async ({ lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear }) => {
   const query = `
     WITH trans as (
     SELECT t.category_id, t.amount
@@ -50,11 +50,11 @@ export const fetchCategories = async ({lowerBoundAmount, upperBoundAmount, lower
   GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
   ORDER BY c.id;
   `;
-  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+  const data = [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear];
 
   try {
     const db = await getDBConnection();
-    const [results] = await db.executeSql(query,data);
+    const [results] = await db.executeSql(query, data);
     const categories = results.rows.raw();
     return categories;
   }
@@ -66,7 +66,7 @@ export const fetchCategories = async ({lowerBoundAmount, upperBoundAmount, lower
 
 export const addCategories = async ({ categoryName, categoryBudget, categoryType, categoryIcon, categoryBackgroundColor }) => {
   const query = `
-  INSERT INTO categories (name, budeget_amount, type, icon, background_color)
+  INSERT INTO categories (name, budget_amount, type, icon, background_color)
   VALUES
   (?,?,?,?,?);
   `;
@@ -147,27 +147,47 @@ export const updateCategory = async ({ categoryId, categoryBudget, categoryName,
   }
 }
 
-export const fetchCategoriesBar = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+export const fetchCategoriesBar = async ({ categoryID, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear,
+  lowerBoundMonthPrev, upperBoundMonthPrev, lowerBoundYearPrev, upperBoundYearPrev
+}) => {
   const query = `
-    WITH trans as (
-    SELECT t.category_id, t.amount
+   WITH t1 AS (
+    SELECT COALESCE(SUM(t.amount), 0) AS total_amount_spent_prev, t.category_id
     FROM transactions t
-    WHERE (t.amount > ? AND t.amount < ?)
-    AND (strftime('%m', t.tran_date_time) > ? AND ? > strftime('%m', t.tran_date_time))
-    AND (strftime('%Y', t.tran_date_time) > ? AND ? > strftime('%Y', t.tran_date_time))
-    )
-    SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(SUM(t.amount), 0) as total_amount_spent
+    WHERE t.category_id = ?
+    AND (strftime('%m', t.tran_date_time) > ? AND strftime('%m', t.tran_date_time) < ?)
+    AND (strftime('%Y', t.tran_date_time) > ? AND strftime('%Y', t.tran_date_time) < ?)
+    AND t.amount > 0
+    GROUP BY t.category_id
+  ),
+  t2 AS (
+      SELECT COALESCE(SUM(t.amount), 0) AS total_amount_spent_curr, t.category_id
+      FROM transactions t
+      WHERE t.category_id = ?
+      AND (strftime('%m', t.tran_date_time) > ? AND strftime('%m', t.tran_date_time) < ?)
+      AND (strftime('%Y', t.tran_date_time) > ? AND strftime('%Y', t.tran_date_time) < ?)
+      AND t.amount > 0
+      GROUP BY t.category_id
+  )
+  SELECT 
+      COALESCE(t2.total_amount_spent_curr, 0) AS this_month,
+      c.budget_amount AS budget, 
+      COALESCE(t1.total_amount_spent_prev, 0) AS prev_month,
+      c.name,
+      0 as median_others
   FROM categories c
-  LEFT OUTER JOIN trans t
-  ON c.id = t.category_id
-  GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
-  ORDER BY c.id;
+  LEFT JOIN t1 ON c.id = t1.category_id
+  LEFT JOIN t2 ON c.id = t2.category_id
+  WHERE c.id = ?
   `;
-  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+  const data = [categoryID, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear,
+    categoryID, lowerBoundMonthPrev, upperBoundMonthPrev, lowerBoundYearPrev, upperBoundYearPrev,
+    categoryID
+  ];
 
   try {
     const db = await getDBConnection();
-    const [results] = await db.executeSql(query,data);
+    const [results] = await db.executeSql(query, data);
     const categories = results.rows.raw();
     return categories;
   }
@@ -177,7 +197,7 @@ export const fetchCategoriesBar = async ({lowerBoundAmount, upperBoundAmount, lo
 
 }
 
-export const fetchCategoriesPie = async ({lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear}) => {
+export const fetchCategoriesPie = async ({ lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear }) => {
   const query = `
     WITH trans as (
     SELECT t.category_id, t.amount
@@ -186,17 +206,17 @@ export const fetchCategoriesPie = async ({lowerBoundAmount, upperBoundAmount, lo
     AND (strftime('%m', t.tran_date_time) > ? AND ? > strftime('%m', t.tran_date_time))
     AND (strftime('%Y', t.tran_date_time) > ? AND ? > strftime('%Y', t.tran_date_time))
     )
-    SELECT c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color, COALESCE(SUM(t.amount), 0) as total_amount_spent
+    SELECT c.id , c.name, ABS( COALESCE(SUM(t.amount), 0)) as amount
   FROM categories c, trans t
   WHERE c.id = t.category_id
   GROUP BY c.id, c.name, c.budget_amount, c.type, c.icon, c.background_color
   ORDER BY c.id;
   `;
-  const data =  [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear];
+  const data = [lowerBoundAmount, upperBoundAmount, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear];
 
   try {
     const db = await getDBConnection();
-    const [results] = await db.executeSql(query,data);
+    const [results] = await db.executeSql(query, data);
     const categories = results.rows.raw();
     return categories;
   }

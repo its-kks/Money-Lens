@@ -32,7 +32,7 @@ export default function HomeScreen({navigation}) {
     dispatch(fetchCurrentMonthMoneyRequest());
     dispatch(fetchRecurringPaymentsRequest({ type: 'Any', frequency: 'All', sort: 'desc' }));
     dispatch(fetchActionsRequest());
-    dispatch(fetchBarDataRequest({type:'Expenditure', month: 'This Month', year: 'This Year' }));
+    dispatch(fetchBarDataRequest({categoryID:1, month: 'This Month', year: 'This Year' }));
     dispatch(fetchPieDataRequest({type:'Expenditure', month: 'This Month', year: 'This Year' }));
     updateData();
   },[])

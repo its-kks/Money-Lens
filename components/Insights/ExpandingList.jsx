@@ -2,8 +2,9 @@ import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View, Modal,
 import React, { useState } from 'react'
 import appColors from '../../constants/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { limitText } from '../../utilities/text';
 
-export default function ExpandingList({ listItem, showList, setShowList, currentItem, setCurrentItem }) {
+export default function ExpandingList({ listItem, showList, setShowList, currentItem, setCurrentItem, setCurrentItemID = null }) { 
 
   return (
 
@@ -13,7 +14,7 @@ export default function ExpandingList({ listItem, showList, setShowList, current
       }}>
         <View style={styles.current}>
           <Text style={styles.currentItem}>
-            {currentItem}
+            { limitText(currentItem, 11)}
           </Text>
           <Text style={styles.currentItem}>
             <MaterialCommunityIcons name="chevron-down" size={20} color={appColors.blue} />
@@ -37,11 +38,19 @@ export default function ExpandingList({ listItem, showList, setShowList, current
               {listItem.map((item, index) => {
                 return (
                   <TouchableOpacity key={index} onPress={() => {
-                    setCurrentItem(item)
+                    if (setCurrentItemID) {
+                      setCurrentItemID(item.id)
+                      setCurrentItem(item.name)
+                    }
+                    else {
+                      setCurrentItem(item)
+                    }
                     setShowList(false)
                   }}>
                     <Text style={[styles.listItem, { borderBottomWidth: index === listItem.length - 1 ? 0 : 1 }]}>
-                      {item}
+                      {
+                        setCurrentItemID ? limitText(item.name, 15) : limitText(item, 15)
+                      }
                     </Text>
                   </TouchableOpacity>
                 )

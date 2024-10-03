@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Rect, G, Line, Text as SvgText, Path, Polygon } from 'react-native-svg';
 import appColors from '../../constants/colors';
 
-const BarGraph = ({ data }) => {
+const BarGraph = ({ data, isInfinity }) => {
   const barWidth = 50;
   const barSpacing = 35;
   const maxBarHeight = 200;
@@ -84,7 +84,7 @@ const BarGraph = ({ data }) => {
                   fontSize="14"
                   fontFamily="Roboto-Bold"
                 >
-                  {data[0][key]}
+                  {key == 'budget' && isInfinity ? '∞' : data[0][key]}
                 </SvgText>
                 <Line x1={x} y1={y-1} x2={10} y2={y} stroke={index === selectedBar ? appColors.lightGrey : 'none'}
                   strokeWidth="2"
@@ -106,6 +106,7 @@ const BarGraph = ({ data }) => {
               textAnchor="middle"
               fontSize="14"
               fontFamily="Roboto-Bold"
+              onPress={() => { setSelectedBar(index) }}
             >
               {xLabels[index]}
             </SvgText>
