@@ -5,6 +5,7 @@ import appColors from '../../constants/colors';
 import ConfirmationModal from '../listScreenComponents/Forms/ConfirmationModal';
 import { useDispatch } from 'react-redux';
 import { deleteActionRequest } from '../../Redux/actions/actions';
+import { limitText } from '../../utilities/text';
 
 
 
@@ -60,7 +61,7 @@ export default function SingleAction({ name, act_id, amount, type, rp_id, handle
         </View>
       </View>
       <View style={{ flex: 40, justifyContent: 'center', alignItems: 'flex-start' }}>
-        <Text style={{ fontSize: 18, fontFamily: 'Roboto-Bold', color: appColors.black }}>{name}</Text>
+        <Text style={{ fontSize: 18, fontFamily: 'Roboto-Bold', color: appColors.black }}>{ limitText(name,18)}</Text>
         <Text style={{ fontSize: 20, fontFamily: 'Roboto-Bold', color: type === 'Save' || type === 'Pay' ? appColors.red : appColors.green }}>{'$' + amount}</Text>
       </View>
       <View style={{ flex: 40, alignItems: 'flex-start', flexDirection: "row", justifyContent: 'space-around' }}>
