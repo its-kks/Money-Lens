@@ -73,12 +73,11 @@ export default function InsightsScreen() {
     };
   });
 
-  console.log(fetchedCategoryBar);
 
   useEffect(() => {
     dispatch(fetchPieDataRequest({ type: transactionType, month: monthTransaction, year: yearTransaction }));
-    dispatch(fetchBarDataRequest({ categoryID, month: monthTransaction, year: yearTransaction }));
-  }, [transactionType, monthTransaction, yearTransaction, categoryID]);
+    dispatch(fetchBarDataRequest({ categoryID, month: monthCategory, year: yearTransaction }));
+  }, [transactionType, monthTransaction, yearTransaction, categoryID, monthCategory, yearCategory]);
 
 
 

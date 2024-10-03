@@ -151,34 +151,34 @@ export const fetchCategoriesBar = async ({ categoryID, lowerBoundMonth, upperBou
   lowerBoundMonthPrev, upperBoundMonthPrev, lowerBoundYearPrev, upperBoundYearPrev
 }) => {
   const query = `
-   WITH t1 AS (
-    SELECT COALESCE(SUM(t.amount), 0) AS total_amount_spent_prev, t.category_id
+  WITH t1 AS (
+    SELECT ABS(COALESCE(SUM(t.amount), 0)) AS total_amount_spent_curr, t.category_id
     FROM transactions t
     WHERE t.category_id = ?
     AND (strftime('%m', t.tran_date_time) > ? AND strftime('%m', t.tran_date_time) < ?)
     AND (strftime('%Y', t.tran_date_time) > ? AND strftime('%Y', t.tran_date_time) < ?)
-    AND t.amount > 0
+    AND t.amount < 0
     GROUP BY t.category_id
   ),
   t2 AS (
-      SELECT COALESCE(SUM(t.amount), 0) AS total_amount_spent_curr, t.category_id
+      SELECT ABS(COALESCE(SUM(t.amount), 0)) AS total_amount_spent_prev, t.category_id
       FROM transactions t
       WHERE t.category_id = ?
       AND (strftime('%m', t.tran_date_time) > ? AND strftime('%m', t.tran_date_time) < ?)
       AND (strftime('%Y', t.tran_date_time) > ? AND strftime('%Y', t.tran_date_time) < ?)
-      AND t.amount > 0
+      AND t.amount < 0
       GROUP BY t.category_id
   )
   SELECT 
-      COALESCE(t2.total_amount_spent_curr, 0) AS this_month,
+      COALESCE(t1.total_amount_spent_curr, 0) AS this_month,
       c.budget_amount AS budget, 
-      COALESCE(t1.total_amount_spent_prev, 0) AS prev_month,
+      COALESCE(t2.total_amount_spent_prev, 0) AS prev_month,
       c.name,
       0 as median_others
   FROM categories c
   LEFT JOIN t1 ON c.id = t1.category_id
   LEFT JOIN t2 ON c.id = t2.category_id
-  WHERE c.id = ?
+  WHERE c.id = ?;
   `;
   const data = [categoryID, lowerBoundMonth, upperBoundMonth, lowerBoundYear, upperBoundYear,
     categoryID, lowerBoundMonthPrev, upperBoundMonthPrev, lowerBoundYearPrev, upperBoundYearPrev,

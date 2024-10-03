@@ -12,7 +12,7 @@ import {
 
 import { fetchCategoriesBar } from '../../sql/dbCategories';
 
-import { returnUpperAmount, returnLowerAmount, returnLowerMonth, returnLowerYear } from '../../utilities/filters';
+import { returnLowerMonth, returnLowerYear } from '../../utilities/filters';
 
 function* fetchBarDataSaga(action) {
   try {
@@ -21,10 +21,18 @@ function* fetchBarDataSaga(action) {
     const upperBoundMonth = (returnLowerMonth(month) + 2).toString().padStart(2, '0');
     const lowerBoundYear = returnLowerYear(year).toString();
     const upperBoundYear = (returnLowerYear(year) + 2).toString();
-    const lowerBoundMonthPrev = returnLowerMonth(month-1).toString().padStart(2, '0');
-    const upperBoundMonthPrev = (returnLowerMonth(month-1) + 2).toString().padStart(2, '0');
-    const lowerBoundYearPrev = returnLowerYear(year-1).toString();
-    const upperBoundYearPrev = (returnLowerYear(year-1) + 2).toString();
+    const lowerBoundMonthPrev = (parseInt(lowerBoundMonth) - 1).toString().padStart(2, '0');
+    const upperBoundMonthPrev = (parseInt(upperBoundMonth) - 1).toString().padStart(2, '0');
+    
+    const currentMonth = new Date().getMonth();
+    let lowerBoundYearPrev = lowerBoundYear;
+    let upperBoundYearPrev = upperBoundYear;
+
+    if ((month === 'This Month' && currentMonth === 0) || month === 'Janurary') {
+      lowerBoundYearPrev = (parseInt(lowerBoundYear) - 1).toString();
+      upperBoundYearPrev = (parseInt(upperBoundYear) - 1).toString();
+    }
+    
     const data = yield call(fetchCategoriesBar, {categoryID, lowerBoundMonth, upperBoundMonth, lowerBoundYear ,upperBoundYear,
       lowerBoundMonthPrev, upperBoundMonthPrev, lowerBoundYearPrev ,upperBoundYearPrev});
     yield put(fetchBarDataSuccess(data));
