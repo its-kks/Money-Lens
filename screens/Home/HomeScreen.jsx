@@ -13,6 +13,7 @@ import Actions from '../../components/homeScreenComp/Actions';
 import { fetchActionsRequest } from '../../Redux/actions/actions';
 import { fetchBarDataRequest } from '../../Redux/actions/insightBar';
 import { fetchPieDataRequest } from '../../Redux/actions/insightPie';
+import { limitText } from '../../utilities/text';
 
 export default function HomeScreen({navigation}) {
   const [userName, setUserName] = useState('');
@@ -56,7 +57,7 @@ export default function HomeScreen({navigation}) {
     
       <SafeAreaView style={styles.homeScreenContainer}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
-        <TopText userName={userName} src={avatar} moneyPos={positive} moneyNeg={negative}/>
+        <TopText userName={ limitText(userName,25)} src={avatar} moneyPos={positive} moneyNeg={negative}/>
         <PayButtons navigation={navigation}/>
         <Actions />
       </SafeAreaView>

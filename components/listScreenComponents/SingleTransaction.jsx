@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { limitText } from '../../utilities/text'
 
 export default function SingleTransaction({ navigation, itemId, itemName, itemIcon, date, time, 
   price, itemBackgroundColor, itemRecipient, categoryID, recipientId , setType, setMonth, setYear }) {
@@ -17,10 +18,10 @@ export default function SingleTransaction({ navigation, itemId, itemName, itemIc
 
       <View style={styles.detailsContainer}>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>{itemRecipient}</Text>
+          <Text style={styles.dateText}>{ limitText(itemRecipient,15)}</Text>
         </View>
         <View>
-          <Text style={styles.itemName}>{itemName}</Text>
+          <Text style={styles.itemName}>{limitText(itemName,18)}</Text>
         </View>
         <View style={styles.dateContainer}>
           <Text style={styles.dateText}>{date}</Text>

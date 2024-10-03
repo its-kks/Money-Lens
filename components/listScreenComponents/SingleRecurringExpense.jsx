@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import appColors from '../../constants/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { limitText } from '../../utilities/text'
 
 export default function SingleRecurringExpense({ itemName, itemIcon, repeat, price, itemBackgroundColor, handleUpdate }) {
   return (
@@ -15,7 +16,7 @@ export default function SingleRecurringExpense({ itemName, itemIcon, repeat, pri
 
       <View style={styles.detailsContainer}>
         <View>
-          <Text style={styles.itemName}>{itemName}</Text>
+          <Text style={styles.itemName}>{ limitText(itemName,18)}</Text>
         </View>
         <View style={styles.dateContainer}>
           <Text style={styles.dateText}>{'Every ' +repeat + (repeat > 1 ? ' months' : ' month')}</Text>
